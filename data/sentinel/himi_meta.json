@@ -1,0 +1,34 @@
+{
+  "scene_id": "S2B_53SPA_20251130_0_L2A",
+  "datetime": "2025-11-30T01:47:06.127000+00:00",
+  "platform": "sentinel-2b",
+  "cloud_cover": 2.284717,
+  "mgrs_tile": "T53SPA",
+  "bbox_wgs84": [
+    136.90352513975958,
+    36.784327557490904,
+    137.07077325289453,
+    36.92967646973313
+  ],
+  "leaflet_bounds": [
+    [
+      36.784327557490904,
+      136.90352513975958
+    ],
+    [
+      36.92967646973313,
+      137.07077325289453
+    ]
+  ],
+  "shape": [
+    1583,
+    1459
+  ],
+  "stats": {
+    "ndvi_mean": 0.43112653493881226,
+    "ndvi_max": 0.9982062578201294,
+    "forest_pct": 53.9010042903592
+  },
+  "source": "Sentinel-2 L2A via AWS sentinel-cogs Open Data",
+  "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_53SPA_20251130_0_L2A"
+}
