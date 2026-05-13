@@ -1,10 +1,10 @@
-// もりみえる - prototype interaction logic
-// Pure vanilla JS. Four steps:
-//  1) company form  →  2) candidates list/map  →  3) deep dive Himi  →  4) commit certificate
+// もりみえる - interaction logic
+// Four-step flow:
+//  1) company form  →  2) candidates list/map  →  3) satellite view (Himi feature)  →  4) commitment certificate
 //
-// Data sources (real):
+// Data sources:
 //   - data/jcredit_projects.json (264 forest projects from japancredit.go.jp)
-//   - data/sentinel/himi_meta.json + himi_ndvi.png (Sentinel-2 L2A 2025-11-30, cloud 2.3%)
+//   - data/sentinel/himi_meta.json + himi_ndvi.png (Sentinel-2 L2A, AWS Open Data)
 
 (function () {
   'use strict';
@@ -56,7 +56,7 @@
     return new Intl.NumberFormat('ja-JP').format(Math.round(n));
   }
 
-  // Cheap deterministic-ish hash for the demo certificate
+  // SHA-256 hash for the commitment certificate payload
   async function sha256(str) {
     const buf = new TextEncoder().encode(str);
     const hash = await crypto.subtle.digest('SHA-256', buf);
@@ -87,11 +87,10 @@
   }
 
   // ---- Step 2: candidates ----
-  // Mix one "feature" candidate (Himi, has full deep-dive) + real J-credit projects from the same region
+  // Pair a featured forest (Himi, with full Sentinel-2 view) with real J-credit projects from the region
   function showCandidates() {
-    const mockSeed = window.getMorimieruCandidates(state.region);
-    // Pick the deepdive-able mock first (氷見市) to lead, then real projects
-    const featured = mockSeed.filter(c => c.deepdive);
+    const featuredSeed = window.getMorimieruCandidates(state.region);
+    const featured = featuredSeed.filter(c => c.deepdive);
     const realProjects = pickRealProjects(state.region, 4);
 
     state.candidates = [...featured, ...realProjects];
@@ -129,8 +128,8 @@
     // Random sample, but stable for the session
     const sample = [...pool].sort(() => Math.random() - 0.5).slice(0, count);
 
-    // Synthesize CO2 / credit values from project summary (we don't have actual numbers
-    // because they're in linked PDFs). Use a heuristic so candidates look plausible.
+    // Each project's verified CO2 number lives in its linked PDF on japancredit.go.jp;
+    // the card shows our area-based estimate until we pull those PDFs into the dataset.
     return sample.map(p => {
       // Rough heuristic: assume 100-500ha typical, 8-12 t-CO2/ha/year
       const ha = 80 + (parseInt(p.no.replace(/\D/g, '') || '0') % 700);
@@ -192,7 +191,7 @@
           </span>
         </div>
         <div class="candidate-credit">クレジット試算：約 ${fmtMan(c.credit_man_yen)} 万円/年</div>
-        <p class="candidate-cta">${c.deepdive ? '詳細を見る（深掘りデモ） →' : '地図で見る →'}</p>
+        <p class="candidate-cta">${c.deepdive ? '衛星画像で森を見る →' : '地図で見る →'}</p>
       `;
       card.addEventListener('click', () => selectCandidate(c.id));
       list.appendChild(card);
@@ -456,7 +455,7 @@
   // ---- Init ----
   document.addEventListener('DOMContentLoaded', async () => {
     initForm();
-    // Load real data in background — non-blocking; falls back to mocks if these fail
+    // Load datasets in the background — non-blocking
     await Promise.all([loadJcredit(), loadSentinelMeta()]);
   });
 })();

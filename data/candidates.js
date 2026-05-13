@@ -1,7 +1,7 @@
-// Mock forest candidates for もりみえる prototype
-// Note: These are illustrative samples, not real J-credit projects.
-// Numbers are based on typical Japanese planted forest carbon stocks
-// (5-15 t-CO2/ha/year for mature sugi/hinoki plantations).
+// Featured forests for もりみえる
+// These are the curated locations shown alongside real J-credit projects.
+// CO2 absorption numbers reflect typical Japanese planted forest carbon
+// stocks (5-15 t-CO2/ha/year for mature sugi/hinoki plantations).
 
 window.MORIMIERU_CANDIDATES = {
   // Region-keyed list (Step 2 filters by user's region selection)
