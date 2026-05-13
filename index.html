@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>もりみえる｜あなたの会社の森を、見つけよう</title>
 <meta name="description" content="豊かな森を未来につなぐため、衛星の目で森を可視化し、企業と森をつなぎます。">
+<meta property="og:title" content="もりみえる｜あなたの会社の森を、見つけよう">
+<meta property="og:description" content="衛星 × J-クレジット × 暗号で、日本の森と会社をつなぐ。すべて無料の公開データから。">
+<meta property="og:image" content="https://mori-mieru.jp/assets/og-image.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -14,11 +20,11 @@
 <body>
 
 <header class="site-header">
-  <div class="logo">
+  <a href="#" class="logo" onclick="resetFlow();return false;" aria-label="Home">
     <span class="logo-mark">🌲</span>
     <span class="logo-text">もりみえる</span>
     <span class="logo-en">morimieru</span>
-  </div>
+  </a>
   <nav class="nav">
     <a href="#about">これは何？</a>
     <a href="#technology">技術</a>
@@ -55,6 +61,10 @@
   <div class="container">
     <p class="section-eyebrow">About</p>
     <h2 class="section-title">日本の森が、週単位で見えるようになる。</h2>
+    <figure class="concept-figure">
+      <img src="assets/concept-diagram.jpg" alt="衛星が森を観測し、CO2吸収が会社に届く仕組み" loading="lazy">
+      <figcaption>衛星 → 森 → 会社。お互いをつなぐ「測定と信頼の基盤」をつくります。</figcaption>
+    </figure>
     <div class="about-grid">
       <div class="about-card">
         <div class="about-icon">🛰️</div>
@@ -223,7 +233,7 @@
 
     <div class="certificate">
       <div class="cert-header">
-        <div class="cert-mark">🌲</div>
+        <img src="assets/cert-emblem.png" alt="" class="cert-mark-img">
         <div class="cert-title-wrap">
           <p class="cert-en">FOREST COMMITMENT CERTIFICATE</p>
           <p class="cert-jp">森林コミットメント証明書</p>

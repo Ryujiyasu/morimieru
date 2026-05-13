@@ -68,7 +68,11 @@ button, input, textarea, select { font: inherit; color: inherit; }
   display: flex;
   align-items: baseline;
   gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
 }
+.logo:hover { opacity: 0.75; }
 .logo-mark { font-size: 24px; }
 .logo-text {
   font-family: var(--font-display);
@@ -116,9 +120,8 @@ button, input, textarea, select { font: inherit; color: inherit; }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 30% 20%, rgba(167, 196, 152, 0.4), transparent 70%),
-    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(196, 122, 74, 0.10), transparent 70%),
-    linear-gradient(180deg, #f4ecdf 0%, var(--cream) 70%);
+    linear-gradient(180deg, rgba(250, 246, 239, 0.75) 0%, rgba(250, 246, 239, 0.85) 60%, var(--cream) 100%),
+    url('assets/hero-forest.jpg') center/cover no-repeat;
   z-index: -1;
 }
 .hero::after {
@@ -259,6 +262,32 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
 /* ============ About cards ============ */
 .about { background: var(--paper); }
+.concept-figure {
+  margin: 0 0 48px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  background: var(--cream);
+}
+.concept-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.concept-figure figcaption {
+  padding: 16px 24px;
+  font-size: 13px;
+  color: var(--ink-700);
+  line-height: 1.8;
+}
+.cert-mark-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--cream);
+  padding: 4px;
+}
 .about-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
