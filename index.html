@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>もりみえる｜あなたの会社の森を、見つけよう</title>
+<meta name="description" content="豊かな森を未来につなぐため、衛星の目で森を可視化し、企業と森をつなぎます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">
+    <span class="logo-mark">🌲</span>
+    <span class="logo-text">もりみえる</span>
+    <span class="logo-en">morimieru</span>
+  </div>
+  <nav class="nav">
+    <a href="#about">これは何？</a>
+    <a href="#technology">技術</a>
+    <a href="#start" class="cta">森を探す</a>
+  </nav>
+</header>
+
+<!-- ============== Hero ============== -->
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">A forest finder for companies</p>
+    <h1 class="hero-title">
+      あなたの会社の森を、<br>
+      <span class="accent">見つけよう。</span>
+    </h1>
+    <p class="hero-lead">
+      豊かな森を未来につなぐため、衛星の目で日本中の森を可視化し、<br>
+      その想いを支える会社と、森を守る人をつなぎます。
+    </p>
+    <div class="hero-cta-row">
+      <a href="#start" class="btn btn-primary">森を探しに行く</a>
+      <a href="#about" class="btn btn-ghost">仕組みを見る</a>
+    </div>
+    <p class="hero-sub">
+      全部、無料の公開衛星データから。<br>
+      Sentinel-1/2・Landsat・林野庁オープンデータを統合しています。
+    </p>
+  </div>
+  <div class="hero-bg"></div>
+</section>
+
+<!-- ============== About ============== -->
+<section id="about" class="section about">
+  <div class="container">
+    <p class="section-eyebrow">About</p>
+    <h2 class="section-title">日本の森が、週単位で見えるようになる。</h2>
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="about-icon">🛰️</div>
+        <h3>衛星が、週に1度通る</h3>
+        <p>欧州 Sentinel-2 と Sentinel-1 が日本上空を週2〜3回観測。森の動きが、年単位ではなく週単位で見えます。</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">📐</div>
+        <h3>林野庁20年の蓄積</h3>
+        <p>森林生態系多様性基礎調査（全国15,000プロット×25年）と航空レーザ計測（80%整備済）。教師データとして衛星推定モデルに組み込みます。</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">🔏</div>
+        <h3>改ざんできない記録</h3>
+        <p>取得・処理・推定の各ステップに暗号タイムスタンプ。第三者が後から検証可能なモニタリング報告書を生成します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Start (Step 1: Form) ============== -->
+<section id="start" class="section step-form">
+  <div class="container narrow">
+    <p class="section-eyebrow">Step 1</p>
+    <h2 class="section-title">あなたの会社のこと、教えてください。</h2>
+    <p class="section-lead">入力いただいた条件で、あなたの会社にあった森の候補をご提案します。</p>
+
+    <form id="company-form" class="form">
+      <label class="field">
+        <span class="field-label">会社名</span>
+        <input type="text" name="company" placeholder="例：株式会社サンプル" required>
+      </label>
+      <label class="field">
+        <span class="field-label">業種</span>
+        <select name="industry">
+          <option value="食品">食品・飲料</option>
+          <option value="建築">建築・不動産</option>
+          <option value="製造">製造業</option>
+          <option value="IT">IT・サービス</option>
+          <option value="金融">金融</option>
+          <option value="小売">小売・流通</option>
+          <option value="その他">その他</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">年間ご予算 <span class="value-display" id="budget-display">300万円</span></span>
+        <input type="range" name="budget" min="50" max="2000" step="50" value="300" id="budget-input">
+        <div class="range-hints"><span>50万円</span><span>2,000万円</span></div>
+      </label>
+      <label class="field">
+        <span class="field-label">ご希望の地域</span>
+        <select name="region">
+          <option value="all">全国から提案してほしい</option>
+          <option value="hokkaido">北海道</option>
+          <option value="tohoku">東北</option>
+          <option value="kanto">関東</option>
+          <option value="chubu" selected>中部・北陸</option>
+          <option value="kansai">関西</option>
+          <option value="chugoku">中国</option>
+          <option value="shikoku">四国</option>
+          <option value="kyushu">九州・沖縄</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">森への想い（任意）</span>
+        <textarea name="vision" rows="3" placeholder="例：地域貢献の一環として／創業100年に向けて／脱炭素経営の柱として"></textarea>
+      </label>
+      <button type="submit" class="btn btn-primary btn-large">候補の森を見る →</button>
+    </form>
+  </div>
+</section>
+
+<!-- ============== Step 2: Candidates ============== -->
+<section id="candidates" class="section step-candidates" hidden>
+  <div class="container">
+    <p class="section-eyebrow">Step 2</p>
+    <h2 class="section-title"><span id="company-name-display">あなた</span>の会社にあう森、<span id="candidate-count">4</span>つ見つかりました。</h2>
+    <p class="section-lead">クリックで、その森を衛星で「いま」見ることができます。</p>
+
+    <div class="candidates-layout">
+      <div id="candidates-map" class="candidates-map"></div>
+      <div id="candidates-list" class="candidates-list"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Step 3: Deep dive (Himi) ============== -->
+<section id="deepdive" class="section step-deepdive" hidden>
+  <div class="container">
+    <p class="section-eyebrow">Step 3 — 深掘り</p>
+    <h2 class="section-title" id="dd-title">富山県 氷見市・朝日山系の森</h2>
+    <p class="section-lead" id="dd-lead">林野庁令和7年度委託事業の対象地。航空レーザ計測の高精度ベースラインと、Sentinel-2の週次観測で「いま」を捉えています。</p>
+
+    <div class="dd-grid">
+      <!-- Left: Big satellite view -->
+      <div class="dd-satellite">
+        <div class="dd-satellite-frame">
+          <div id="dd-map" class="dd-map"></div>
+          <div class="dd-satellite-overlay">
+            <div class="dd-stamp">
+              <div class="stamp-row"><span class="stamp-label">Source</span><span>Sentinel-2 L2A</span></div>
+              <div class="stamp-row"><span class="stamp-label">Tile</span><span>T53SMV</span></div>
+              <div class="stamp-row"><span class="stamp-label">Date</span><span id="dd-date">2026-05-10</span></div>
+              <div class="stamp-row"><span class="stamp-label">Cloud</span><span>3%</span></div>
+              <div class="stamp-row"><span class="stamp-label">Hash</span><span class="mono">a4f3...92c1</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="timeline">
+          <p class="timeline-label">過去5年の NDVI 推移（週次観測）</p>
+          <svg viewBox="0 0 600 80" class="timeline-svg" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="ndviGrad" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#5a8a3a" stop-opacity="0.5"/>
+                <stop offset="1" stop-color="#5a8a3a" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path id="ndvi-path" fill="url(#ndviGrad)" stroke="#2d5a3d" stroke-width="1.5" d=""/>
+          </svg>
+          <div class="timeline-axis"><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
+        </div>
+      </div>
+
+      <!-- Right: Forest metrics -->
+      <div class="dd-side">
+        <div class="metric-card highlight">
+          <p class="metric-label">推定 年間 CO₂ 吸収量</p>
+          <p class="metric-value"><span id="dd-co2">1,420</span> <span class="metric-unit">t-CO₂/年</span></p>
+          <p class="metric-error">95% 信頼区間：1,180 – 1,690 t-CO₂</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">クレジット化試算</p>
+          <p class="metric-value"><span id="dd-credit">1,705</span> <span class="metric-unit">万円/年</span></p>
+          <p class="metric-error">@ 12,000円/t-CO₂（森林由来J-クレジット直近価格）</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">森の概要</p>
+          <ul class="metric-list">
+            <li><span>面積</span><span id="dd-area">182 ha</span></li>
+            <li><span>樹種</span><span id="dd-species">スギ・ヒノキ 73% / 広葉樹 27%</span></li>
+            <li><span>平均樹高</span><span id="dd-height">18.4 m</span></li>
+            <li><span>林齢</span><span id="dd-age">55年生（主林木）</span></li>
+            <li><span>所有形態</span><span id="dd-owner">森林組合・私有林</span></li>
+          </ul>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">林野庁データの参照</p>
+          <ul class="metric-list small">
+            <li><span>森林生態系多様性基礎調査</span><span>3 plot 含む</span></li>
+            <li><span>航空レーザ計測</span><span>R6 高密度実施</span></li>
+            <li><span>収穫予想表</span><span>富山県スギ用</span></li>
+          </ul>
+        </div>
+        <button class="btn btn-primary btn-large btn-full" onclick="goToCommit()">この森に、コミットする →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Step 4: Commit (Mock certificate) ============== -->
+<section id="commit" class="section step-commit" hidden>
+  <div class="container narrow">
+    <p class="section-eyebrow">Step 4</p>
+    <h2 class="section-title">コミットメント証明書</h2>
+    <p class="section-lead">この度のコミットを、暗号タイムスタンプつきで記録しました。<br>第三者が後から「この時点でこの内容が決定された」ことを検証できます。</p>
+
+    <div class="certificate">
+      <div class="cert-header">
+        <div class="cert-mark">🌲</div>
+        <div class="cert-title-wrap">
+          <p class="cert-en">FOREST COMMITMENT CERTIFICATE</p>
+          <p class="cert-jp">森林コミットメント証明書</p>
+        </div>
+        <div class="cert-no">No. <span id="cert-no">MM-2026-0513-001</span></div>
+      </div>
+
+      <div class="cert-body">
+        <p class="cert-statement">
+          この度、<strong id="cert-company">サンプル株式会社</strong>様におかれましては、<br>
+          下記の森林の保全と育成に対し、コミットを表明されました。
+        </p>
+
+        <table class="cert-table">
+          <tr><th>対象森林</th><td id="cert-forest">富山県 氷見市・朝日山系</td></tr>
+          <tr><th>面積</th><td id="cert-area">182 ha</td></tr>
+          <tr><th>推定年間CO₂吸収量</th><td id="cert-co2">1,420 t-CO₂ <span class="cert-sub">（95% CI: 1,180 – 1,690）</span></td></tr>
+          <tr><th>コミット期間</th><td id="cert-period">2026年5月13日 〜 2031年5月12日（5年間）</td></tr>
+          <tr><th>年間ご予算</th><td id="cert-budget">300 万円</td></tr>
+        </table>
+
+        <div class="cert-hash-block">
+          <p class="cert-hash-title">改ざん不能な記録</p>
+          <div class="cert-hash-row"><span>記録時刻</span><span class="mono" id="cert-timestamp">2026-05-13T14:38:21+09:00</span></div>
+          <div class="cert-hash-row"><span>Sentinel-2 観測ID</span><span class="mono">S2A_MSIL2A_20260510T013451</span></div>
+          <div class="cert-hash-row"><span>取得サーバ TPM Attestation</span><span class="mono">7f3b9c...2a91</span></div>
+          <div class="cert-hash-row"><span>処理コード Hash</span><span class="mono">e8a124...c0d5</span></div>
+          <div class="cert-hash-row"><span>本証明書 Hash (SHA-256)</span><span class="mono" id="cert-self-hash">計算中...</span></div>
+          <div class="cert-hash-row"><span>RFC 3161 タイムスタンプ</span><span class="mono">tsa.example.jp #00128341</span></div>
+        </div>
+
+        <p class="cert-disclaimer">
+          ※ 本証明書は「もりみえる」プロトタイプによるデモンストレーションです。実運用ではJ-クレジット制度のモニタリング報告書として、林野庁・制度事務局の方法論に準拠した形で発行されます。
+        </p>
+      </div>
+
+      <div class="cert-footer">
+        <p class="cert-issuer">株式会社モリアゲ × エムスクエア・ラボ「もりみえる」</p>
+        <button class="btn btn-ghost btn-small" onclick="window.print()">🖨️ PDFで保存</button>
+      </div>
+    </div>
+
+    <div class="next-steps">
+      <a href="#" onclick="resetFlow();return false;" class="btn btn-ghost">最初に戻る</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Technology ============== -->
+<section id="technology" class="section technology">
+  <div class="container">
+    <p class="section-eyebrow">Technology</p>
+    <h2 class="section-title">仕組み</h2>
+    <div class="tech-grid">
+      <div class="tech-step">
+        <div class="tech-num">1</div>
+        <h3>無料の公開衛星データ</h3>
+        <p>Sentinel-2（光学・10m解像度・週2回）、Sentinel-1（SAR・全天候・週1-2回）、Landsat 8/9を統合。日本上空でほぼ毎日、何らかの観測機会があります。</p>
+      </div>
+      <div class="tech-step">
+        <div class="tech-num">2</div>
+        <h3>林野庁の20年蓄積を教師に</h3>
+        <p>森林生態系多様性基礎調査（4kmグリッド15,000プロット×25年）と航空レーザ計測（民有林80%整備）を組み合わせ、衛星推定モデルの学習データに。</p>
+      </div>
+      <div class="tech-step">
+        <div class="tech-num">3</div>
+        <h3>暗号タイムスタンプで「改ざんできない」</h3>
+        <p>TPM 2.0 attestation（取得時刻の証明）+ Merkle hash chain（処理パイプライン）+ RFC 3161タイムスタンプで、モニタリング報告書を暗号学的に検証可能化。</p>
+      </div>
+      <div class="tech-step">
+        <div class="tech-num">4</div>
+        <h3>誰もが使える普及可能性</h3>
+        <p>すべて無料データ + オープンソース。小規模な森林組合・自治体でも運用可能。「精度競争」ではなく「検証可能性 × 普及可能性」で価値を生みます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-logo">🌲 もりみえる</p>
+        <p class="footer-tag">豊かな森を未来につなぐ、衛星と暗号のインフラ。</p>
+      </div>
+      <div>
+        <p class="footer-heading">データソース</p>
+        <ul>
+          <li>Sentinel-1 / Sentinel-2（欧州 Copernicus）</li>
+          <li>Landsat 8/9（NASA / USGS）</li>
+          <li>森林生態系多様性基礎調査（林野庁）</li>
+          <li>航空レーザ森林資源解析データ（林野庁）</li>
+          <li>J-クレジット制度（経産省・農水省・環境省）</li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-heading">これは何？</p>
+        <p class="small">林野庁森林整備部計画課の令和7年度委託事業（森林資源調査手法の複合利用に関する評価検証）の構造を踏まえ、無料公開衛星データ × 暗号学的検証可能性レイヤーの可能性を可視化したプロトタイプです。</p>
+      </div>
+    </div>
+    <p class="copyright">© 2026 morimieru prototype. Built for forests, by people who love forests.</p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="data/candidates.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
