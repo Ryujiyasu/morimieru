@@ -7,24 +7,26 @@ window.MORIMIERU_CANDIDATES = {
   // Region-keyed list (Step 2 filters by user's region selection)
   chubu: [
     {
-      id: 'himi-asahi',
-      name: '朝日山系の森',
+      id: 'himi-area',
+      name: '氷見市周辺の森林',
       pref: '富山県 氷見市',
       lat: 36.857,
       lon: 136.987,
-      area_ha: 182,
-      species: 'スギ・ヒノキ 73% / 広葉樹 27%',
-      mean_height: '18.4 m',
-      stand_age: '55年生',
-      co2_estimate: 1420,
-      co2_low: 1180,
-      co2_high: 1690,
-      credit_man_yen: 1705,
-      owner: '森林組合・私有林',
+      // Real Sentinel-2 measurement: forest area, CO2 from data/sentinel/himi_co2.json
+      // Filled in at runtime from the CDSE pipeline.
+      area_ha: 12398,
+      species: 'スギ・ヒノキ 主体（落葉広葉樹混交）',
+      mean_height: '18 m 前後（地域平均）',
+      stand_age: '50〜70年生（主林木）',
+      co2_estimate: 119211,
+      co2_low: 83448,
+      co2_high: 154974,
+      credit_man_yen: 143053,
+      owner: '森林組合・私有林・市有林を含む混合',
       deepdive: true,
-      tagline: '林野庁令和7年度委託事業の対象地',
-      lidar: 'R6 高密度実施',
-      ndvi_path: [0.62, 0.58, 0.71, 0.74, 0.65, 0.72, 0.78, 0.81, 0.76, 0.68, 0.71, 0.79, 0.82, 0.77]
+      tagline: '林野庁 令和7年度委託事業の対象地',
+      lidar: 'R6 高密度航空レーザ計測実施',
+      method_label: 'IPCC Tier 2 × Sentinel-2 衛星実観測'
     },
     {
       id: 'midori-watarase',

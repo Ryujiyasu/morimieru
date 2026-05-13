@@ -1,34 +1,29 @@
 {
-  "scene_id": "S2B_53SPA_20251130_0_L2A",
-  "datetime": "2025-11-30T01:47:06.127000+00:00",
-  "platform": "sentinel-2b",
-  "cloud_cover": 2.284717,
-  "mgrs_tile": "T53SPA",
+  "source": "CDSE Sentinel Hub Process API",
+  "fetched_at": "2026-05-13T23:47:52.388184Z",
   "bbox_wgs84": [
-    136.90352513975958,
-    36.784327557490904,
-    137.07077325289453,
-    36.92967646973313
+    136.897,
+    36.787,
+    137.077,
+    36.927
   ],
   "leaflet_bounds": [
     [
-      36.784327557490904,
-      136.90352513975958
+      36.787,
+      136.897
     ],
     [
-      36.92967646973313,
-      137.07077325289453
+      36.927,
+      137.077
     ]
   ],
-  "shape": [
-    1583,
-    1459
-  ],
-  "stats": {
-    "ndvi_mean": 0.43112653493881226,
-    "ndvi_max": 0.9982062578201294,
-    "forest_pct": 53.9010042903592
+  "scene": {
+    "scene_id": "S2A_MSIL2A_20260317T014121_N0512_R117_T53SPA_20260317T051411.SAFE",
+    "datetime": "2026-03-17T01:47:33.666Z",
+    "platform": "sentinel-2a",
+    "cloud_cover": 3.7,
+    "mgrs_tile": null
   },
-  "source": "Sentinel-2 L2A via AWS sentinel-cogs Open Data",
-  "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_53SPA_20251130_0_L2A"
+  "timeseries_points": 71,
+  "evalscript": "NDVI with SCL cloud mask + brand palette"
 }

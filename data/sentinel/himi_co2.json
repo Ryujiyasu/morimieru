@@ -1,0 +1,49 @@
+{
+  "computed_at": "2026-05-13T23:52:04.670916+00:00",
+  "method": "IPCC AFOLU 2006 Tier 2 (temperate evergreen needleleaf forest)",
+  "aoi": {
+    "name": "氷見市 朝日山系周辺",
+    "bbox_wgs84": [
+      136.897,
+      36.787,
+      137.077,
+      36.927
+    ],
+    "total_area_ha": 22400.0
+  },
+  "forest_mask_source": {
+    "satellite": "Sentinel-2 L2A (CDSE)",
+    "scene_window": "2025-07-15 → 2025-10-15",
+    "evalscript": "NDVI from B04/B08 with SCL cloud mask",
+    "forest_threshold_ndvi": 0.5,
+    "valid_pixels": 2232621,
+    "forest_pixels": 1239835,
+    "total_pixels": 2240000,
+    "pixel_area_ha": 0.01,
+    "valid_coverage_pct": 99.7,
+    "forest_ratio_pct": 55.3,
+    "forest_ratio_within_valid_pct": 55.5
+  },
+  "forest_area_ha": 12398.4,
+  "co2_per_ha_per_year": 9.615,
+  "annual_co2_t": 119211,
+  "uncertainty_pct": 0.3,
+  "annual_co2_low_t": 83448,
+  "annual_co2_high_t": 154974,
+  "parameters": {
+    "MAI_m3_per_ha_yr": 10.0,
+    "wood_density_t_per_m3": 0.314,
+    "BEF": 1.31,
+    "root_shoot_ratio": 0.25,
+    "carbon_fraction": 0.51,
+    "co2_per_c": 3.6666666666666665
+  },
+  "parameter_sources": {
+    "MAI": "林野庁「収穫予想表」中位（スギ・ヒノキ 50-70年生）",
+    "wood_density": "IPCC 2006 Guidelines Vol.4 Ch.4 Table 4.13 (Sugi)",
+    "BEF": "IPCC 2006 Guidelines Vol.4 Ch.4 Table 4.5 (temperate conifer)",
+    "root_shoot_ratio": "IPCC 2006 Guidelines Vol.4 Ch.4 Table 4.4",
+    "carbon_fraction": "IPCC 2006 Guidelines Vol.4 Ch.4 Table 4.3 (default)"
+  },
+  "formula": "annual_CO2 = forest_area_ha × MAI × wood_density × BEF × (1 + root_shoot_ratio) × carbon_fraction × (44/12)"
+}

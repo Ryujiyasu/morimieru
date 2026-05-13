@@ -22,6 +22,8 @@
     ddMap: null,
     ddNdviLayer: null,
     sentinelMeta: null,
+    sentinelSeries: null,
+    himiCo2: null,
     jcreditProjects: []
   };
 
@@ -31,7 +33,7 @@
       const r = await fetch('data/jcredit_projects.json');
       const j = await r.json();
       state.jcreditProjects = j.projects || [];
-      console.log(`Loaded ${state.jcreditProjects.length} real J-credit forest projects`);
+      console.log(`Loaded ${state.jcreditProjects.length} J-credit forest projects`);
     } catch (e) {
       console.warn('J-credit data load failed', e);
       state.jcreditProjects = [];
@@ -40,11 +42,32 @@
 
   async function loadSentinelMeta() {
     try {
-      const r = await fetch('data/sentinel/himi_meta.json');
-      state.sentinelMeta = await r.json();
-      console.log('Loaded Sentinel-2 metadata:', state.sentinelMeta.scene_id);
+      const [meta, series, co2] = await Promise.all([
+        fetch('data/sentinel/himi_meta.json').then(r => r.json()).catch(() => null),
+        fetch('data/sentinel/himi_timeseries.json').then(r => r.json()).catch(() => null),
+        fetch('data/sentinel/himi_co2.json').then(r => r.json()).catch(() => null),
+      ]);
+      state.sentinelMeta = meta;
+      state.sentinelSeries = series;
+      state.himiCo2 = co2;
+      if (meta) console.log('Sentinel scene:', meta.scene?.scene_id);
+      if (series) console.log(`NDVI time series: ${series.points?.length} points`);
+      if (co2) console.log(`Himi CO2: ${co2.annual_co2_t.toLocaleString()} t-CO2/yr`);
+
+      // Sync the Himi candidate with the live CO2 model result
+      if (co2 && window.MORIMIERU_CANDIDATES?.chubu) {
+        const himi = window.MORIMIERU_CANDIDATES.chubu.find(c => c.id === 'himi-area');
+        if (himi) {
+          himi.area_ha = Math.round(co2.forest_area_ha);
+          himi.co2_estimate = co2.annual_co2_t;
+          himi.co2_low = co2.annual_co2_low_t;
+          himi.co2_high = co2.annual_co2_high_t;
+          himi.credit_man_yen = Math.round(co2.annual_co2_t * 1.2);  // 12,000 yen/t-CO2
+          himi._co2_report = co2;
+        }
+      }
     } catch (e) {
-      console.warn('Sentinel metadata load failed', e);
+      console.warn('Sentinel data load failed', e);
     }
   }
 
@@ -347,53 +370,139 @@
     setTimeout(() => map.invalidateSize(), 100);
 
     drawNDVIPath(c);
+    renderMethodBlock(c);
 
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderMethodBlock(c) {
+    const block = $('#method-details');
+    const body = $('#method-body');
+    if (!block || !body) return;
+    if (!c.deepdive || !state.himiCo2) {
+      block.hidden = true;
+      return;
+    }
+    const co2 = state.himiCo2;
+    const fm = co2.forest_mask_source;
+    const p = co2.parameters;
+    block.hidden = false;
+    body.innerHTML = `
+      <ol class="method-steps">
+        <li>
+          <h4>1. 森林面積の特定（衛星実測）</h4>
+          <p>
+            Sentinel-2 L2A の <code>${fm.scene_window}</code> 期間の最低雲量シーンから NDVI を計算。
+            NDVI > <code>${fm.forest_threshold_ndvi}</code> の画素を森林と判定（Hansen et al. 2013, Tier 2 既定値）。
+          </p>
+          <ul class="method-list">
+            <li>AOI 総面積：<strong>${co2.aoi.total_area_ha.toLocaleString()} ha</strong>（${co2.aoi.name}）</li>
+            <li>解析画素数：${fm.total_pixels.toLocaleString()} (1 画素 ≈ ${fm.pixel_area_ha} ha)</li>
+            <li>有効画素率（非雲）：<strong>${fm.valid_coverage_pct}%</strong></li>
+            <li>森林画素率：<strong>${fm.forest_ratio_pct}%</strong></li>
+            <li>森林面積：<strong>${co2.forest_area_ha.toLocaleString()} ha</strong></li>
+          </ul>
+        </li>
+        <li>
+          <h4>2. 森林1 ha あたりの CO₂ 吸収量</h4>
+          <p><code>${co2.method}</code> による既定式：</p>
+          <pre class="method-formula">CO₂/ha/年 = MAI × wood_density × BEF × (1 + R) × CF × (44/12)
+        = ${p.MAI_m3_per_ha_yr} × ${p.wood_density_t_per_m3} × ${p.BEF}
+          × (1 + ${p.root_shoot_ratio}) × ${p.carbon_fraction} × ${p.co2_per_c.toFixed(3)}
+        ≈ ${co2.co2_per_ha_per_year} t-CO₂</pre>
+          <ul class="method-list small-list">
+            <li>MAI：${p.MAI_m3_per_ha_yr} m³/ha/年（${co2.parameter_sources.MAI}）</li>
+            <li>木材密度：${p.wood_density_t_per_m3} t/m³（${co2.parameter_sources.wood_density}）</li>
+            <li>BEF（バイオマス拡大係数）：${p.BEF}（${co2.parameter_sources.BEF}）</li>
+            <li>根/地上比：${p.root_shoot_ratio}（${co2.parameter_sources.root_shoot_ratio}）</li>
+            <li>炭素割合：${p.carbon_fraction}（${co2.parameter_sources.carbon_fraction}）</li>
+          </ul>
+        </li>
+        <li>
+          <h4>3. AOI 全体の年間 CO₂ 吸収量</h4>
+          <pre class="method-formula">${co2.forest_area_ha.toLocaleString()} ha × ${co2.co2_per_ha_per_year} t-CO₂/ha/年
+  ≈ <strong>${co2.annual_co2_t.toLocaleString()} t-CO₂/年</strong>
+  ( ±${(co2.uncertainty_pct * 100).toFixed(0)}% 信頼幅：${co2.annual_co2_low_t.toLocaleString()} – ${co2.annual_co2_high_t.toLocaleString()} )</pre>
+          <p class="method-note">
+            不確実性は Tier 2 で典型的に ±30%。MAI の地域差、樹種混交、衛星分類誤差を合算した経験値です。
+            個別森林・施業実態を組み込むことで、より狭い信頼幅と高精度な推定が可能になります。
+          </p>
+        </li>
+      </ol>
+    `;
   }
 
   function updateSatelliteStamp(meta) {
     // Update the on-map metadata stamp (the small overlay box in the deep dive map)
     const stamp = document.querySelector('.dd-stamp');
     if (!stamp || !meta) return;
-    const date = (meta.datetime || '').slice(0, 10);
+    const scene = meta.scene || {};
+    const co2 = state.himiCo2 || {};
+    const fmask = co2.forest_mask_source || {};
+    const date = (scene.datetime || '').slice(0, 10);
+    const sceneShort = (scene.scene_id || '').replace(/_(SAFE|MSIL2A_)/g, ' ').slice(0, 32);
     stamp.innerHTML = `
-      <div class="stamp-row"><span class="stamp-label">Source</span><span>Sentinel-2 L2A</span></div>
-      <div class="stamp-row"><span class="stamp-label">Scene</span><span>${meta.scene_id || ''}</span></div>
+      <div class="stamp-row"><span class="stamp-label">Source</span><span>Sentinel-2 L2A (CDSE)</span></div>
+      <div class="stamp-row"><span class="stamp-label">Scene</span><span>${sceneShort}</span></div>
       <div class="stamp-row"><span class="stamp-label">Date</span><span>${date}</span></div>
-      <div class="stamp-row"><span class="stamp-label">Tile</span><span>${meta.mgrs_tile || ''}</span></div>
-      <div class="stamp-row"><span class="stamp-label">Cloud</span><span>${(meta.cloud_cover || 0).toFixed(1)}%</span></div>
-      <div class="stamp-row"><span class="stamp-label">Forest%</span><span>${(meta.stats?.forest_pct || 0).toFixed(1)}%</span></div>
-      <div class="stamp-row"><span class="stamp-label">Mean NDVI</span><span>${(meta.stats?.ndvi_mean || 0).toFixed(3)}</span></div>
-      <div class="stamp-row"><span class="stamp-label">Source</span><span>AWS Open Data (free)</span></div>
+      <div class="stamp-row"><span class="stamp-label">Cloud</span><span>${(scene.cloud_cover ?? 0).toFixed(1)}%</span></div>
+      <div class="stamp-row"><span class="stamp-label">Valid pixels</span><span>${fmask.valid_coverage_pct ?? '?'}%</span></div>
+      <div class="stamp-row"><span class="stamp-label">Forest pixels</span><span>${fmask.forest_ratio_pct ?? '?'}%</span></div>
+      <div class="stamp-row"><span class="stamp-label">NDVI 観測点</span><span>${state.sentinelSeries?.points?.length ?? '?'} (5yr)</span></div>
     `;
   }
 
   function drawNDVIPath(c) {
-    // Generate a plausible weekly NDVI series for 5 years (~260 points)
-    // Seasonal cosine + smooth random walk + slight upward trend
-    const N = 260;
-    const points = [];
-    let drift = 0;
-    for (let i = 0; i < N; i++) {
-      const t = i / N;
-      const seasonal = 0.10 * Math.cos(2 * Math.PI * (i / 52 - 0.2)); // peak around late spring
-      drift += (Math.random() - 0.49) * 0.012;
-      drift *= 0.98;
-      const trend = 0.04 * t;
-      const v = Math.min(0.95, Math.max(0.25, 0.65 + seasonal + drift + trend));
-      points.push(v);
-    }
-    // Build SVG path
+    // Plot the real NDVI time series from CDSE Statistical API.
+    // Falls back to a smooth seasonal curve when no series is available
+    // (e.g., for candidates other than Himi).
+    const series = (c.deepdive && state.sentinelSeries?.points) || null;
     const W = 600, H = 80;
-    const xs = points.map((_, i) => (i / (N - 1)) * W);
-    const ys = points.map(v => H - (v - 0.20) / (0.95 - 0.20) * (H - 4) - 2);
+    const Y_MIN = 0.0, Y_MAX = 1.0;
+
+    let xs, ys;
+    if (series && series.length >= 4) {
+      // Map real dates onto X
+      const t0 = new Date(series[0].date).getTime();
+      const t1 = new Date(series[series.length - 1].date).getTime();
+      const span = t1 - t0 || 1;
+      xs = series.map(p => ((new Date(p.date).getTime() - t0) / span) * W);
+      ys = series.map(p => H - (p.mean - Y_MIN) / (Y_MAX - Y_MIN) * (H - 4) - 2);
+      updateTimelineAxis(series);
+    } else {
+      const N = 100;
+      xs = [], ys = [];
+      for (let i = 0; i < N; i++) {
+        const t = i / (N - 1);
+        const seasonal = 0.10 * Math.cos(2 * Math.PI * (t * 5 - 0.2));
+        const v = 0.55 + seasonal;
+        xs.push(t * W);
+        ys.push(H - (v - Y_MIN) / (Y_MAX - Y_MIN) * (H - 4) - 2);
+      }
+    }
+
     let d = `M${xs[0].toFixed(1)},${ys[0].toFixed(1)}`;
-    for (let i = 1; i < N; i++) {
+    for (let i = 1; i < xs.length; i++) {
       d += ` L${xs[i].toFixed(1)},${ys[i].toFixed(1)}`;
     }
-    // close to baseline
     d += ` L${W},${H} L0,${H} Z`;
     $('#ndvi-path').setAttribute('d', d);
+  }
+
+  function updateTimelineAxis(series) {
+    const axis = document.querySelector('.timeline-axis');
+    if (!axis || !series.length) return;
+    const t0 = new Date(series[0].date);
+    const t1 = new Date(series[series.length - 1].date);
+    const startYear = t0.getFullYear();
+    const endYear = t1.getFullYear();
+    const years = [];
+    for (let y = startYear; y <= endYear; y++) years.push(y);
+    axis.innerHTML = years.map(y => `<span>${y}</span>`).join('');
+    const label = document.querySelector('.timeline-label');
+    if (label) {
+      label.textContent = `過去 ${endYear - startYear} 年の NDVI 推移（${series.length} 観測点・Sentinel-2 実測）`;
+    }
   }
 
   // ---- Step 4: commit certificate ----
