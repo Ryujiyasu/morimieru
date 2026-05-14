@@ -201,8 +201,7 @@
       budgetDisplay.textContent = `${fmtMan(v)}万円`;
     });
 
-    // "Sample address" button fills the form with a real Japanese company HQ-ish address
-    // and submits, so first-time visitors immediately see the watershed feature in action.
+    // "Sample address" button — auto-fills the form with a real Japanese company HQ-ish address
     const sampleBtn = document.getElementById('sample-button');
     if (sampleBtn) {
       sampleBtn.addEventListener('click', () => {
@@ -217,6 +216,23 @@
         form.querySelector('input[name="address"]').value = s.address;
         form.querySelector('select[name="region"]').value = s.region;
         form.requestSubmit();
+      });
+    }
+
+    // "Quick look" — skip the form entirely, jump straight to candidates with defaults
+    const quickBtn = document.getElementById('quick-look');
+    if (quickBtn) {
+      quickBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        state.company = 'あなた';
+        state.address = '';
+        state.addressLatLon = null;
+        state.userBasin = null;
+        state.watershedBasins = [];
+        state.candidateBasinFilter = false;
+        state.region = 'all';
+        state.budget = 300;
+        showCandidates();
       });
     }
 

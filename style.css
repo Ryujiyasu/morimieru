@@ -1072,3 +1072,133 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
 /* Hidden helper for revealed sections */
 section[hidden] { display: none !important; }
+
+/* ============================================================
+   Mobile / Tablet  (≤ 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Header — keep logo+CTA, hide secondary nav links */
+  .site-header { padding: 12px 16px; }
+  .logo-en { display: none; }
+  .logo-text { font-size: 17px; }
+  .logo-mark { font-size: 20px; }
+  .nav { gap: 12px; }
+  .nav a:not(.cta) { display: none; }
+  .nav a.cta { padding: 7px 14px; font-size: 13px; }
+
+  /* Hero */
+  .hero { padding: 56px 20px 72px; }
+  .hero-title { line-height: 1.25; margin-bottom: 18px; }
+  .hero-lead { font-size: 15px; line-height: 1.85; margin-bottom: 28px; }
+  .hero-eyebrow { font-size: 11px; margin-bottom: 16px; }
+  .hero-cta-row { flex-direction: column; gap: 10px; align-items: stretch; }
+  .hero-cta-row .btn { width: 100%; }
+
+  /* Sections */
+  .section { padding: 56px 20px; }
+  .section-title { line-height: 1.45; }
+  .section-lead { font-size: 14.5px; margin-bottom: 32px; }
+
+  /* About / Technology grids */
+  .about-grid { gap: 14px; }
+  .about-card { padding: 24px 20px; }
+  .about-card h3 { font-size: 16px; }
+  .about-card p { font-size: 13.5px; }
+  .concept-figure { margin-bottom: 32px; }
+
+  /* Form */
+  .form { padding: 24px 18px; gap: 22px; border-radius: 16px; }
+  .field input[type="text"],
+  .field select,
+  .field textarea { font-size: 16px; /* prevent iOS zoom */ padding: 12px 14px; }
+  .form-actions { flex-direction: column; align-items: stretch; gap: 8px; }
+  .form-actions .btn { width: 100%; }
+
+  /* Watershed summary */
+  .watershed-summary {
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px 18px;
+  }
+  .ws-icon { font-size: 36px; }
+  .ws-name { font-size: 17px; }
+  .ws-stats {
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13.5px;
+  }
+  .ws-stats strong { font-size: 15px; }
+
+  /* Candidates layout — already stacks via @media 900px, but tighten */
+  .candidates-map { height: 360px; }
+  .candidates-list { max-height: none; }
+  .candidate { padding: 18px; }
+  .candidate-name { font-size: 16px; }
+
+  /* Deep dive */
+  .dd-map { height: 320px; }
+  .dd-stamp { font-size: 10px; padding: 10px 12px; }
+  .dd-satellite-overlay { bottom: 10px; left: 10px; right: 10px; }
+  .timeline { padding: 16px 18px; }
+  .metric-card { padding: 18px; }
+  .metric-value { font-size: 28px; }
+  .metric-value .metric-unit { font-size: 12px; }
+
+  /* Method details (formula) */
+  .method-details > summary { padding: 12px 16px; font-size: 14px; }
+  .method-body { padding: 0 16px 14px; }
+  .method-formula {
+    font-size: 10.5px;
+    padding: 10px 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+  }
+  .method-steps h4 { font-size: 13.5px; }
+  .method-list { font-size: 12px; }
+
+  /* Certificate */
+  .certificate { padding: 28px 18px; border-radius: 16px; }
+  .certificate::before { inset: 6px; border-radius: 12px; }
+  .cert-header { grid-template-columns: auto 1fr; gap: 12px; }
+  .cert-mark-img { width: 48px; height: 48px; }
+  .cert-no { grid-column: 1 / -1; font-size: 11px; text-align: right; }
+  .cert-jp { font-size: 18px; }
+  .cert-en { font-size: 10px; letter-spacing: 0.2em; }
+  .cert-table { font-size: 13px; }
+  .cert-table th, .cert-table td { padding: 10px 0; }
+  .cert-table th { width: 42%; }
+  .cert-hash-block { padding: 14px 16px; }
+  .cert-hash-row {
+    font-size: 11px;
+    flex-direction: column;
+    gap: 0;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.08);
+  }
+  .cert-hash-row > span:first-child { font-size: 10.5px; color: var(--earth-300); }
+  .cert-footer { flex-direction: column; align-items: stretch; gap: 8px; }
+
+  /* Footer */
+  .site-footer { padding: 40px 20px 24px; }
+  .footer-grid { gap: 28px; }
+
+  /* General buttons */
+  .btn { min-height: 44px; /* touch target */ }
+  .btn-large { padding: 14px 24px; font-size: 15px; }
+
+  /* Hero decorative dots — heavier on mobile, but lower opacity to avoid noise */
+  .hero::after { opacity: 0.7; }
+}
+
+/* ============================================================
+   Tiny phones  (≤ 380px)
+   ============================================================ */
+@media (max-width: 380px) {
+  .logo-text { font-size: 15px; }
+  .hero { padding: 40px 16px 56px; }
+  .section { padding: 44px 16px; }
+  .hero-title { font-size: 28px; }
+  .section-title { font-size: 22px; }
+  .candidates-map, .dd-map { height: 280px; }
+}
