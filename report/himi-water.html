@@ -219,6 +219,43 @@ table.param-table {
   font-family: var(--font-jp); font-size: 13px; cursor: pointer;
 }
 .btn-print:hover { background: var(--green-900); }
+
+/* Figures */
+.aoi-figure {
+  display: grid; grid-template-columns: 1fr 1.4fr;
+  gap: 20px; margin: 28px 0 36px;
+  background: var(--paper);
+  padding: 20px 24px; border-radius: 10px;
+  border: 1px solid var(--ink-300);
+}
+.aoi-left, .aoi-right { min-width: 0; }
+.figure-label {
+  font-family: var(--font-en); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--blue-700); margin: 0 0 8px; font-weight: 500;
+}
+.figure-caption {
+  font-size: 11px; color: var(--ink-500); line-height: 1.7;
+  margin: 8px 0 0;
+}
+.ndvi-image {
+  width: 100%; height: auto; display: block;
+  border-radius: 6px; border: 1px solid var(--ink-300);
+  background: #1f3d2a;
+}
+.budget-flex {
+  display: grid; grid-template-columns: 280px 1fr;
+  gap: 24px; align-items: center;
+}
+.donut-wrap { padding: 4px; }
+.chart-wrap {
+  background: var(--paper); padding: 16px 20px;
+  border-radius: 10px; border: 1px solid var(--ink-300);
+  margin: 14px 0 28px;
+}
+@media (max-width: 700px) {
+  .aoi-figure, .budget-flex { grid-template-columns: 1fr; gap: 16px; }
+}
 </style>
 </head>
 <body>
@@ -237,6 +274,24 @@ table.param-table {
     <dt>森林面積</dt><dd>12,398 ha</dd>
     <dt>準拠手法</dt><dd>林野庁簡易評価法 Ver.1.0</dd>
   </dl>
+</div>
+
+<!-- ===== AOI map & satellite image ===== -->
+<div class="aoi-figure">
+  <div class="aoi-left">
+    <p class="figure-label">解析対象 AOI</p>
+    <div id="map-svg-container"></div>
+    <p class="figure-caption">富山県氷見市 / 中緯度・日本海側多雨地域</p>
+  </div>
+  <div class="aoi-right">
+    <p class="figure-label">Sentinel-2 NDVI 実観測（2026-03-17）</p>
+    <img src="../data/sentinel/himi_ndvi.png" alt="Himi NDVI"
+         class="ndvi-image" loading="lazy">
+    <p class="figure-caption">
+      濃緑＝高NDVI（活発な植生）／薄緑＝中程度／土色＝裸地・低植生<br>
+      雲量 3.7%、Sentinel-2A 13:47 JST 観測
+    </p>
+  </div>
 </div>
 
 <!-- ===== Hero Stat ===== -->
@@ -284,18 +339,31 @@ table.param-table {
 <h2>2. 水収支の内訳</h2>
 
 <div class="budget-chart">
-  <p style="margin: 0 0 4px; font-size: 13.5px; font-weight: 500;">年降水量 2,331 mm の行き先</p>
-  <div class="budget-bar">
-    <div class="bar-runoff" style="width: 22.9%;">直接流出 23%</div>
-    <div class="bar-evapo"  style="width: 35.9%;">蒸発散 36%</div>
-    <div class="bar-yield"  style="width: 41.2%;">水資源涵養 41%</div>
-  </div>
-  <div class="budget-legend">
-    <span><span class="legend-swatch bar-runoff"></span>直接流出 533 mm（表面流出として河川直行）</span>
-    <span><span class="legend-swatch bar-evapo"></span>蒸発散 837 mm（蒸散＋遮断蒸発）</span>
-    <span><span class="legend-swatch bar-yield"></span>水資源涵養 961 mm（地下水・基底流量）</span>
+  <div class="budget-flex">
+    <div id="water-donut-container" class="donut-wrap"></div>
+    <div class="budget-text">
+      <p style="margin: 0 0 12px; font-size: 14px; font-weight: 500;">年降水量 2,331 mm の行き先</p>
+      <div class="budget-bar">
+        <div class="bar-runoff" style="width: 22.9%;">23%</div>
+        <div class="bar-evapo"  style="width: 35.9%;">36%</div>
+        <div class="bar-yield"  style="width: 41.2%;">41%</div>
+      </div>
+      <div class="budget-legend">
+        <span><span class="legend-swatch bar-runoff"></span>直接流出 533 mm（表面流出）</span>
+        <span><span class="legend-swatch bar-evapo"></span>蒸発散 837 mm（蒸散＋遮断）</span>
+        <span><span class="legend-swatch bar-yield"></span>水資源涵養 961 mm（地下水）</span>
+      </div>
+    </div>
   </div>
 </div>
+
+<h3>2.1 過去5年の NDVI 時系列（実観測）</h3>
+<p>
+  Sentinel-2 の 5 年分の観測データ（71 観測点）を Statistical API で集計。
+  季節周期（春〜夏ピーク、冬期低下）と年次変化が明確に捉えられている。
+  NDVI 0.5 を森林閾値とし、夏期ピーク時のラスタから森林面積を算定した。
+</p>
+<div id="ndvi-chart-container" class="chart-wrap"></div>
 
 <p>
 水資源涵養量は、降水量から直接流出と蒸発散を差し引いた量で、土壌に浸透し
@@ -498,5 +566,17 @@ AOI 全体の年間水資源涵養量を算定する。
 </div>
 
 </div>
+
+<script>
+// Embed the auto-generated SVG figures
+fetch('../data/sentinel/himi_figures.json')
+  .then(r => r.json())
+  .then(figs => {
+    document.getElementById('ndvi-chart-container').innerHTML = figs.ndvi_chart_svg;
+    document.getElementById('water-donut-container').innerHTML = figs.water_donut_svg;
+    document.getElementById('map-svg-container').innerHTML = figs.japan_map_svg;
+  })
+  .catch(e => console.warn('figures load failed', e));
+</script>
 </body>
 </html>
