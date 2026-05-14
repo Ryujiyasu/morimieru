@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>静岡県 森林公益機能レポート｜もりみえる</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-900: #1f3d2a; --green-700: #2d5a3d; --green-100: #e7efde;
+  --blue-900: #1f4570; --blue-700: #3b6da1; --blue-100: #e7f0fa;
+  --earth-500: #c47a4a; --earth-600: #8c5a3a;
+  --cream: #faf6ef; --paper: #ffffff;
+  --ink-900: #2a2820; --ink-700: #4a4838; --ink-500: #7a786a; --ink-300: #bcbaae;
+  --font-jp: 'Noto Sans JP', system-ui, sans-serif;
+  --font-display: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
+  --font-en: 'Josefin Sans', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-jp); color: var(--ink-900); background: var(--cream);
+  line-height: 1.8; -webkit-font-smoothing: antialiased;
+}
+.report { max-width: 960px; margin: 0 auto; padding: 56px 36px 80px; }
+.report-header {
+  border-bottom: 3px solid var(--green-700); padding-bottom: 28px; margin-bottom: 40px;
+}
+.report-eyebrow {
+  font-family: var(--font-en); font-size: 13px; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--green-700); margin: 0 0 16px; font-weight: 500;
+}
+.report-title {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(28px, 4.5vw, 42px); line-height: 1.35;
+  color: var(--green-900); margin: 0 0 16px;
+}
+.report-subtitle { font-size: 15px; color: var(--ink-700); margin: 0 0 18px; }
+h2 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 22px; color: var(--green-900);
+  margin: 48px 0 14px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--ink-300);
+}
+.hero-stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px; margin: 24px 0 36px;
+}
+.stat {
+  background: var(--paper); padding: 22px 24px; border-radius: 12px;
+  border-left: 4px solid var(--green-700);
+}
+.stat.water { border-left-color: var(--blue-700); }
+.stat.bare { border-left-color: var(--earth-500); }
+.stat.effect { border-left-color: var(--green-700); }
+.stat-label {
+  font-size: 11px; color: var(--ink-500); margin: 0 0 6px;
+  letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+}
+.stat-value {
+  font-family: var(--font-display); font-weight: 900; font-size: 26px;
+  color: var(--green-900); margin: 0; line-height: 1.1;
+}
+.stat-value .unit { font-size: 13px; font-weight: 500; color: var(--ink-500); margin-left: 4px; }
+.stat-note { font-size: 11px; color: var(--ink-500); margin: 4px 0 0; }
+
+table.muni-table {
+  width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13.5px;
+  background: var(--paper); border-radius: 10px; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.muni-table th, .muni-table td {
+  text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--ink-300);
+}
+.muni-table th {
+  background: var(--green-700); color: white; font-weight: 500;
+  font-size: 12px; letter-spacing: 0.05em;
+}
+.muni-table td.num {
+  text-align: right; font-family: var(--font-mono); font-size: 13px;
+}
+.muni-table td.num.bare { color: var(--earth-600); }
+.muni-table td.num.effect {
+  color: var(--green-700); font-weight: 600;
+  background: rgba(45, 90, 61, 0.05);
+}
+.muni-table tr:hover { background: var(--cream); }
+.muni-table small { color: var(--ink-500); font-size: 10px; font-family: var(--font-jp); }
+
+.callout {
+  background: var(--blue-100); border-left: 4px solid var(--blue-700);
+  padding: 18px 22px; border-radius: 0 8px 8px 0;
+  margin: 24px 0; font-size: 14px;
+}
+.callout strong { color: var(--blue-900); }
+
+.disclaimer {
+  font-size: 12px; color: var(--ink-500); line-height: 1.85;
+  border-top: 1px dashed var(--ink-300); padding-top: 20px; margin-top: 36px;
+}
+.report-footer {
+  margin-top: 56px; padding-top: 24px;
+  border-top: 1px solid var(--ink-300);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.report-footer p { margin: 0; font-size: 12px; color: var(--ink-500); }
+
+@media print { body { background: white; } .report { padding: 24px; } }
+@media (max-width: 640px) {
+  .report { padding: 32px 18px 56px; }
+  .muni-table { font-size: 11.5px; }
+  .muni-table th, .muni-table td { padding: 8px 6px; }
+}
+</style>
+</head>
+<body>
+<div class="report">
+
+<div class="report-header">
+  <p class="report-eyebrow">Shizuoka Prefecture Forest Public Function Report</p>
+  <h1 class="report-title">静岡県 森林公益機能<br>市町村別レポート</h1>
+  <p class="report-subtitle">
+    静岡県森林クラウド公開システム（1,102 林班）× 林野庁簡易評価法による
+    市町村別の森林公益機能（水資源涵養 + CO₂吸収 + 裸地比較）の定量評価
+  </p>
+</div>
+
+<h2>1. 静岡県全体サマリ</h2>
+
+<div class="hero-stats">
+  <div class="stat">
+    <p class="stat-label">対象 林班数</p>
+    <p class="stat-value">1,102<span class="unit">林班</span></p>
+  </div>
+  <div class="stat">
+    <p class="stat-label">対象 森林面積</p>
+    <p class="stat-value">161,182<span class="unit">ha</span></p>
+  </div>
+  <div class="stat water">
+    <p class="stat-label">水資源涵養量</p>
+    <p class="stat-value">1,800.2<span class="unit">百万m³/年</span></p>
+  </div>
+  <div class="stat bare">
+    <p class="stat-label">裸地仮定の場合</p>
+    <p class="stat-value">385.8<span class="unit">百万m³/年</span></p>
+  </div>
+  <div class="stat effect">
+    <p class="stat-label">森林維持効果</p>
+    <p class="stat-value">+1,414.3<span class="unit">百万m³/年</span></p>
+    <p class="stat-note">+367% 増</p>
+  </div>
+  <div class="stat">
+    <p class="stat-label">CO₂吸収量</p>
+    <p class="stat-value">1,549,787<span class="unit">t-CO₂/年</span></p>
+  </div>
+</div>
+
+<div class="callout">
+  <strong>このレポートが意味すること：</strong>
+  もし静岡県の本対象森林 161,182 ha が裸地化（伐採後植栽せず・はげ山化）した場合、
+  年間の水資源涵養量は <strong>1800.2 百万 m³ → 385.8 百万 m³</strong> に
+  落ち込み、<strong>1414.3 百万 m³（家庭約 19,374,308 世帯分相当）</strong>
+  の水資源が失われる。森林を維持することの公益機能は、この差分として定量化できる。
+</div>
+
+<h2>2. 市町村別 内訳</h2>
+
+<p>面積の大きい順。市町村コードは静岡県森林クラウドの内部コード（61-76）。</p>
+
+<table class="muni-table">
+  <thead>
+    <tr>
+      <th>市町村</th>
+      <th>林班数</th>
+      <th>森林面積 (ha)</th>
+      <th>水源涵養 (m³/年)</th>
+      <th>裸地仮定 (m³/年)</th>
+      <th>森林維持効果</th>
+      <th>CO₂ (t/年)</th>
+    </tr>
+  </thead>
+  <tbody>
+        <tr>
+          <td><strong>市町村-67</strong><br><small>コード 67</small></td>
+          <td class="num">67</td>
+          <td class="num">28,388</td>
+          <td class="num">381,321,354</td>
+          <td class="num bare">76,401,066</td>
+          <td class="num effect">+304,920,288<br><small>+399%</small></td>
+          <td class="num">272,956</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-62</strong><br><small>コード 62</small></td>
+          <td class="num">124</td>
+          <td class="num">27,138</td>
+          <td class="num">275,062,395</td>
+          <td class="num bare">59,586,059</td>
+          <td class="num effect">+215,476,336<br><small>+362%</small></td>
+          <td class="num">260,929</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-66</strong><br><small>コード 66</small></td>
+          <td class="num">214</td>
+          <td class="num">25,091</td>
+          <td class="num">283,055,315</td>
+          <td class="num bare">61,517,467</td>
+          <td class="num effect">+221,537,848<br><small>+360%</small></td>
+          <td class="num">241,248</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-63</strong><br><small>コード 63</small></td>
+          <td class="num">202</td>
+          <td class="num">16,887</td>
+          <td class="num">170,142,294</td>
+          <td class="num bare">39,056,013</td>
+          <td class="num effect">+131,086,281<br><small>+336%</small></td>
+          <td class="num">162,372</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-61</strong><br><small>コード 61</small></td>
+          <td class="num">203</td>
+          <td class="num">14,863</td>
+          <td class="num">154,270,238</td>
+          <td class="num bare">34,235,537</td>
+          <td class="num effect">+120,034,701<br><small>+351%</small></td>
+          <td class="num">142,908</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-75</strong><br><small>コード 75</small></td>
+          <td class="num">114</td>
+          <td class="num">12,119</td>
+          <td class="num">118,932,923</td>
+          <td class="num bare">27,331,153</td>
+          <td class="num effect">+91,601,770<br><small>+335%</small></td>
+          <td class="num">116,537</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-73</strong><br><small>コード 73</small></td>
+          <td class="num">41</td>
+          <td class="num">8,965</td>
+          <td class="num">117,050,789</td>
+          <td class="num bare">24,083,245</td>
+          <td class="num effect">+92,967,544<br><small>+386%</small></td>
+          <td class="num">86,204</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-76</strong><br><small>コード 76</small></td>
+          <td class="num">21</td>
+          <td class="num">8,364</td>
+          <td class="num">89,368,345</td>
+          <td class="num bare">18,861,884</td>
+          <td class="num effect">+70,506,461<br><small>+374%</small></td>
+          <td class="num">80,424</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-65</strong><br><small>コード 65</small></td>
+          <td class="num">65</td>
+          <td class="num">7,020</td>
+          <td class="num">67,403,484</td>
+          <td class="num bare">15,969,927</td>
+          <td class="num effect">+51,433,557<br><small>+322%</small></td>
+          <td class="num">67,497</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-68</strong><br><small>コード 68</small></td>
+          <td class="num">25</td>
+          <td class="num">6,727</td>
+          <td class="num">76,668,856</td>
+          <td class="num bare">15,170,622</td>
+          <td class="num effect">+61,498,234<br><small>+405%</small></td>
+          <td class="num">64,683</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-74</strong><br><small>コード 74</small></td>
+          <td class="num">22</td>
+          <td class="num">3,894</td>
+          <td class="num">42,707,086</td>
+          <td class="num bare">8,781,686</td>
+          <td class="num effect">+33,925,400<br><small>+386%</small></td>
+          <td class="num">37,443</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-69</strong><br><small>コード 69</small></td>
+          <td class="num">3</td>
+          <td class="num">997</td>
+          <td class="num">13,970,387</td>
+          <td class="num bare">2,792,654</td>
+          <td class="num effect">+11,177,733<br><small>+400%</small></td>
+          <td class="num">9,588</td>
+        </tr>
+        <tr>
+          <td><strong>市町村-70</strong><br><small>コード 70</small></td>
+          <td class="num">1</td>
+          <td class="num">728</td>
+          <td class="num">10,196,673</td>
+          <td class="num bare">2,038,296</td>
+          <td class="num effect">+8,158,377<br><small>+400%</small></td>
+          <td class="num">6,998</td>
+        </tr>
+  </tbody>
+</table>
+
+<h2>3. 計算手法</h2>
+
+<p>
+各林班ごとに：
+</p>
+
+<ul>
+  <li>林班ポリゴンの面積（SHAPE_AREA）を Sentinel-2 で抽出した森林ピクセルと突合</li>
+  <li>林班重心の座標で気象（NASA POWER）・標高（国土地理院）・地質（産総研シームレス地質図）を取得</li>
+  <li>林野庁簡易評価法 Ver.1.0 で水資源涵養量を算定（針葉樹常緑として）</li>
+  <li>裸地仮定：水資源涵養量＝降水量 × 10%（マニュアル準拠）</li>
+  <li>CO₂ 吸収量：IPCC AFOLU Tier 2（9.62 t-CO₂/ha/年）× 林班面積</li>
+</ul>
+
+<div class="callout">
+  <strong>次のステップ（精度向上）</strong>：
+  栃木県・兵庫県・高知県では既に LiDAR の高精度森林資源データ
+  （20m メッシュ × 樹種・本数・樹高・材積）が「らしんばん」（MIERUNE×日本森林技術協会）
+  経由で公開されており、商用利用可能。静岡県でも同等データが公開されれば、林野庁標準値
+  ではなく実測 DBH・密度・樹高で計算でき、Tier 3 相当の精度（不確実性 ±10〜15%）に到達できる。
+</div>
+
+<h2>4. データソース</h2>
+
+<ul>
+  <li><strong>林班ポリゴン</strong>：静岡県森林クラウド公開システム（MAGIS.RINPAN ベクトルタイル）</li>
+  <li><strong>気象</strong>：NASA POWER monthly API（2020-2024 mean）</li>
+  <li><strong>標高</strong>：国土地理院 5m DEM API</li>
+  <li><strong>地質</strong>：産総研 シームレス地質図 v2 API</li>
+  <li><strong>水源涵養計算式</strong>：林野庁「林地における水資源涵養量簡易評価法」Ver.1.0（令和8年3月）</li>
+  <li><strong>CO₂ 換算</strong>：IPCC AFOLU 2006 Tier 2 + 林野庁収穫予想表</li>
+</ul>
+
+<p class="disclaimer">
+※ 本レポートは林野庁の公式評価式に準拠した第三者試算であり、公式認証データではありません。
+林野庁簡易評価法 Ver.1.0 は本来 100ha 未満の小規模林分を対象としており、本レポートでは
+林班単位（中央値約 100ha 程度）で適用しているが、林分内の樹高・密度・DBH のばらつきを
+標準値で平均化している点に注意。LiDAR 等の実測データ統合で Tier 3 への移行が可能。
+</p>
+
+<div class="report-footer">
+  <p>© 2026 もりみえる｜<a href="https://mori-mieru.jp/">mori-mieru.jp</a></p>
+</div>
+
+</div>
+</body>
+</html>
