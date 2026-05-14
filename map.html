@@ -185,6 +185,17 @@
 }
 .layer-row span { vertical-align: middle; }
 
+.zoom-hint {
+  margin: 10px 0 0; padding: 6px 10px;
+  font-size: 11px; color: var(--ink-500);
+  background: var(--cream); border-radius: 999px;
+  font-family: var(--font-mono); text-align: center;
+  transition: background .2s, color .2s;
+}
+.zoom-hint.active {
+  background: var(--green-700); color: #fff; font-weight: 600;
+}
+
 .legend {
   margin-top: 16px;
   padding: 14px 16px;
@@ -276,6 +287,7 @@
           </div>
           <p style="margin:8px 0 0;font-size:10.5px;color:var(--ink-500);">クリックで都道府県別の10年推移を見る</p>
         </div>
+        <p id="zoom-hint" class="zoom-hint">ズームすると市町村〜林班スケールに切替</p>
       </div>
 
       <div class="layer-group">
@@ -734,6 +746,36 @@ function bindLayerToggle(id, getLayer, legendId) {
     if (legendId) updateLegend();
   });
 }
+
+// ----- Zoom-dependent layer swap -----
+// 低ズームは「都道府県スケール」, 高ズームは「市町村〜林班スケール」に切替
+const ZOOM_DETAIL_THRESHOLD = 9;
+function applyZoomScale() {
+  const z = map.getZoom();
+  const prefChk = document.getElementById('ly-pref-co2');
+  const rinpanChk = document.getElementById('ly-rinpan-co2');
+  const hint = document.getElementById('zoom-hint');
+  if (z >= ZOOM_DETAIL_THRESHOLD) {
+    if (prefCo2Layer && map.hasLayer(prefCo2Layer)) map.removeLayer(prefCo2Layer);
+    if (rinpanCo2Layer && !map.hasLayer(rinpanCo2Layer) && !map.hasLayer(rinpanWaterLayer)) {
+      rinpanCo2Layer.addTo(map);
+      rinpanChk.checked = true;
+      updateLegend();
+    }
+    if (hint) {
+      hint.textContent = '🔎 市町村〜林班スケール表示中';
+      hint.classList.add('active');
+    }
+  } else {
+    if (prefCo2Layer && !map.hasLayer(prefCo2Layer) && prefChk.checked) {
+      prefCo2Layer.addTo(map);
+    }
+    if (hint) {
+      hint.textContent = 'ズームすると市町村〜林班スケールに切替';
+      hint.classList.remove('active');
+    }
+  }
+}
 function updateLegend() {
   document.querySelectorAll('.legend').forEach(l => l.classList.remove('active'));
   if (document.getElementById('ly-rinpan-co2').checked) document.getElementById('legend-co2').classList.add('active');
@@ -772,6 +814,9 @@ window.closeDetail = closeDetail;
   // Set initial Japan view
   map.setView([37.5, 138], 6);
   updateLegend();
+  // Zoom→スケール切替 連動
+  map.on('zoomend', applyZoomScale);
+  applyZoomScale();
 })();
 </script>
 </body>

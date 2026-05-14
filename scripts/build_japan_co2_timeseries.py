@@ -64,20 +64,34 @@ def polygon_area_km2(geom):
 
 
 def fetch_year(geom, year, retries=3):
+    # For multi-island prefectures (北海道・東京・鹿児島・沖縄), use the LARGEST polygon
+    # and its own bounds — the full multi-polygon bounds would span remote islands and
+    # produce an unusable bbox.
     if geom.geom_type == "MultiPolygon":
         largest = max(geom.geoms, key=lambda p: p.area)
         geom_dict = mapping(largest)
+        bbox = list(largest.bounds)
     else:
         geom_dict = mapping(geom)
+        bbox = list(geom.bounds)
 
-    bbox = geom.bounds
-    width = max(80, min(300, int((bbox[2] - bbox[0]) * 80)))
-    height = max(80, min(300, int((bbox[3] - bbox[1]) * 80)))
+    # Ensure resolution stays under Sentinel-2 L2A 1500 m/pixel limit.
+    # CDSE Statistical API seems to compute pixel size with significant overhead vs
+    # naive bbox/width — empirically we need ~5x safety margin (try aiming for
+    # 0.3 km/pixel target so API's own calc stays under 1500m).
+    import math
+    lat_mid = (bbox[1] + bbox[3]) / 2
+    bbox_w_km = (bbox[2] - bbox[0]) * 111 * math.cos(math.radians(lat_mid))
+    bbox_h_km = (bbox[3] - bbox[1]) * 111
+    min_width = max(120, int(bbox_w_km / 0.3) + 1)
+    min_height = max(120, int(bbox_h_km / 0.3) + 1)
+    width = min(800, min_width)
+    height = min(800, min_height)
 
     payload = {
         "input": {
             "bounds": {
-                "bbox": list(geom.bounds),
+                "bbox": bbox,
                 "properties": {"crs": "http://www.opengis.net/def/crs/OGC/1.3/CRS84"},
             },
             "data": [{
@@ -103,6 +117,7 @@ def fetch_year(geom, year, retries=3):
         },
     }
     backoff = 2
+    result = None
     for attempt in range(retries):
         try:
             result = sh.statistics(payload)
@@ -113,8 +128,10 @@ def fetch_year(geom, year, retries=3):
                 time.sleep(backoff)
                 backoff *= 2
                 continue
+            # Print other errors for debugging
+            print(f"    [fetch error] {err[:200]}", flush=True)
             return None
-    else:
+    if result is None:
         return None
     # Aggregate across all monthly entries — pick the one with highest valid count
     best = None
