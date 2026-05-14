@@ -1,0 +1,59 @@
+{
+  "reports": [
+    {
+      "id": "himi-water",
+      "title": "氷見市周辺森林 水資源涵養量レポート",
+      "subtitle": "Sentinel-2 × 林野庁簡易評価法 で年間 約 1.19 億トンを定量",
+      "theme": "water",
+      "region": "富山県氷見市",
+      "category": "水資源涵養",
+      "date": "2026-05-14",
+      "href": "report/himi-water.html",
+      "image": "assets/report-water-hero.jpg",
+      "kpi_label": "年間 水資源涵養量",
+      "kpi_value": "約 1.19 億トン",
+      "kpi_note": "AOI 12,398 ha・公式値 13,486 ha と一致率 92%",
+      "tags": ["水源涵養", "Sentinel-2", "林野庁 Tier 2", "北陸", "富山"]
+    },
+    {
+      "id": "shizuoka-forests",
+      "title": "静岡県 森林公益機能 市町村別レポート",
+      "subtitle": "1,102 林班 × 13 市町村の水源涵養・CO2・裸地比較",
+      "theme": "co2",
+      "region": "静岡県",
+      "category": "自治体スコア",
+      "date": "2026-05-14",
+      "href": "report/shizuoka-forests.html",
+      "image": "assets/report-co2-hero.jpg",
+      "kpi_label": "森林維持効果",
+      "kpi_value": "+14 億トン／年",
+      "kpi_note": "1,102 林班・161,182 ha / CO2 155万 t/年",
+      "tags": ["自治体", "林班", "水源涵養", "CO2", "中部", "静岡"]
+    },
+    {
+      "id": "himi-monitoring",
+      "title": "氷見市 森林施業効果モニタリングレポート",
+      "subtitle": "Sentinel-2 5 年時系列で施業効果を量化、MRV 代替",
+      "theme": "monitor",
+      "region": "富山県氷見市",
+      "category": "施業効果モニタリング",
+      "date": "2026-05-14",
+      "href": "report/himi-monitoring.html",
+      "image": "assets/report-monitoring-hero.jpg",
+      "kpi_label": "5 年 NDVI 変化",
+      "kpi_value": "+15.2%",
+      "kpi_note": "累計 ΔCO2 +41,566 t / 71 観測点",
+      "tags": ["時系列差分", "Sentinel-2", "MRV代替", "施業効果", "北陸", "富山"]
+    }
+  ],
+  "categories": [
+    "水資源涵養",
+    "自治体スコア",
+    "施業効果モニタリング",
+    "生物多様性",
+    "流域マッチング"
+  ],
+  "regions": [
+    "北海道", "東北", "関東", "中部", "関西", "中国", "四国", "九州"
+  ]
+}

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>レポート一覧｜もりみえる</title>
+<meta name="description" content="もりみえるが衛星 × 公開データで自動生成したレポートの一覧。水資源涵養・CO2吸収・施業効果・流域マッチング等のテーマ別・地域別。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.reports-page { padding: 80px 36px 96px; }
+.reports-page .container { max-width: 1200px; margin: 0 auto; }
+.reports-intro { margin-bottom: 36px; text-align: center; }
+.reports-intro p { color: var(--ink-700); font-size: 15px; line-height: 1.95; max-width: 720px; margin: 0 auto; }
+
+.filter-bar {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center; margin: 24px 0 36px;
+}
+.filter-chip {
+  background: var(--paper);
+  border: 1.5px solid var(--ink-300);
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-700);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-chip:hover { border-color: var(--green-700); color: var(--green-700); }
+.filter-chip.active {
+  background: var(--green-700); color: white; border-color: var(--green-700);
+}
+
+.reports-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px;
+}
+.report-card-rich {
+  background: var(--paper);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ink-300);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.report-card-rich:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--green-700);
+}
+.report-card-rich .img {
+  width: 100%;
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.report-card-rich .img::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(31, 61, 42, 0.55));
+}
+.report-card-rich .badge-stack {
+  position: absolute; top: 12px; left: 12px;
+  display: flex; gap: 6px; z-index: 1;
+}
+.report-card-rich .badge {
+  background: rgba(255,255,255,0.92);
+  color: var(--green-900);
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+}
+.report-card-rich .badge.water { background: var(--blue-700); color: white; }
+.report-card-rich .badge.co2 { background: var(--green-700); color: white; }
+.report-card-rich .badge.monitor { background: var(--earth-500); color: white; }
+.report-card-rich .body { padding: 22px 24px 24px; }
+.report-card-rich h3 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 17px; color: var(--green-900);
+  margin: 0 0 8px; line-height: 1.5;
+}
+.report-card-rich .subtitle { font-size: 12.5px; color: var(--ink-500); margin: 0 0 14px; line-height: 1.7; }
+.report-card-rich .kpi-block {
+  background: var(--cream); padding: 12px 14px;
+  border-radius: 10px; margin: 0 0 12px;
+}
+.report-card-rich .kpi-label { font-size: 10.5px; color: var(--ink-500); margin: 0 0 2px; letter-spacing: 0.05em; text-transform: uppercase; }
+.report-card-rich .kpi-value {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 22px; color: var(--green-700); margin: 0;
+}
+.report-card-rich .kpi-note { font-size: 10.5px; color: var(--ink-500); margin: 3px 0 0; line-height: 1.5; }
+.report-card-rich .meta {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 11px; color: var(--ink-500);
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px dashed var(--ink-300);
+}
+.report-card-rich .meta .region { color: var(--earth-600); font-weight: 600; }
+
+.empty {
+  text-align: center; color: var(--ink-500); padding: 40px;
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/" class="logo">
+    <span class="logo-mark">🌲</span>
+    <span class="logo-text">もりみえる</span>
+    <span class="logo-en">morimieru</span>
+  </a>
+  <nav class="nav">
+    <a href="/#reports" class="active">レポート</a>
+    <a href="/#about">これは何？</a>
+    <a href="/#technology">技術</a>
+    <a href="/#start" class="cta">森を探す</a>
+  </nav>
+</header>
+
+<main class="reports-page">
+  <div class="container">
+    <p class="section-eyebrow" style="text-align:center;">All Reports</p>
+    <h1 class="section-title" style="text-align:center;font-size:clamp(28px,4.5vw,40px);">公開レポート一覧</h1>
+    <div class="reports-intro">
+      <p>
+        衛星と公開データから自動生成したレポート。テーマ・地域・自治体別に並んでいます。
+        誰でも自由に閲覧・引用・PDF 保存できます。
+      </p>
+    </div>
+
+    <div class="filter-bar" id="filter-bar"></div>
+
+    <div class="reports-list" id="reports-list"></div>
+
+    <p style="text-align:center; margin-top: 36px; color: var(--ink-500); font-size: 13px;">
+      新しいレポート（自治体・林班・流域別）を順次追加中。
+      <a href="https://github.com/Ryujiyasu/morimieru" target="_blank" style="margin-left:6px;">GitHub で進捗を見る</a>
+    </p>
+  </div>
+</main>
+
+<script>
+let allReports = [];
+let activeFilter = 'all';
+
+const themeLabel = { water: '水資源涵養', co2: '自治体スコア', monitor: '施業効果モニタリング' };
+
+fetch('data/reports.json')
+  .then(r => r.json())
+  .then(data => {
+    allReports = data.reports;
+    renderFilters(data.categories);
+    renderList();
+  });
+
+function renderFilters(categories) {
+  const bar = document.getElementById('filter-bar');
+  const chips = [
+    `<button class="filter-chip ${activeFilter==='all'?'active':''}" data-cat="all">すべて</button>`,
+    ...categories.map(c => `<button class="filter-chip ${activeFilter===c?'active':''}" data-cat="${c}">${c}</button>`),
+  ];
+  bar.innerHTML = chips.join('');
+  bar.querySelectorAll('.filter-chip').forEach(b => {
+    b.addEventListener('click', () => {
+      activeFilter = b.dataset.cat;
+      bar.querySelectorAll('.filter-chip').forEach(x => x.classList.toggle('active', x.dataset.cat === activeFilter));
+      renderList();
+    });
+  });
+}
+
+function renderList() {
+  const list = document.getElementById('reports-list');
+  const filtered = activeFilter === 'all'
+    ? allReports
+    : allReports.filter(r => r.category === activeFilter);
+
+  if (!filtered.length) {
+    list.innerHTML = `<p class="empty">該当するレポートがまだありません（今後追加予定）。</p>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(r => `
+    <a class="report-card-rich" href="${r.href}">
+      <div class="img" style="background-image:url('${r.image}')">
+        <div class="badge-stack">
+          <span class="badge ${r.theme}">${themeLabel[r.theme] || r.category}</span>
+        </div>
+      </div>
+      <div class="body">
+        <h3>${r.title}</h3>
+        <p class="subtitle">${r.subtitle}</p>
+        <div class="kpi-block">
+          <p class="kpi-label">${r.kpi_label}</p>
+          <p class="kpi-value">${r.kpi_value}</p>
+          <p class="kpi-note">${r.kpi_note}</p>
+        </div>
+        <div class="meta">
+          <span class="region">📍 ${r.region}</span>
+          <span>${r.date}</span>
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+</script>
+</body>
+</html>
