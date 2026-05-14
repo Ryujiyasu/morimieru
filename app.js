@@ -204,18 +204,31 @@
     // "Sample address" button — auto-fills the form with a real Japanese company HQ-ish address
     const sampleBtn = document.getElementById('sample-button');
     if (sampleBtn) {
-      sampleBtn.addEventListener('click', () => {
+      sampleBtn.addEventListener('click', async () => {
         const samples = [
           { company: 'サンプル食品株式会社', address: '静岡県焼津市利右衛門', region: 'chubu' },
           { company: 'サンプル製造株式会社', address: '富山県氷見市丸の内', region: 'chubu' },
           { company: 'サンプル飲料株式会社', address: '熊本県小国町宮原', region: 'kyushu' },
         ];
         const s = samples[Math.floor(Math.random() * samples.length)];
+
+        // Visible feedback: change the button text + scroll the form into view
+        const origLabel = sampleBtn.textContent;
+        sampleBtn.textContent = `${s.address} で実行中…`;
+        sampleBtn.disabled = true;
         const form = document.getElementById('company-form');
         form.querySelector('input[name="company"]').value = s.company;
         form.querySelector('input[name="address"]').value = s.address;
         form.querySelector('select[name="region"]').value = s.region;
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Give the scroll a beat so the user sees the values fill in
+        await new Promise(r => setTimeout(r, 200));
         form.requestSubmit();
+        // Re-enable after the submit handler finishes
+        setTimeout(() => {
+          sampleBtn.textContent = origLabel;
+          sampleBtn.disabled = false;
+        }, 5000);
       });
     }
 
@@ -249,6 +262,17 @@
       // Show loading state if we have an address — we'll geocode + load watersheds in parallel
       const btn = e.target.querySelector('button[type="submit"]');
       const origLabel = btn.textContent;
+      // Reveal candidates section EARLY so the user sees something is happening,
+      // with a temporary "searching" placeholder.
+      $('#candidates').hidden = false;
+      const titleEl = document.querySelector('#candidates .section-title');
+      const leadEl = document.querySelector('#candidates .section-lead');
+      const origTitle = titleEl.innerHTML;
+      const origLead = leadEl.textContent;
+      titleEl.textContent = `🛰️  ${state.address || '候補地'} を探しています…`;
+      leadEl.textContent = '少々お待ちください。';
+      $('#candidates').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
       if (state.address) {
         btn.textContent = '取水域を特定中…';
         btn.disabled = true;
@@ -330,6 +354,8 @@
       lead.textContent = '住所から取水域を特定できなかったため（離島・河口の可能性）、希望地域の中から候補を提示しています。';
       summary.hidden = true;
     } else {
+      title.innerHTML = `<span id="company-name-display">${state.company || 'あなた'}</span>の会社にあう森、<span id="candidate-count">${state.candidates.length}</span> つ見つかりました。`;
+      lead.textContent = 'クリックで、その森を衛星で「いま」見ることができます。';
       summary.hidden = true;
     }
 
