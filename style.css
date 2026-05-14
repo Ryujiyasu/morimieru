@@ -338,6 +338,14 @@ button, input, textarea, select { font: inherit; color: inherit; }
   font-size: 14px;
   font-weight: 500;
   color: var(--green-900);
+  display: block;
+}
+.field-hint {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--ink-500);
+  margin-top: 3px;
 }
 .value-display {
   color: var(--earth-500);
@@ -644,6 +652,31 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .metric-list li > span:first-child { color: var(--ink-500); }
 .metric-list li > span:last-child { color: var(--ink-900); font-weight: 500; }
 .metric-list.small li { font-size: 13px; padding: 4px 0; }
+
+/* ============ User location pin on candidates map ============ */
+.user-loc-pin .pin-inner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1f4570;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 4px 10px rgba(31, 69, 112, 0.4);
+  border: 3px solid white;
+  position: relative;
+}
+.user-loc-pin .pin-inner::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1f4570;
+}
 
 /* ============ Method details (deep dive) ============ */
 .method-details {

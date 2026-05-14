@@ -24,7 +24,13 @@
     sentinelMeta: null,
     sentinelSeries: null,
     himiCo2: null,
-    jcreditProjects: []
+    jcreditProjects: [],
+    address: '',
+    addressLatLon: null,            // [lat, lon] from geocoder
+    watersheds: null,               // FeatureCollection (lazy-loaded)
+    userBasin: null,                // GeoJSON feature
+    watershedBasins: [],            // user basin + upstream basins
+    candidateBasinFilter: false,    // whether candidates are filtered by basin
   };
 
   // ---- Data loaders ----
@@ -38,6 +44,100 @@
       console.warn('J-credit data load failed', e);
       state.jcreditProjects = [];
     }
+  }
+
+  // ---- Geocoding (国土地理院 free API) ----
+  async function geocodeAddress(addr) {
+    if (!addr) return null;
+    try {
+      const r = await fetch(
+        'https://msearch.gsi.go.jp/address-search/AddressSearch?q=' + encodeURIComponent(addr)
+      );
+      const arr = await r.json();
+      if (!Array.isArray(arr) || !arr.length) return null;
+      const c = arr[0].geometry.coordinates;
+      return { lat: c[1], lon: c[0], title: arr[0].properties.title };
+    } catch (e) {
+      console.warn('geocode failed', e);
+      return null;
+    }
+  }
+
+  // ---- Watershed loader + point-in-polygon ----
+  async function loadWatersheds() {
+    if (state.watersheds) return state.watersheds;
+    try {
+      const r = await fetch('data/watersheds/japan_lev08.geojson');
+      state.watersheds = await r.json();
+      console.log(`Loaded ${state.watersheds.features.length} watersheds`);
+    } catch (e) {
+      console.warn('watershed load failed', e);
+      state.watersheds = { features: [] };
+    }
+    return state.watersheds;
+  }
+
+  // Standard ray-casting point-in-polygon for [lon, lat] coordinates
+  function pointInRing(point, ring) {
+    let inside = false;
+    const [x, y] = point;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const [xi, yi] = ring[i];
+      const [xj, yj] = ring[j];
+      const intersect = ((yi > y) !== (yj > y)) &&
+        (x < (xj - xi) * (y - yi) / (yj - yi + 1e-15) + xi);
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  }
+
+  function pointInGeometry(point, geom) {
+    if (geom.type === 'Polygon') {
+      if (!pointInRing(point, geom.coordinates[0])) return false;
+      for (let i = 1; i < geom.coordinates.length; i++) {
+        if (pointInRing(point, geom.coordinates[i])) return false; // in a hole
+      }
+      return true;
+    } else if (geom.type === 'MultiPolygon') {
+      return geom.coordinates.some(poly => {
+        if (!pointInRing(point, poly[0])) return false;
+        for (let i = 1; i < poly.length; i++) {
+          if (pointInRing(point, poly[i])) return false;
+        }
+        return true;
+      });
+    }
+    return false;
+  }
+
+  function findContainingBasin(lonLat, fc) {
+    for (const f of fc.features) {
+      if (pointInGeometry(lonLat, f.geometry)) return f;
+    }
+    return null;
+  }
+
+  // Recursive: all basins that eventually drain into target
+  function findUpstreamBasins(target, fc) {
+    const byId = new Map();
+    for (const f of fc.features) byId.set(f.properties.hybas_id, f);
+    const targetId = target.properties.hybas_id;
+    const upstream = new Set();
+    for (const f of fc.features) {
+      let cur = f;
+      const seen = new Set();
+      while (cur && !seen.has(cur.properties.hybas_id)) {
+        seen.add(cur.properties.hybas_id);
+        const nextId = cur.properties.next_down;
+        if (nextId === targetId) {
+          upstream.add(f.properties.hybas_id);
+          break;
+        }
+        if (!nextId) break;
+        cur = byId.get(nextId);
+      }
+    }
+    return [...upstream].map(id => byId.get(id));
   }
 
   async function loadSentinelMeta() {
@@ -97,7 +197,7 @@
       budgetDisplay.textContent = `${fmtMan(v)}万円`;
     });
 
-    $('#company-form').addEventListener('submit', (e) => {
+    $('#company-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(e.target);
       state.company = fd.get('company') || 'あなた';
@@ -105,6 +205,43 @@
       state.budget = +fd.get('budget');
       state.region = fd.get('region');
       state.vision = fd.get('vision') || '';
+      state.address = (fd.get('address') || '').trim();
+
+      // Show loading state if we have an address — we'll geocode + load watersheds in parallel
+      const btn = e.target.querySelector('button[type="submit"]');
+      const origLabel = btn.textContent;
+      if (state.address) {
+        btn.textContent = '取水域を特定中…';
+        btn.disabled = true;
+        const [geo, _] = await Promise.all([
+          geocodeAddress(state.address),
+          loadWatersheds(),
+        ]);
+        if (geo) {
+          state.addressLatLon = [geo.lat, geo.lon];
+          const basin = findContainingBasin([geo.lon, geo.lat], state.watersheds);
+          if (basin) {
+            const upstream = findUpstreamBasins(basin, state.watersheds);
+            state.userBasin = basin;
+            state.watershedBasins = [basin, ...upstream];
+            state.candidateBasinFilter = true;
+            console.log(`User basin: ${basin.properties.hybas_id}, +${upstream.length} upstream basins, total area ${(basin.properties.up_area_sqkm || 0).toLocaleString()} km²`);
+          } else {
+            console.warn('No basin contains the address — coastline issue?');
+            state.userBasin = null;
+            state.watershedBasins = [];
+            state.candidateBasinFilter = false;
+          }
+        }
+        btn.textContent = origLabel;
+        btn.disabled = false;
+      } else {
+        state.addressLatLon = null;
+        state.userBasin = null;
+        state.watershedBasins = [];
+        state.candidateBasinFilter = false;
+      }
+
       showCandidates();
     });
   }
@@ -120,6 +257,22 @@
 
     $('#company-name-display').textContent = state.company || 'あなた';
     $('#candidate-count').textContent = state.candidates.length;
+
+    // Update headline: if we matched a watershed, brag about it
+    const title = document.querySelector('#candidates .section-title');
+    const lead = document.querySelector('#candidates .section-lead');
+    const inWsCount = state.candidates.filter(c => c.in_watershed).length;
+    if (state.userBasin && inWsCount > 0) {
+      const upArea = Math.round(state.userBasin.properties.up_area_sqkm || state.userBasin.properties.area_sqkm || 0);
+      title.innerHTML = `<span id="company-name-display">${state.company}</span> の取水域・上流の森、<span id="candidate-count">${inWsCount}</span> つ見つかりました`;
+      lead.innerHTML = `工場や本社で使う水は、上流の森が育んでいます。あなたの会社の地点を含む水系（流域面積 <b>${upArea.toLocaleString()} km²</b>）の中で、J-クレジット制度に登録された森林を優先的にお見せしています。`;
+    } else if (state.userBasin) {
+      title.innerHTML = `<span id="company-name-display">${state.company}</span> の取水域内、登録済みプロジェクトが見つからなかったので、近隣の候補をお見せします`;
+      lead.textContent = 'あなたの会社の流域内では現時点でJ-クレジット登録森林が見つかりませんでした。近隣の森から優先表示しています。';
+    } else if (state.address) {
+      title.innerHTML = `<span id="company-name-display">${state.company}</span> 向けの候補、${state.candidates.length} つ`;
+      lead.textContent = '住所から取水域を特定できなかったため（離島・海岸沿いの可能性）、希望地域の中から候補を提示しています。';
+    }
 
     const section = $('#candidates');
     section.hidden = false;
@@ -144,21 +297,49 @@
   function pickRealProjects(region, count) {
     if (!state.jcreditProjects.length) return [];
     let pool = state.jcreditProjects;
-    if (region && region !== 'all') {
-      const prefs = REGION_PREFS[region] || [];
-      pool = pool.filter(p => prefs.includes(p.prefecture));
+
+    // If we have a matched watershed, prefer projects inside the user's basin + upstream basins
+    let inWatershed = [];
+    if (state.candidateBasinFilter && state.watershedBasins.length) {
+      for (const p of pool) {
+        for (const b of state.watershedBasins) {
+          if (pointInGeometry([p.lon, p.lat], b.geometry)) {
+            inWatershed.push({ ...p, _basin: b });
+            break;
+          }
+        }
+      }
+      console.log(`${inWatershed.length} J-credit projects in your watershed`);
     }
-    // Random sample, but stable for the session
-    const sample = [...pool].sort(() => Math.random() - 0.5).slice(0, count);
+
+    // Pick: prefer watershed-matched, fall back to region, then everything else
+    let primary, secondary;
+    if (inWatershed.length) {
+      primary = inWatershed;
+      secondary = pool.filter(p => !inWatershed.some(w => w.no === p.no));
+    } else if (region && region !== 'all') {
+      const prefs = REGION_PREFS[region] || [];
+      primary = pool.filter(p => prefs.includes(p.prefecture));
+      secondary = pool.filter(p => !prefs.includes(p.prefecture));
+    } else {
+      primary = pool;
+      secondary = [];
+    }
+
+    // Shuffle then take from primary first
+    const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+    const sample = [...shuffle(primary).slice(0, count), ...shuffle(secondary).slice(0, Math.max(0, count - primary.length))].slice(0, count);
 
     // Each project's verified CO2 number lives in its linked PDF on japancredit.go.jp;
     // the card shows our area-based estimate until we pull those PDFs into the dataset.
     return sample.map(p => {
-      // Rough heuristic: assume 100-500ha typical, 8-12 t-CO2/ha/year
+      // Each project's verified CO2 number lives in its linked PDF on japancredit.go.jp;
+      // the card shows our area-based estimate until we pull those PDFs into the dataset.
       const ha = 80 + (parseInt(p.no.replace(/\D/g, '') || '0') % 700);
       const co2_per_ha = 8 + Math.random() * 4;
       const co2_estimate = Math.round(ha * co2_per_ha);
       const uncertainty = co2_estimate * 0.18;
+      const inWatershed = !!p._basin;
       return {
         id: `jc-${p.no}`,
         name: shortenSummary(p.summary),
@@ -176,7 +357,8 @@
         credit_man_yen: Math.round(co2_estimate * 1.2),
         owner: p.operator,
         deepdive: false,
-        tagline: `J-クレジット登録番号 ${p.no}・${p.methodology.split(' ')[0]}`,
+        tagline: inWatershed ? '🌊 あなたの取水域・上流の森' : `J-クレジット登録番号 ${p.no}・${p.methodology.split(' ')[0]}`,
+        in_watershed: inWatershed,
         _jcredit: p
       };
     });
@@ -235,19 +417,67 @@
       maxZoom: 18
     }).addTo(map);
 
-    state.candidates.forEach((c, idx) => {
+    // ---- Watershed overlay ----
+    if (state.watershedBasins.length) {
+      const userBasinFC = {
+        type: 'FeatureCollection',
+        features: [state.userBasin],
+      };
+      const upstreamFC = {
+        type: 'FeatureCollection',
+        features: state.watershedBasins.filter(b => b !== state.userBasin),
+      };
+
+      // Upstream basins in a lighter, complementary color
+      L.geoJSON(upstreamFC, {
+        style: {
+          color: '#3b6da1',
+          weight: 1,
+          fillColor: '#7fadda',
+          fillOpacity: 0.18,
+        },
+      }).addTo(map).bindTooltip('あなたの取水域・上流側', { sticky: true });
+
+      // The user's local basin
+      L.geoJSON(userBasinFC, {
+        style: {
+          color: '#1f4570',
+          weight: 2,
+          fillColor: '#3b6da1',
+          fillOpacity: 0.25,
+        },
+      }).addTo(map).bindTooltip('あなたの会社の取水域', { sticky: true });
+    }
+
+    // ---- User's company location ----
+    if (state.addressLatLon) {
+      const [lat, lon] = state.addressLatLon;
+      L.marker([lat, lon], {
+        icon: L.divIcon({
+          className: 'user-loc-pin',
+          html: '<div class="pin-inner">🏢</div>',
+          iconSize: [40, 40],
+          iconAnchor: [20, 36],
+        }),
+      }).addTo(map).bindTooltip(`<b>${state.company}</b><br>${state.address}`, { direction: 'top' });
+    }
+
+    // ---- Forest candidates ----
+    state.candidates.forEach((c) => {
       const isDeepdive = c.deepdive;
+      const inWs = c.in_watershed;
       const marker = L.circleMarker([c.lat, c.lon], {
-        radius: isDeepdive ? 14 : 10,
-        fillColor: isDeepdive ? '#c47a4a' : '#2d5a3d',
+        radius: isDeepdive ? 14 : (inWs ? 12 : 9),
+        fillColor: isDeepdive ? '#c47a4a' : (inWs ? '#2d5a3d' : '#7a786a'),
         color: 'white',
         weight: 3,
         opacity: 1,
-        fillOpacity: 0.85
+        fillOpacity: 0.9,
       }).addTo(map);
 
+      const tipLine2 = inWs ? '<span style="color:#3b6da1;">🌊 あなたの取水域・上流</span><br>' : '';
       marker.bindTooltip(
-        `<b>${c.name}</b><br>${c.pref}<br>${fmtMan(c.co2_estimate)} t-CO₂/年`,
+        `<b>${c.name}</b><br>${tipLine2}${c.pref}<br>${fmtMan(c.co2_estimate)} t-CO₂/年`,
         { direction: 'top', offset: [0, -8] }
       );
 
@@ -255,14 +485,15 @@
       c.__marker = marker;
     });
 
-    if (state.candidates.length > 1) {
-      const bounds = L.latLngBounds(state.candidates.map(c => [c.lat, c.lon]));
+    // ---- Fit bounds: user location + candidates + watershed ----
+    const fitItems = state.candidates.map(c => [c.lat, c.lon]);
+    if (state.addressLatLon) fitItems.push(state.addressLatLon);
+    if (fitItems.length > 1) {
+      const bounds = L.latLngBounds(fitItems);
       map.fitBounds(bounds, { padding: [40, 40] });
     }
 
     state.candidateMap = map;
-
-    // workaround for Leaflet inside hidden section
     setTimeout(() => map.invalidateSize(), 100);
   }
 
