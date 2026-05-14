@@ -138,7 +138,10 @@
         <span class="field-label">森への想い（任意）</span>
         <textarea name="vision" rows="3" placeholder="例：地域貢献の一環として／創業100年に向けて／脱炭素経営の柱として"></textarea>
       </label>
-      <button type="submit" class="btn btn-primary btn-large">候補の森を見る →</button>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-large">候補の森を見る →</button>
+        <button type="button" class="btn btn-ghost" id="sample-button">サンプル住所で試す</button>
+      </div>
     </form>
   </div>
 </section>
@@ -149,6 +152,21 @@
     <p class="section-eyebrow">Step 2</p>
     <h2 class="section-title"><span id="company-name-display">あなた</span>の会社にあう森、<span id="candidate-count">4</span>つ見つかりました。</h2>
     <p class="section-lead">クリックで、その森を衛星で「いま」見ることができます。</p>
+
+    <!-- Watershed summary (shown only when address yielded a basin) -->
+    <div id="watershed-summary" class="watershed-summary" hidden>
+      <div class="ws-icon">🌊</div>
+      <div class="ws-text">
+        <p class="ws-label">あなたの会社の取水域</p>
+        <p class="ws-name" id="ws-name">—</p>
+        <ul class="ws-stats">
+          <li>流域面積：<strong id="ws-area">—</strong> km²</li>
+          <li>取水域内のJ-クレジット登録森林：<strong id="ws-jc-count">—</strong>件</li>
+          <li>上流側の盆地：<strong id="ws-upstream-count">—</strong>個</li>
+        </ul>
+        <p class="ws-help">水色の枠が「取水域」、青色の枠が「上流側」です。地図でご確認ください。</p>
+      </div>
+    </div>
 
     <div class="candidates-layout">
       <div id="candidates-map" class="candidates-map"></div>
@@ -229,8 +247,8 @@
             <li><span>収穫予想表</span><span>富山県スギ用</span></li>
           </ul>
         </div>
-        <details class="method-details" id="method-details" hidden>
-          <summary>計算根拠を見る（衛星 → 森林面積 → CO₂）</summary>
+        <details class="method-details" id="method-details" open hidden>
+          <summary>📐 衛星から数字を出した計算根拠（4ステップ）</summary>
           <div id="method-body" class="method-body"></div>
         </details>
         <button class="btn btn-primary btn-large btn-full" onclick="goToCommit()">この森に、コミットする →</button>

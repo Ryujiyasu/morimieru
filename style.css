@@ -410,6 +410,66 @@ button, input, textarea, select { font: inherit; color: inherit; }
   color: var(--ink-500);
   margin-top: 4px;
 }
+.form-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ============ Watershed summary ============ */
+.watershed-summary {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #e7f0fa 0%, #f3f8fd 100%);
+  border: 2px solid #3b6da1;
+  border-radius: var(--radius-md);
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+}
+.ws-icon {
+  font-size: 48px;
+  line-height: 1;
+}
+.ws-text { flex: 1; }
+.ws-label {
+  font-family: var(--font-en);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: #3b6da1;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.ws-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  color: #1f4570;
+  margin: 0 0 12px;
+}
+.ws-stats {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 28px;
+  font-size: 14px;
+  color: var(--ink-700);
+}
+.ws-stats strong {
+  color: #1f4570;
+  font-family: var(--font-display);
+  font-size: 17px;
+}
+.ws-help {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-500);
+}
 
 /* ============ Candidates ============ */
 .step-candidates { background: var(--paper); }

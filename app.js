@@ -201,6 +201,25 @@
       budgetDisplay.textContent = `${fmtMan(v)}万円`;
     });
 
+    // "Sample address" button fills the form with a real Japanese company HQ-ish address
+    // and submits, so first-time visitors immediately see the watershed feature in action.
+    const sampleBtn = document.getElementById('sample-button');
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', () => {
+        const samples = [
+          { company: 'サンプル食品株式会社', address: '静岡県焼津市利右衛門', region: 'chubu' },
+          { company: 'サンプル製造株式会社', address: '富山県氷見市丸の内', region: 'chubu' },
+          { company: 'サンプル飲料株式会社', address: '熊本県小国町宮原', region: 'kyushu' },
+        ];
+        const s = samples[Math.floor(Math.random() * samples.length)];
+        const form = document.getElementById('company-form');
+        form.querySelector('input[name="company"]').value = s.company;
+        form.querySelector('input[name="address"]').value = s.address;
+        form.querySelector('select[name="region"]').value = s.region;
+        form.requestSubmit();
+      });
+    }
+
     $('#company-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(e.target);
@@ -254,7 +273,16 @@
   // Pair a featured forest (Himi, with full Sentinel-2 view) with real J-credit projects from the region
   function showCandidates() {
     const featuredSeed = window.getMorimieruCandidates(state.region);
-    const featured = featuredSeed.filter(c => c.deepdive);
+    const featured = featuredSeed.filter(c => c.deepdive).map(c => {
+      // Tag featured candidates with in_watershed flag too
+      if (state.candidateBasinFilter && state.watershedBasins.length) {
+        const inside = state.watershedBasins.some(b => pointInGeometry([c.lon, c.lat], b.geometry));
+        if (inside) {
+          return { ...c, in_watershed: true, tagline: '🌊 あなたの取水域内の森（深掘り対応）' };
+        }
+      }
+      return c;
+    });
     const realProjects = pickRealProjects(state.region, 4);
 
     state.candidates = [...featured, ...realProjects];
@@ -262,20 +290,31 @@
     $('#company-name-display').textContent = state.company || 'あなた';
     $('#candidate-count').textContent = state.candidates.length;
 
-    // Update headline: if we matched a watershed, brag about it
+    // Update headline + render watershed summary block
     const title = document.querySelector('#candidates .section-title');
     const lead = document.querySelector('#candidates .section-lead');
+    const summary = $('#watershed-summary');
     const inWsCount = state.candidates.filter(c => c.in_watershed).length;
-    if (state.userBasin && inWsCount > 0) {
-      const upArea = Math.round(state.userBasin.properties.up_area_sqkm || state.userBasin.properties.area_sqkm || 0);
-      title.innerHTML = `<span id="company-name-display">${state.company}</span> の取水域・上流の森、<span id="candidate-count">${inWsCount}</span> つ見つかりました`;
-      lead.innerHTML = `工場や本社で使う水は、上流の森が育んでいます。あなたの会社の地点を含む水系（流域面積 <b>${upArea.toLocaleString()} km²</b>）の中で、J-クレジット制度に登録された森林を優先的にお見せしています。`;
-    } else if (state.userBasin) {
-      title.innerHTML = `<span id="company-name-display">${state.company}</span> の取水域内、登録済みプロジェクトが見つからなかったので、近隣の候補をお見せします`;
-      lead.textContent = 'あなたの会社の流域内では現時点でJ-クレジット登録森林が見つかりませんでした。近隣の森から優先表示しています。';
+    const upstreamCount = state.watershedBasins.length > 0 ? state.watershedBasins.length - 1 : 0;
+
+    if (state.userBasin) {
+      const basinArea = Math.round(state.userBasin.properties.area_sqkm || 0);
+      const upArea = Math.round(state.userBasin.properties.up_area_sqkm || basinArea);
+
+      title.innerHTML = `<span id="company-name-display">${state.company}</span> の取水域の森、<span id="candidate-count">${inWsCount || state.candidates.length}</span> つ`;
+      lead.textContent = '工場や本社で使う水は、流域の森が育んでいます。あなたの取水域内・上流側にある森を優先的に並べています。';
+
+      $('#ws-name').textContent = `流域ID ${state.userBasin.properties.hybas_id}（HydroBASINS Lvl 8）`;
+      $('#ws-area').textContent = upArea.toLocaleString();
+      $('#ws-jc-count').textContent = inWsCount;
+      $('#ws-upstream-count').textContent = upstreamCount;
+      summary.hidden = false;
     } else if (state.address) {
       title.innerHTML = `<span id="company-name-display">${state.company}</span> 向けの候補、${state.candidates.length} つ`;
-      lead.textContent = '住所から取水域を特定できなかったため（離島・海岸沿いの可能性）、希望地域の中から候補を提示しています。';
+      lead.textContent = '住所から取水域を特定できなかったため（離島・河口の可能性）、希望地域の中から候補を提示しています。';
+      summary.hidden = true;
+    } else {
+      summary.hidden = true;
     }
 
     const section = $('#candidates');
@@ -371,7 +410,7 @@
         credit_man_yen: Math.round(co2_estimate * 1.2),
         owner: p.operator,
         deepdive: false,
-        tagline: inWatershed ? '🌊 あなたの取水域・上流の森' : `J-クレジット登録番号 ${p.no}・${p.methodology.split(' ')[0]}`,
+        tagline: inWatershed ? '🌊 あなたの取水域内の森' : `J-クレジット登録番号 ${p.no}・${p.methodology.split(' ')[0]}`,
         in_watershed: inWatershed,
         park_badge: park_badge,
         _jcredit: p
