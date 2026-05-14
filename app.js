@@ -327,10 +327,8 @@
 
     state.candidates = [...featured, ...realProjects];
 
-    $('#company-name-display').textContent = state.company || 'あなた';
-    $('#candidate-count').textContent = state.candidates.length;
-
     // Update headline + render watershed summary block
+    // (the inner spans #company-name-display / #candidate-count are rebuilt below)
     const title = document.querySelector('#candidates .section-title');
     const lead = document.querySelector('#candidates .section-lead');
     const summary = $('#watershed-summary');
