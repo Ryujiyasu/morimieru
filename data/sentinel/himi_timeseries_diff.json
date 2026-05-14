@@ -1,0 +1,85 @@
+{
+  "method": "Sentinel-2 NDVI time-series difference (summer peak)",
+  "aoi": {
+    "name": "氷見市 朝日山系周辺",
+    "center_lat": 36.857,
+    "center_lon": 136.987,
+    "forest_area_ha": 12398
+  },
+  "observation_period": {
+    "from": 2021,
+    "to": 2025,
+    "obs_count": 71
+  },
+  "yearly_summer_ndvi": {
+    "2021": {
+      "mean_ndvi_summer": 0.3671,
+      "count_obs": 5
+    },
+    "2022": {
+      "mean_ndvi_summer": 0.4342,
+      "count_obs": 5
+    },
+    "2023": {
+      "mean_ndvi_summer": 0.346,
+      "count_obs": 8
+    },
+    "2024": {
+      "mean_ndvi_summer": 0.4834,
+      "count_obs": 4
+    },
+    "2025": {
+      "mean_ndvi_summer": 0.4397,
+      "count_obs": 5
+    }
+  },
+  "year_over_year": [
+    {
+      "from_year": 2021,
+      "to_year": 2022,
+      "ndvi_from": 0.3671,
+      "ndvi_to": 0.4342,
+      "delta_ndvi": 0.0671,
+      "delta_pct": 18.3
+    },
+    {
+      "from_year": 2022,
+      "to_year": 2023,
+      "ndvi_from": 0.4342,
+      "ndvi_to": 0.346,
+      "delta_ndvi": -0.0882,
+      "delta_pct": -20.3
+    },
+    {
+      "from_year": 2023,
+      "to_year": 2024,
+      "ndvi_from": 0.346,
+      "ndvi_to": 0.4834,
+      "delta_ndvi": 0.1374,
+      "delta_pct": 39.7
+    },
+    {
+      "from_year": 2024,
+      "to_year": 2025,
+      "ndvi_from": 0.4834,
+      "ndvi_to": 0.4397,
+      "delta_ndvi": -0.0437,
+      "delta_pct": -9.0
+    }
+  ],
+  "long_term": {
+    "ndvi_early_mean": 0.4006,
+    "ndvi_late_mean": 0.4616,
+    "delta_ndvi": 0.0609,
+    "delta_pct": 15.2,
+    "delta_co2_cumulative_t": 41566,
+    "delta_water_yield_pct": 0.3,
+    "delta_water_yield_m3_per_yr": 362707
+  },
+  "interpretation": "AOI 全体（12,398 ha 森林）の 5 年間 NDVI 平均が +15.2% 変化。これは概ね +41,566 t-CO2 の累積吸収量変化、水資源涵養量で +0.3% の変動に相当する。プラスは森林整備・自然回復が進んでいる、マイナスは伐採・劣化を示唆する。",
+  "notes": [
+    "NDVI から AGB（地上部バイオマス）への換算は経験的近似（Pettorelli 等参照）。実測 LiDAR を組み合わせれば精度大幅向上。",
+    "夏期ピーク NDVI を採用することで、季節変動の影響を最小化。",
+    "本手法は林班単位・自治体単位への横展開可能。クレジット制度の MRV（モニタリング・報告・検証）に低コスト代替として適用可能。"
+  ]
+}
