@@ -85,6 +85,53 @@ A circular emblem in the style of a traditional Japanese seal (hanko / inkan), b
 
 ---
 
+## 追加（2026-05-14）：レポート用ヘッダー画像 3 枚
+
+各レポートのトップに敷くヘッダー背景画像。すべてアスペクト比 21:9（横長・パノラマ）、
+解像度 2400 × 1029 程度。
+
+### A. 水資源涵養レポート用
+
+**保存先**: `assets/report-water-hero.jpg`
+
+```
+A serene Japanese mountain forest landscape with a clear stream winding through
+cedar and broadleaf trees. Morning mist hovering between the ridges. Soft warm
+light from the upper right. Dominant colors: deep forest greens, soft sage, cool
+blue water tones reflecting the trees. Painterly photography style, slightly
+desaturated, contemplative mood. No people or buildings. Panoramic 21:9 aspect
+ratio for a report header banner. Very high resolution.
+```
+
+### B. CO₂ 吸収レポート用（氷見市周辺森林レポート）
+
+**保存先**: `assets/report-co2-hero.jpg`
+
+```
+A wide panoramic view of a Japanese mountain forest in late summer, photographed
+from a high vantage point at golden hour. Dense canopy of cedar (sugi) and
+broadleaf trees stretching to the horizon. Soft warm light, very subtle haze
+suggesting CO2 absorption. Mostly deep forest greens with warm amber highlights.
+Documentary photography style, slightly painterly. Panoramic 21:9 ratio for a
+report header banner. No people, no buildings, no text.
+```
+
+### C. 時系列差分（モニタリング）レポート用
+
+**保存先**: `assets/report-monitoring-hero.jpg`
+
+```
+A panoramic Japanese forest landscape showing subtle seasonal variation: a few
+patches of younger growth, mature canopy, and slightly different shades indicating
+forest vigor over time. Photographed at the edge of golden hour, with a hint of
+mist. Dominant colors: a layered palette of forest greens (younger lighter green,
+mature deep green, mature dark cedar green). Slightly painterly editorial photo
+style. Panoramic 21:9 ratio for a report header banner. No people, no buildings,
+no text.
+```
+
+---
+
 ## 共通ガイドライン
 
 ### カラーパレット（生成画像に含めたい色）

@@ -3,305 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>氷見市周辺森林 水資源涵養量レポート｜もりみえる</title>
+<title>富山県 氷見市周辺森林 水資源涵養量レポート｜もりみえる</title>
 <meta name="description" content="衛星 × 林野庁簡易評価法による富山県氷見市周辺森林の水資源涵養量定量レポート。年間 約1.19億トン。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report.css">
 <style>
-:root {
-  --green-900: #1f3d2a; --green-700: #2d5a3d; --green-100: #e7efde;
-  --blue-900: #1f4570; --blue-700: #3b6da1; --blue-100: #e7f0fa;
-  --earth-500: #c47a4a; --earth-300: #e6c4a0;
-  --cream: #faf6ef; --paper: #ffffff;
-  --ink-900: #2a2820; --ink-700: #4a4838; --ink-500: #7a786a; --ink-300: #bcbaae;
-  --font-jp: 'Noto Sans JP', system-ui, sans-serif;
-  --font-display: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
-  --font-en: 'Josefin Sans', sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
-}
-*, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body {
-  font-family: var(--font-jp); color: var(--ink-900); background: var(--cream);
-  line-height: 1.8; font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-}
-.report {
-  max-width: 880px; margin: 0 auto; padding: 56px 36px 80px;
-}
-.report-header {
-  border-bottom: 3px solid var(--blue-900);
-  padding-bottom: 28px; margin-bottom: 40px;
-}
-.report-eyebrow {
-  font-family: var(--font-en); font-size: 13px; letter-spacing: 0.3em;
-  text-transform: uppercase; color: var(--blue-700);
-  margin: 0 0 16px; font-weight: 500;
-}
-.report-title {
-  font-family: var(--font-display); font-weight: 900;
-  font-size: clamp(28px, 4.5vw, 42px); line-height: 1.35;
-  color: var(--blue-900); margin: 0 0 16px;
-}
-.report-subtitle {
-  font-size: 15px; color: var(--ink-700); margin: 0 0 18px;
-}
-.report-meta {
-  display: flex; flex-wrap: wrap; gap: 12px 24px;
-  font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-500);
-}
-.report-meta dt { display: inline; font-weight: 700; color: var(--blue-700); }
-.report-meta dt::after { content: ' '; }
-.report-meta dd { display: inline; margin: 0 16px 0 0; }
-
-h2 {
-  font-family: var(--font-display); font-weight: 700;
-  font-size: 22px; color: var(--green-900);
-  margin: 48px 0 14px; padding-bottom: 8px;
-  border-bottom: 1px solid var(--ink-300);
-}
-h3 {
-  font-family: var(--font-display); font-weight: 700;
-  font-size: 16px; color: var(--green-900);
-  margin: 28px 0 10px;
-}
-p { margin: 0 0 14px; font-size: 14.5px; }
-
-.hero-stat {
-  background: linear-gradient(135deg, var(--blue-900) 0%, #2c5687 100%);
-  color: var(--cream); padding: 32px 36px; border-radius: 14px;
-  margin: 24px 0 36px; box-shadow: 0 8px 24px rgba(31, 69, 112, 0.18);
-}
-.hero-stat .label {
-  font-family: var(--font-en); font-size: 12px; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--blue-100); margin: 0 0 6px;
-}
-.hero-stat .number {
-  font-family: var(--font-display); font-weight: 900;
-  font-size: clamp(36px, 6vw, 56px); line-height: 1.1;
-  margin: 4px 0 8px;
-}
-.hero-stat .unit {
-  font-size: 18px; font-weight: 500; color: #b6cce4; margin-left: 6px;
-}
-.hero-stat .compare {
-  font-size: 13px; color: #b6cce4; margin: 8px 0 0;
-}
-
-.kpi-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 14px; margin: 18px 0 28px;
-}
-.kpi {
-  background: var(--paper); padding: 18px 20px; border-radius: 10px;
-  border: 1px solid var(--ink-300);
-}
-.kpi-label { font-size: 11px; color: var(--ink-500); margin: 0 0 4px;
-  letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500; }
-.kpi-value {
-  font-family: var(--font-display); font-weight: 700; font-size: 22px;
-  color: var(--blue-900); margin: 0; line-height: 1.2;
-}
-.kpi-value .unit { font-size: 12px; color: var(--ink-500); font-weight: 500; margin-left: 4px; }
-.kpi-note { font-size: 11px; color: var(--ink-500); margin: 4px 0 0; }
-
-.budget-chart {
-  background: var(--paper); padding: 24px; border-radius: 10px;
-  border: 1px solid var(--ink-300); margin: 20px 0 32px;
-}
-.budget-bar {
-  display: flex; height: 28px; border-radius: 6px; overflow: hidden;
-  margin: 12px 0 16px;
-}
-.budget-bar > div {
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; color: white; font-weight: 600; font-family: var(--font-mono);
-}
-.bar-runoff { background: var(--earth-500); }
-.bar-evapo  { background: #7ba56f; }
-.bar-yield  { background: var(--blue-700); }
-.budget-legend {
-  display: flex; flex-wrap: wrap; gap: 16px;
-  font-size: 12.5px; color: var(--ink-700);
-}
-.legend-swatch {
-  display: inline-block; width: 12px; height: 12px; border-radius: 3px;
-  vertical-align: middle; margin-right: 6px;
-}
-
-.method-formula {
-  background: var(--green-900); color: var(--green-100);
-  padding: 16px 20px; border-radius: 8px;
-  font-family: var(--font-mono); font-size: 11.5px;
-  line-height: 1.8; margin: 12px 0; overflow-x: auto;
-  white-space: pre-wrap; word-break: break-word;
-}
-.method-formula strong { color: var(--earth-300); font-weight: 700; }
-
-table.param-table {
-  width: 100%; border-collapse: collapse;
-  margin: 12px 0 20px; font-size: 13px;
-}
-.param-table th, .param-table td {
-  text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--ink-300);
-}
-.param-table th {
-  background: var(--cream); color: var(--ink-700); font-weight: 500;
-  width: 36%;
-}
-.param-table td {
-  font-family: var(--font-mono); color: var(--ink-900);
-}
-.param-table td.note { font-family: var(--font-jp); font-size: 12px; color: var(--ink-500); }
-
-.callout {
-  background: var(--blue-100); border-left: 4px solid var(--blue-700);
-  padding: 16px 20px; border-radius: 0 8px 8px 0;
-  margin: 20px 0; font-size: 13.5px;
-}
-.callout strong { color: var(--blue-900); }
-
-.compare-list {
-  list-style: none; padding: 0; margin: 12px 0 20px;
-}
-.compare-list li {
-  background: var(--paper); padding: 12px 18px; border-radius: 8px;
-  margin-bottom: 8px; font-size: 13.5px; color: var(--ink-700);
-  display: flex; justify-content: space-between; gap: 16px;
-}
-.compare-list strong { color: var(--blue-900); font-family: var(--font-display); font-size: 15px; }
-
-.sources {
-  background: var(--paper); padding: 20px 24px;
-  border-radius: 10px; border: 1px solid var(--ink-300);
-  margin: 30px 0;
-}
-.sources h3 { margin-top: 0; }
-.sources ul { margin: 8px 0 0; padding-left: 20px; font-size: 13px; line-height: 2; }
-.sources a { color: var(--blue-700); }
-
-.disclaimer {
-  font-size: 11.5px; color: var(--ink-500); line-height: 1.85;
-  border-top: 1px dashed var(--ink-300);
-  padding-top: 20px; margin-top: 36px;
-}
-
-.report-footer {
-  margin-top: 56px; padding-top: 24px;
-  border-top: 1px solid var(--ink-300);
-  display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: 12px;
-}
-.report-footer p { margin: 0; font-size: 12px; color: var(--ink-500); }
-.report-footer a {
-  color: var(--green-700); font-weight: 500; text-decoration: none;
-  font-size: 13.5px;
-}
-
-@media print {
-  body { background: white; }
-  .report { padding: 24px; }
-  .hero-stat { box-shadow: none; }
-  .report-footer .btn-print { display: none; }
-}
-@media (max-width: 640px) {
-  .report { padding: 32px 18px 56px; }
-  .hero-stat { padding: 24px; }
-  .kpi-grid { gap: 10px; }
-  .budget-chart { padding: 16px; }
-  .param-table { font-size: 12px; }
-  .param-table th, .param-table td { padding: 7px 8px; }
-}
-.btn-print {
-  background: var(--green-700); color: white;
-  padding: 10px 24px; border: none; border-radius: 999px;
-  font-family: var(--font-jp); font-size: 13px; cursor: pointer;
-}
-.btn-print:hover { background: var(--green-900); }
-
-/* Figures */
-.aoi-figure {
-  display: grid; grid-template-columns: 1fr 1.4fr;
-  gap: 20px; margin: 28px 0 36px;
-  background: var(--paper);
-  padding: 20px 24px; border-radius: 10px;
-  border: 1px solid var(--ink-300);
-}
-.aoi-left, .aoi-right { min-width: 0; }
-.figure-label {
-  font-family: var(--font-en); font-size: 11px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--blue-700); margin: 0 0 8px; font-weight: 500;
-}
-.figure-caption {
-  font-size: 11px; color: var(--ink-500); line-height: 1.7;
-  margin: 8px 0 0;
-}
-.ndvi-image {
-  width: 100%; height: auto; display: block;
-  border-radius: 6px; border: 1px solid var(--ink-300);
-  background: #1f3d2a;
-}
-.budget-flex {
-  display: grid; grid-template-columns: 280px 1fr;
-  gap: 24px; align-items: center;
-}
-.donut-wrap { padding: 4px; }
-.chart-wrap {
-  background: var(--paper); padding: 16px 20px;
-  border-radius: 10px; border: 1px solid var(--ink-300);
-  margin: 14px 0 28px;
-}
-@media (max-width: 700px) {
-  .aoi-figure, .budget-flex { grid-template-columns: 1fr; gap: 16px; }
-}
+.report-hero { --bg-image: url('../assets/report-water-hero.jpg'); }
 </style>
 </head>
-<body>
-<div class="report">
+<body class="theme-water">
 
-<div class="report-header">
-  <p class="report-eyebrow">Forest Water Yield Report</p>
-  <h1 class="report-title">富山県 氷見市周辺森林<br>水資源涵養量レポート</h1>
-  <p class="report-subtitle">
-    衛星画像（Sentinel-2 / Copernicus）と林野庁簡易評価法（Ver.1.0, 令和8年3月公開）による
-    AOI 16km × 14km の森林の年間水資源涵養量の定量評価
-  </p>
-  <dl class="report-meta">
-    <dt>レポート発行</dt><dd>2026年5月14日</dd>
-    <dt>解析対象</dt><dd>富山県氷見市 朝日山系周辺 AOI</dd>
-    <dt>森林面積</dt><dd>12,398 ha（衛星推定）/ 13,486 ha（市公式）</dd>
-    <dt>面積一致率</dt><dd>92%（過小推定 8%）</dd>
-    <dt>準拠手法</dt><dd>林野庁簡易評価法 Ver.1.0</dd>
-  </dl>
-</div>
-
-<!-- ===== AOI map & satellite image ===== -->
-<div class="aoi-figure">
-  <div class="aoi-left">
-    <p class="figure-label">解析対象 AOI</p>
-    <div id="map-svg-container"></div>
-    <p class="figure-caption">富山県氷見市 / 中緯度・日本海側多雨地域</p>
-  </div>
-  <div class="aoi-right">
-    <p class="figure-label">Sentinel-2 NDVI 実観測（2026-03-17）</p>
-    <img src="../data/sentinel/himi_ndvi.png" alt="Himi NDVI"
-         class="ndvi-image" loading="lazy">
-    <p class="figure-caption">
-      濃緑＝高NDVI（活発な植生）／薄緑＝中程度／土色＝裸地・低植生<br>
-      雲量 3.7%、Sentinel-2A 13:47 JST 観測
+<!-- =========== Hero =========== -->
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">Forest Water Yield Report</p>
+    <h1 class="report-title">富山県 氷見市周辺森林<br>水資源涵養量レポート</h1>
+    <p class="report-subtitle">
+      衛星画像（Sentinel-2 / Copernicus）と林野庁簡易評価法（Ver.1.0, 令和8年3月公開）による
+      AOI 16km × 14km の森林の年間水資源涵養量の定量評価。
     </p>
+    <dl class="report-meta">
+      <dt>レポート発行</dt><dd>2026年5月14日</dd>
+      <dt>解析対象</dt><dd>富山県氷見市 朝日山系周辺</dd>
+      <dt>森林面積</dt><dd>12,398 ha（衛星）/ 13,486 ha（市公式）</dd>
+      <dt>面積一致率</dt><dd>92%</dd>
+      <dt>準拠手法</dt><dd>林野庁簡易評価法 Ver.1.0</dd>
+    </dl>
   </div>
-</div>
+</header>
 
-<!-- ===== Hero Stat ===== -->
+<div class="report-body">
+
+<!-- =========== Hero Stat =========== -->
 <div class="hero-stat">
   <p class="label">Annual Water Yield</p>
   <p class="number">約 1.19<span class="unit">億トン／年</span></p>
   <p class="compare">
     119,115,675 m³／年（信頼幅 ±30%：8,300万トン〜1億5,500万トン）<br>
-    一般家庭約160万世帯の年間生活用水に相当
+    一般家庭約 160 万世帯の年間生活用水に相当
   </p>
 </div>
 
@@ -320,12 +61,12 @@ table.param-table {
     <p class="kpi-value">2,331<span class="unit">mm/年</span></p>
     <p class="kpi-note">NASA POWER 2020-2024 平均</p>
   </div>
-  <div class="kpi">
+  <div class="kpi alt-effect">
     <p class="kpi-label">水資源涵養量</p>
-    <p class="kpi-value">961<span class="unit">mm/年 (41.2%)</span></p>
+    <p class="kpi-value positive">961<span class="unit">mm/年 (41.2%)</span></p>
     <p class="kpi-note">林地ベース</p>
   </div>
-  <div class="kpi">
+  <div class="kpi alt-bare">
     <p class="kpi-label">直接流出量</p>
     <p class="kpi-value">533<span class="unit">mm/年 (22.9%)</span></p>
     <p class="kpi-note">第三紀地質ベース</p>
@@ -337,12 +78,30 @@ table.param-table {
   </div>
 </div>
 
-<h2>2. 水収支の内訳</h2>
+<h2>2. AOI と Sentinel-2 NDVI 実観測</h2>
 
-<div class="budget-chart">
-  <div class="budget-flex">
-    <div id="water-donut-container" class="donut-wrap"></div>
-    <div class="budget-text">
+<div class="figure-grid">
+  <div class="figure-wrap">
+    <p class="figure-label">解析対象 AOI</p>
+    <div id="map-svg-container"></div>
+    <p class="figure-caption">富山県氷見市 / 日本海側多雨地域</p>
+  </div>
+  <div class="figure-wrap">
+    <p class="figure-label">Sentinel-2 NDVI（2026-03-17）</p>
+    <img src="../data/sentinel/himi_ndvi.png" alt="Himi NDVI" class="ndvi-image" loading="lazy">
+    <p class="figure-caption">
+      濃緑＝高NDVI（活発な植生）／薄緑＝中程度／土色＝裸地・低植生<br>
+      雲量 3.7%、Sentinel-2A 観測
+    </p>
+  </div>
+</div>
+
+<h2>3. 水収支の内訳</h2>
+
+<div class="figure-wrap">
+  <div style="display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:center;">
+    <div id="water-donut-container"></div>
+    <div>
       <p style="margin: 0 0 12px; font-size: 14px; font-weight: 500;">年降水量 2,331 mm の行き先</p>
       <div class="budget-bar">
         <div class="bar-runoff" style="width: 22.9%;">23%</div>
@@ -350,37 +109,23 @@ table.param-table {
         <div class="bar-yield"  style="width: 41.2%;">41%</div>
       </div>
       <div class="budget-legend">
-        <span><span class="legend-swatch bar-runoff"></span>直接流出 533 mm（表面流出）</span>
-        <span><span class="legend-swatch bar-evapo"></span>蒸発散 837 mm（蒸散＋遮断）</span>
-        <span><span class="legend-swatch bar-yield"></span>水資源涵養 961 mm（地下水）</span>
+        <span><span class="legend-swatch bar-runoff"></span>直接流出 533 mm</span>
+        <span><span class="legend-swatch bar-evapo"></span>蒸発散 837 mm</span>
+        <span><span class="legend-swatch bar-yield"></span>水資源涵養 961 mm</span>
       </div>
     </div>
   </div>
 </div>
 
-<h3>2.1 過去5年の NDVI 時系列（実観測）</h3>
+<h3>3.1 過去5年の NDVI 時系列（実観測）</h3>
 <p>
-  Sentinel-2 の 5 年分の観測データ（71 観測点）を Statistical API で集計。
+  Sentinel-2 の 5 年分の観測データ（71 観測点）を CDSE Statistical API で集計。
   季節周期（春〜夏ピーク、冬期低下）と年次変化が明確に捉えられている。
   NDVI 0.5 を森林閾値とし、夏期ピーク時のラスタから森林面積を算定した。
 </p>
-<div id="ndvi-chart-container" class="chart-wrap"></div>
+<div class="figure-wrap" id="ndvi-chart-container"></div>
 
-<p>
-水資源涵養量は、降水量から直接流出と蒸発散を差し引いた量で、土壌に浸透し
-地下水を涵養し、長期にわたって安定的に河川に供給される水量を表す。森林の
-土壌・林床・根系の働きにより、裸地に比べて直接流出を大きく抑え、より多くの
-水を「ゆっくり放出する貯留装置」として機能している。
-</p>
-
-<div class="callout">
-  <strong>裸地との比較</strong>：
-  仮に同じ12,398 ha が裸地（はげ山）であった場合、水資源涵養量は降水量の約10%（233 mm/年）
-  まで低下し、年間 約 2,900万トン にしかならない。森林が現在の地表被覆を維持することで、
-  <strong>+9,000万トン／年の水を追加で安定供給</strong>している計算となる。
-</div>
-
-<div class="callout" style="background:#f3f8fd;border-left-color:#2d5a3d;">
+<div class="callout success">
   <strong>公式統計との整合性検証</strong>：
   本レポートが Sentinel-2 NDVI > 0.5 で抽出した森林面積 <strong>12,398 ha</strong> に対し、
   氷見市が公式に発表している森林面積は <strong>13,486 ha</strong>。
@@ -389,7 +134,14 @@ table.param-table {
   針葉樹の若齢林・伐採直後・植栽地を保守的に除外することと推察される。
 </div>
 
-<h2>3. 計算手法（IPCC 整合・林野庁準拠）</h2>
+<div class="callout">
+  <strong>裸地との比較</strong>：
+  仮に同じ 12,398 ha が裸地（はげ山）であった場合、水資源涵養量は降水量の約10%（233 mm/年）
+  まで低下し、年間 約 2,900万トン にしかならない。森林が現在の地表被覆を維持することで、
+  <strong>+9,000万トン／年の水を追加で安定供給</strong>している計算となる。
+</div>
+
+<h2>4. 計算手法（IPCC 整合・林野庁準拠）</h2>
 
 <p>
 林野庁が令和8年3月に公開した
@@ -398,7 +150,7 @@ table.param-table {
 に準拠。インプットはすべて公開データから自動取得した。
 </p>
 
-<h3>3.1 基本式</h3>
+<h3>4.1 基本式</h3>
 <div class="method-formula">水資源涵養量 [mm/年] = 年降水量 − 直接流出量 − 蒸発散量
 
   P_eve  = 0.6473 × P − 138.67          （イベント積算降水量）
@@ -410,75 +162,43 @@ table.param-table {
 
   <strong>水源涵養量 = P − Q − E</strong></div>
 
-<h3>3.2 インプット項目と取得元</h3>
+<h3>4.2 インプット項目と取得元</h3>
 
-<table class="param-table">
-  <tr><th>項目</th><th>値</th><th class="note">出典</th></tr>
-  <tr>
-    <th>月別気温・降水量</th>
-    <td>T=16.0°C, P=2,160 mm/年</td>
-    <td class="note">NASA POWER monthly（2020-2024平均）</td>
-  </tr>
-  <tr>
-    <th>降水量観測点標高</th>
-    <td>2.9 m</td>
-    <td class="note">国土地理院 5m DEM API</td>
-  </tr>
-  <tr>
-    <th>対象林地標高</th>
-    <td>171.5 m</td>
-    <td class="note">国土地理院 5m DEM API</td>
-  </tr>
-  <tr>
-    <th>地質区分</th>
-    <td>第三紀（新第三紀 中新世）</td>
-    <td class="note">産総研 シームレス地質図 v2 API</td>
-  </tr>
-  <tr>
-    <th>林地タイプ</th>
-    <td>常緑針葉樹（スギ・ヒノキ主体）</td>
-    <td class="note">Sentinel-2 NDVI 季節パターン</td>
-  </tr>
-  <tr>
-    <th>森林面積</th>
-    <td>12,398 ha</td>
-    <td class="note">Sentinel-2 L2A NDVI > 0.5（夏期ピーク時、Hansen et al. 2013）</td>
-  </tr>
-  <tr>
-    <th>立木密度</th>
-    <td>783 本/ha</td>
-    <td class="note">林野庁 標準値（中老齢 sugi/hinoki）</td>
-  </tr>
-  <tr>
-    <th>平均胸高直径 (DBH)</th>
-    <td>32 cm</td>
-    <td class="note">林野庁 収穫予想表 中位（50-70年生）</td>
-  </tr>
-  <tr>
-    <th>平均樹高</th>
-    <td>18 m</td>
-    <td class="note">同上</td>
-  </tr>
+<table class="data-table">
+  <thead>
+    <tr><th>項目</th><th>値</th><th>出典</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>月別気温・降水量</td><td class="num">T=16.0°C, P=2,160 mm/年</td><td><small>NASA POWER monthly（2020-2024平均）</small></td></tr>
+    <tr><td>降水量観測点標高</td><td class="num">2.9 m</td><td><small>国土地理院 5m DEM API</small></td></tr>
+    <tr><td>対象林地標高</td><td class="num">171.5 m</td><td><small>国土地理院 5m DEM API</small></td></tr>
+    <tr><td>地質区分</td><td class="num">第三紀（新第三紀 中新世）</td><td><small>産総研 シームレス地質図 v2 API</small></td></tr>
+    <tr><td>林地タイプ</td><td class="num">常緑針葉樹（スギ・ヒノキ主体）</td><td><small>Sentinel-2 NDVI 季節パターン</small></td></tr>
+    <tr><td>森林面積</td><td class="num">12,398 ha</td><td><small>Sentinel-2 L2A NDVI > 0.5 (Hansen 2013)</small></td></tr>
+    <tr><td>立木密度</td><td class="num">783 本/ha</td><td><small>林野庁 標準値（中老齢 sugi/hinoki）</small></td></tr>
+    <tr><td>平均胸高直径 (DBH)</td><td class="num">32 cm</td><td><small>林野庁 収穫予想表 中位（50-70年生）</small></td></tr>
+    <tr><td>平均樹高</td><td class="num">18 m</td><td><small>同上</small></td></tr>
+  </tbody>
 </table>
 
-<h3>3.3 計算結果（mm/年スケール）</h3>
+<h3>4.3 計算結果（mm/年スケール）</h3>
 
-<table class="param-table">
-  <tr><th>項目</th><th>値</th><th class="note">補足</th></tr>
-  <tr><th>P（補正後の年降水量）</th><td>2,331 mm/年</td><td class="note">標高補正後</td></tr>
-  <tr><th>P_eve（イベント積算）</th><td>1,370 mm/年</td><td class="note">回帰式変換</td></tr>
-  <tr><th>Q（直接流出量）</th><td>533 mm/年</td><td class="note">第三紀地質 ≤1306 mm 帯</td></tr>
-  <tr><th>蒸散量</th><td>453 mm/年</td><td class="note">単木式 × 立木密度 × 12ヶ月</td></tr>
-  <tr><th>遮断量</th><td>384 mm/年</td><td class="note">針葉樹遮断率</td></tr>
-  <tr><th>蒸発散量合計</th><td>837 mm/年</td><td class="note">蒸散 + 遮断</td></tr>
-  <tr style="background:var(--blue-100);">
-    <th><strong>水資源涵養量</strong></th>
-    <td><strong>961 mm/年</strong></td>
-    <td class="note"><strong>降水量の 41.2%</strong></td>
-  </tr>
+<table class="data-table">
+  <thead>
+    <tr><th>項目</th><th>値</th><th>補足</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>P（補正後の年降水量）</td><td class="num">2,331 mm/年</td><td><small>標高補正後</small></td></tr>
+    <tr><td>P_eve（イベント積算）</td><td class="num">1,370 mm/年</td><td><small>回帰式変換</small></td></tr>
+    <tr><td>Q（直接流出量）</td><td class="num">533 mm/年</td><td><small>第三紀地質 ≤1306 mm 帯</small></td></tr>
+    <tr><td>蒸散量</td><td class="num">453 mm/年</td><td><small>単木式 × 立木密度 × 12ヶ月</small></td></tr>
+    <tr><td>遮断量</td><td class="num">384 mm/年</td><td><small>針葉樹遮断率</small></td></tr>
+    <tr><td>蒸発散量合計</td><td class="num">837 mm/年</td><td><small>蒸散 + 遮断</small></td></tr>
+    <tr style="background:var(--blue-100);"><td><strong>水資源涵養量</strong></td><td class="num effect"><strong>961 mm/年</strong></td><td><small><strong>降水量の 41.2%</strong></small></td></tr>
+  </tbody>
 </table>
 
-<h2>4. AOI 全体への拡張</h2>
+<h2>5. AOI 全体への拡張</h2>
 
 <p>
 3.3 で得た 1 ha あたりの値を、Sentinel-2 で実測した森林面積（12,398 ha）に乗じることで
@@ -491,106 +211,59 @@ AOI 全体の年間水資源涵養量を算定する。
 = 約 1.19 億トン／年
 = ±30% 信頼幅：83,448,000 – 154,974,000 m³</div>
 
-<h2>5. 規模感の比較</h2>
+<h2>6. 規模感の比較</h2>
 
 <ul class="compare-list">
-  <li>
-    <span>東京ドーム（123万 m³）</span>
-    <strong>約 97 杯ぶん／年</strong>
-  </li>
-  <li>
-    <span>一般家庭 年間生活用水（73 m³/世帯）</span>
-    <strong>約 163 万世帯ぶん／年</strong>
-  </li>
-  <li>
-    <span>飲料水ペットボトル（500ml）</span>
-    <strong>約 2,382 億本ぶん／年</strong>
-  </li>
-  <li>
-    <span>標準的なミネラルウォーター工場の使用量（年間数百万トン規模）</span>
-    <strong>大規模工場 数十〜100社ぶん</strong>
-  </li>
+  <li><span>東京ドーム（123万 m³）</span><strong>約 97 杯ぶん／年</strong></li>
+  <li><span>一般家庭 年間生活用水（73 m³/世帯）</span><strong>約 163 万世帯ぶん／年</strong></li>
+  <li><span>飲料水ペットボトル（500ml）</span><strong>約 2,382 億本ぶん／年</strong></li>
+  <li><span>標準的なミネラルウォーター工場</span><strong>大規模工場 数十〜100社ぶん</strong></li>
 </ul>
 
-<h2>6. データソース一覧</h2>
+<h2>7. データソース</h2>
 
 <div class="sources">
   <h3>公開データソース（すべて無料・商用可）</h3>
   <ul>
-    <li>
-      <strong>Sentinel-2 L2A</strong>（衛星画像 / NDVI 算定）—
-      <a href="https://dataspace.copernicus.eu/" target="_blank">Copernicus Data Space Ecosystem (CDSE)</a>
-    </li>
-    <li>
-      <strong>NASA POWER</strong>（月別気温・降水量）—
-      <a href="https://power.larc.nasa.gov/" target="_blank">power.larc.nasa.gov</a>
-    </li>
-    <li>
-      <strong>国土地理院 標高API</strong>（DEM）—
-      <a href="https://maps.gsi.go.jp/development/elevation_s.html" target="_blank">maps.gsi.go.jp</a>
-    </li>
-    <li>
-      <strong>産総研 シームレス地質図 v2</strong> —
-      <a href="https://gbank.gsj.jp/seamless/" target="_blank">gbank.gsj.jp/seamless/</a>
-    </li>
-    <li>
-      <strong>林野庁 水資源涵養量簡易評価法</strong> Ver.1.0（令和8年3月）—
-      <a href="https://www.rinya.maff.go.jp/j/suigen/suigen/260311.html" target="_blank">rinya.maff.go.jp</a>
-    </li>
+    <li><strong>Sentinel-2 L2A</strong>（衛星画像 / NDVI 算定）— <a href="https://dataspace.copernicus.eu/" target="_blank">Copernicus Data Space Ecosystem (CDSE)</a></li>
+    <li><strong>NASA POWER</strong>（月別気温・降水量）— <a href="https://power.larc.nasa.gov/" target="_blank">power.larc.nasa.gov</a></li>
+    <li><strong>国土地理院 標高API</strong>（DEM）— <a href="https://maps.gsi.go.jp/development/elevation_s.html" target="_blank">maps.gsi.go.jp</a></li>
+    <li><strong>産総研 シームレス地質図 v2</strong> — <a href="https://gbank.gsj.jp/seamless/" target="_blank">gbank.gsj.jp/seamless/</a></li>
+    <li><strong>林野庁 水資源涵養量簡易評価法</strong> Ver.1.0（令和8年3月）— <a href="https://www.rinya.maff.go.jp/j/suigen/suigen/260311.html" target="_blank">rinya.maff.go.jp</a></li>
   </ul>
 </div>
 
-<h2>7. 不確実性と次のステップ</h2>
+<h2>8. 誤差を減らす取り組み</h2>
 
-<div class="callout" style="background:#fdf4eb;border-left-color:#c47a4a;">
-  <strong>スケール適用に関する重要な留意点</strong>：
-  本レポートが準拠する林野庁簡易評価法 Ver.1.0 は、本来
-  <strong>100 ha 未満の小規模林分</strong>を対象として開発されたものであり、
-  AOI 全体（12,398 ha）への一括適用はスケール外。
-  本レポートでは Sentinel-2 で抽出した森林ピクセルごとに同式を当てはめ、
-  AOI スケールに拡張しているため、林分内の樹高・密度・DBH のばらつき、
-  地質の不均一性、気象の局地差を平均化している点に注意。
-  個別森林単位（典型的に 50–500 ha）で別途集計するTier 3 アプローチを
-  併用することで、AOI 規模での不確実性をより小さくできる。
+<div class="callout warn">
+  <strong>本評価の不確実性は典型的に ±30%。原因と圧縮策：</strong>
+  <ul>
+    <li>立木密度・DBH・樹高に林野庁標準値を使っている → **林野庁 LiDAR（栃木・兵庫・高知オープン化済）統合で 20m メッシュ実測値に置換**、Tier 3 化で ±10-15% へ</li>
+    <li>NDVI 閾値による森林マスクの分類誤差 → **多時期 NDVI コンセンサスで安定化**、季節変動を除去</li>
+    <li>地質区分のメッシュ粒度（AOI内 複数地質混在）→ **林班単位でのサブ分割**で局所地質に合わせる</li>
+    <li>NASA POWER のグリッド粒度（約 50km）→ **AMeDAS 連携（17km × 10分粒度）に置換**</li>
+  </ul>
+  単なる注意書きではなく、上記すべてを実装ロードマップに入れて誤差を構造的に圧縮していく。
 </div>
-
-<p>
-本評価の不確実性は典型的に ±30%。主な要因は：
-</p>
-
-<ul>
-  <li>立木密度・DBH・樹高に林野庁標準値を適用しているため、実際の林分との乖離</li>
-  <li>NDVI 閾値による森林マスクの分類誤差（典型的に ±5-10%）</li>
-  <li>地質区分のメッシュ粒度（AOI 内で複数地質が混在する可能性）</li>
-  <li>NASA POWER のグリッド粒度（約 50 km × 50 km）</li>
-</ul>
-
-<p>
-これらは、以下の代替データソースで段階的に精度を上げることが可能：
-</p>
-
-<ul>
-  <li><strong>林野庁 航空レーザ計測データ</strong>（民有林 80% 整備済、3 県オープン化）→ 樹高・DBH・密度を個別森林ごとに置換</li>
-  <li><strong>AMeDAS</strong>（17 km grid・10 分粒度）→ NASA POWER に代わる高解像度気象</li>
-  <li><strong>森林生態系多様性基礎調査</strong>（4 km グリッド × 25年）→ 樹種・林齢分布の地域校正</li>
-</ul>
 
 <p class="disclaimer">
 ※ 本レポートは、林野庁の公式評価式に準拠した第三者試算であり、林野庁・農林水産省による
 公式認証データではありません。J-クレジット制度上の水資源涵養量クレジット創出は、別途
 正式なモニタリング・第三者検証の手続を経て実施されます。
-本レポートに含まれるすべての数値は、推定値であり、商業契約上の保証を伴うものではありません。
+本レポートに含まれるすべての数値は推定値であり、商業契約上の保証を伴うものではありません。
 </p>
 
 <div class="report-footer">
   <p>© 2026 もりみえる｜<a href="https://mori-mieru.jp/">mori-mieru.jp</a></p>
-  <button class="btn-print" onclick="window.print()">🖨️ PDFで保存</button>
+  <div class="footer-actions">
+    <a href="../" class="btn-back">← TOPへ</a>
+    <button class="btn-print" onclick="window.print()">🖨️ PDFで保存</button>
+  </div>
 </div>
 
 </div>
 
 <script>
-// Embed the auto-generated SVG figures
 fetch('../data/sentinel/himi_figures.json')
   .then(r => r.json())
   .then(figs => {

@@ -4,121 +4,39 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>氷見市 森林施業効果モニタリングレポート｜もりみえる</title>
-<meta name="description" content="Sentinel-2 5年時系列で計測した氷見市周辺森林の施業効果。NDVI +15%、累積 CO2 +41,566 t。MRV代替の低コストモニタリング。">
+<meta name="description" content="Sentinel-2 5年時系列で計測した氷見市周辺森林の施業効果。NDVI +15.2%、累積 CO2 +41,566 t。MRV代替の低コストモニタリング。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report.css">
 <style>
-:root {
-  --green-900: #1f3d2a; --green-700: #2d5a3d; --green-500: #5a8a3a; --green-100: #e7efde;
-  --blue-900: #1f4570; --blue-700: #3b6da1; --blue-100: #e7f0fa;
-  --earth-500: #c47a4a; --earth-600: #8c5a3a;
-  --cream: #faf6ef; --paper: #ffffff;
-  --ink-900: #2a2820; --ink-700: #4a4838; --ink-500: #7a786a; --ink-300: #bcbaae;
-  --font-jp: 'Noto Sans JP', system-ui, sans-serif;
-  --font-display: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
-  --font-en: 'Josefin Sans', sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
-}
-*, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body {
-  font-family: var(--font-jp); color: var(--ink-900); background: var(--cream);
-  line-height: 1.8; -webkit-font-smoothing: antialiased;
-}
-.report { max-width: 920px; margin: 0 auto; padding: 56px 36px 80px; }
-.report-header { border-bottom: 3px solid var(--earth-500); padding-bottom: 28px; margin-bottom: 40px; }
-.report-eyebrow {
-  font-family: var(--font-en); font-size: 13px; letter-spacing: 0.3em;
-  text-transform: uppercase; color: var(--earth-500); margin: 0 0 16px; font-weight: 500;
-}
-.report-title {
-  font-family: var(--font-display); font-weight: 900;
-  font-size: clamp(28px, 4.5vw, 42px); line-height: 1.35;
-  color: var(--green-900); margin: 0 0 16px;
-}
-.report-subtitle { font-size: 15px; color: var(--ink-700); margin: 0 0 18px; }
-h2 {
-  font-family: var(--font-display); font-weight: 700;
-  font-size: 22px; color: var(--green-900);
-  margin: 48px 0 14px; padding-bottom: 8px;
-  border-bottom: 1px solid var(--ink-300);
-}
-p { margin: 0 0 14px; font-size: 14.5px; }
-.hero-stat {
-  background: linear-gradient(135deg, var(--earth-500) 0%, var(--earth-600) 100%);
-  color: var(--cream); padding: 32px 36px; border-radius: 14px;
-  margin: 24px 0 36px; box-shadow: 0 8px 24px rgba(196, 122, 74, 0.18);
-}
-.hero-stat .label { font-family: var(--font-en); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #f3dfc7; margin: 0 0 6px; }
-.hero-stat .number { font-family: var(--font-display); font-weight: 900; font-size: clamp(36px, 6vw, 56px); margin: 4px 0 8px; line-height: 1.1; }
-.hero-stat .unit { font-size: 18px; font-weight: 500; color: #e6c4a0; margin-left: 6px; }
-.hero-stat .compare { font-size: 13px; color: #e6c4a0; margin: 8px 0 0; }
-
-.kpi-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 14px; margin: 18px 0 28px;
-}
-.kpi { background: var(--paper); padding: 18px 20px; border-radius: 10px; border: 1px solid var(--ink-300); }
-.kpi-label { font-size: 11px; color: var(--ink-500); margin: 0 0 4px; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500; }
-.kpi-value { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--green-700); margin: 0; line-height: 1.2; }
-.kpi-value .unit { font-size: 12px; color: var(--ink-500); font-weight: 500; margin-left: 4px; }
-.kpi-value.negative { color: var(--earth-500); }
-.kpi-note { font-size: 11px; color: var(--ink-500); margin: 4px 0 0; }
-
-table.year-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13.5px; background: var(--paper); border-radius: 10px; overflow: hidden; }
-.year-table th, .year-table td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--ink-300); }
-.year-table th { background: var(--green-700); color: white; font-weight: 500; font-size: 12px; }
-.year-table td.num { text-align: right; font-family: var(--font-mono); font-size: 13px; }
-.year-table td.pos { color: var(--green-700); font-weight: 600; }
-.year-table td.neg { color: var(--earth-500); font-weight: 600; }
-
-.callout {
-  background: var(--blue-100); border-left: 4px solid var(--blue-700);
-  padding: 18px 22px; border-radius: 0 8px 8px 0;
-  margin: 24px 0; font-size: 14px;
-}
-.callout strong { color: var(--blue-900); }
-.callout.warn { background: #fdf4eb; border-left-color: var(--earth-500); }
-.callout.warn strong { color: var(--earth-600); }
-
-.method-formula {
-  background: var(--green-900); color: var(--green-100);
-  padding: 16px 20px; border-radius: 8px;
-  font-family: var(--font-mono); font-size: 11.5px;
-  line-height: 1.8; margin: 12px 0; overflow-x: auto;
-  white-space: pre-wrap; word-break: break-word;
-}
-.method-formula strong { color: var(--earth-500); font-weight: 700; }
-
-.timeline-chart {
-  background: var(--paper); padding: 24px; border-radius: 10px; border: 1px solid var(--ink-300);
-  margin: 20px 0 32px;
-}
-.disclaimer { font-size: 12px; color: var(--ink-500); line-height: 1.85; border-top: 1px dashed var(--ink-300); padding-top: 20px; margin-top: 36px; }
-.report-footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--ink-300); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-.report-footer p { margin: 0; font-size: 12px; color: var(--ink-500); }
-.btn-print { background: var(--green-700); color: white; padding: 10px 24px; border: none; border-radius: 999px; font-family: var(--font-jp); font-size: 13px; cursor: pointer; }
-.btn-print:hover { background: var(--green-900); }
-@media print { body { background: white; } .report { padding: 24px; } }
-@media (max-width: 640px) { .report { padding: 32px 18px 56px; } .kpi-grid { gap: 10px; } }
+.report-hero { --bg-image: url('../assets/report-monitoring-hero.jpg'); }
 </style>
 </head>
-<body>
-<div class="report">
+<body class="theme-monitor">
 
-<div class="report-header">
-  <p class="report-eyebrow">Forest Treatment Effect Monitoring Report</p>
-  <h1 class="report-title">氷見市 森林施業効果<br>モニタリングレポート</h1>
-  <p class="report-subtitle">
-    Sentinel-2 衛星の 5 年間（2021〜2025）の NDVI 時系列から、対象森林の
-    植生活力変化と、それに伴う CO₂ 吸収・水資源涵養量の変動を量化。
-    クレジット制度の MRV（モニタリング・報告・検証）の低コスト代替として
-    使えることを示します。
-  </p>
-</div>
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">Forest Treatment Effect Monitoring Report</p>
+    <h1 class="report-title">氷見市 森林施業効果<br>モニタリングレポート</h1>
+    <p class="report-subtitle">
+      Sentinel-2 衛星の 5 年間（2021〜2025）の NDVI 時系列から、対象森林の
+      植生活力変化と、それに伴う CO₂ 吸収・水資源涵養量の変動を量化。
+      クレジット制度の MRV（モニタリング・報告・検証）の <strong>低コスト代替</strong>
+      として使えることを示します。
+    </p>
+    <dl class="report-meta">
+      <dt>レポート発行</dt><dd>2026年5月14日</dd>
+      <dt>対象 AOI</dt><dd>富山県氷見市 朝日山系周辺</dd>
+      <dt>森林面積</dt><dd>12,398 ha</dd>
+      <dt>観測期間</dt><dd>2021-2025（5 年）</dd>
+      <dt>観測点数</dt><dd>71 点</dd>
+    </dl>
+  </div>
+</header>
 
-<!-- ===== Hero Stat ===== -->
+<div class="report-body">
+
 <div class="hero-stat">
   <p class="label">5-Year Forest Vigor Change</p>
   <p class="number" id="hero-ndvi-pct">+15.2<span class="unit">% NDVI</span></p>
@@ -131,14 +49,14 @@ table.year-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-
 <h2>1. 観測結果</h2>
 
 <div class="kpi-grid">
-  <div class="kpi">
+  <div class="kpi alt-effect">
     <p class="kpi-label">5年累計 ΔCO₂</p>
-    <p class="kpi-value" id="kpi-co2">+41,566<span class="unit">t-CO₂</span></p>
+    <p class="kpi-value positive" id="kpi-co2">+41,566<span class="unit">t-CO₂</span></p>
     <p class="kpi-note">NDVI→AGB 経験式</p>
   </div>
-  <div class="kpi">
+  <div class="kpi alt-water">
     <p class="kpi-label">水資源涵養量 変動</p>
-    <p class="kpi-value" id="kpi-water">+0.3<span class="unit">%</span></p>
+    <p class="kpi-value positive" id="kpi-water">+0.3<span class="unit">%</span></p>
     <p class="kpi-note">+362,707 m³/年 相当</p>
   </div>
   <div class="kpi">
@@ -155,7 +73,7 @@ table.year-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-
 
 <h2>2. 年次 NDVI 推移</h2>
 
-<table class="year-table">
+<table class="data-table">
   <thead>
     <tr>
       <th>観測年</th>
@@ -194,7 +112,7 @@ NDVI_late  = mean(2024, 2025)
 
 <h2>4. クレジット制度 MRV との比較</h2>
 
-<div class="callout">
+<div class="callout success">
   <strong>MRV（Monitoring, Reporting, Verification）の低コスト代替</strong>：
   J-クレジット森林吸収プロジェクトの認証維持には、年間モニタリング・報告・第三者検証で
   数十万〜数百万円のコストがかかる。本手法は <strong>すべて公開データから自動算定</strong>
@@ -202,15 +120,16 @@ NDVI_late  = mean(2024, 2025)
   共有でき、データの一貫性も担保される。
 </div>
 
-<h2>5. 注意・限界</h2>
+<h2>5. 誤差を構造的に圧縮する取り組み</h2>
 
 <div class="callout warn">
-  <strong>本手法の限界</strong>：
-  <ul style="margin: 8px 0 0; padding-left: 18px;">
-    <li>NDVI → AGB 換算は経験式であり、林分の個別事情（樹種・林齢・施業履歴）を反映していない</li>
-    <li>大規模伐採・植栽・自然攪乱は明示的に検知できるが、林床植生変化や下層木の劣化は把握困難</li>
-    <li>気候年較差の影響を完全には除去できない（移動平均で緩和）</li>
-    <li>林野庁 LiDAR や地上調査と組み合わせれば、Tier 3 相当（不確実性 ±10〜15%）まで圧縮可能</li>
+  <strong>本手法の改善ロードマップ</strong>：
+  <ul>
+    <li>NDVI → AGB 換算は経験式 → <strong>林野庁 LiDAR 統合</strong> で個別林分のバイオマス実測値に置換</li>
+    <li>気候年較差の影響 → <strong>移動平均 + AMeDAS 気象補正</strong> で純粋な植生変化を抽出</li>
+    <li>大規模伐採・自然攪乱 → <strong>Sentinel-1 SAR</strong> 統合で雲量・季節に依存しない検知</li>
+    <li>下層植生・若齢林の変化把握 → <strong>多バンド衛星指数（NDMI, SAVI 等）</strong> を併用</li>
+    <li>Tier 2 → <strong>Tier 3 化</strong> で不確実性を ±30% → ±10〜15% へ圧縮</li>
   </ul>
 </div>
 
@@ -221,7 +140,19 @@ NDVI_late  = mean(2024, 2025)
   <li>林野庁 LiDAR（栃木・兵庫・高知 オープン化分）と組み合わせて Tier 3 化</li>
   <li>自治体・森林組合がダッシュボードで自分の森の変化を見られる UI</li>
   <li>AMeDAS 連携で気象変動の影響を補正</li>
+  <li>Sentinel-1 SAR で全天候・全季節モニタリング</li>
 </ul>
+
+<h2>7. データソース</h2>
+
+<div class="sources">
+  <ul>
+    <li><strong>Sentinel-2 L2A</strong>（時系列 NDVI）— CDSE Sentinel Hub Statistical API</li>
+    <li><strong>林野庁 簡易評価法</strong> Ver.1.0（水資源涵養量の基準値）</li>
+    <li><strong>IPCC AFOLU 2006</strong>（CO₂ 換算係数）</li>
+    <li><strong>Pettorelli et al. 系統</strong>（NDVI → AGB 経験的換算）</li>
+  </ul>
+</div>
 
 <p class="disclaimer">
 ※ 本レポートは公開衛星データに基づく第三者試算であり、J-クレジット制度・VCS等の公式認証
@@ -231,7 +162,10 @@ NDVI_late  = mean(2024, 2025)
 
 <div class="report-footer">
   <p>© 2026 もりみえる｜<a href="https://mori-mieru.jp/">mori-mieru.jp</a></p>
-  <button class="btn-print" onclick="window.print()">🖨️ PDFで保存</button>
+  <div class="footer-actions">
+    <a href="../" class="btn-back">← TOPへ</a>
+    <button class="btn-print" onclick="window.print()">🖨️ PDFで保存</button>
+  </div>
 </div>
 
 </div>
@@ -252,17 +186,15 @@ fetch('../data/sentinel/himi_timeseries_diff.json')
     document.getElementById('kpi-water').innerHTML = `${lt.delta_water_yield_pct >= 0 ? '+' : ''}${lt.delta_water_yield_pct}<span class="unit">%</span>`;
     document.getElementById('kpi-obs').innerHTML = `${d.observation_period.obs_count}<span class="unit">点</span>`;
 
-    // Year table
     const rows = d.year_over_year.map(y => `
       <tr>
         <td><strong>${y.to_year}</strong></td>
         <td class="num">${y.ndvi_to}</td>
-        <td class="num">-</td>
+        <td class="num">${d.yearly_summer_ndvi[y.to_year]?.count_obs || '-'}</td>
         <td class="num ${y.delta_ndvi >= 0 ? 'pos' : 'neg'}">${y.delta_ndvi >= 0 ? '+' : ''}${y.delta_ndvi}</td>
         <td class="num ${y.delta_pct >= 0 ? 'pos' : 'neg'}">${y.delta_pct >= 0 ? '+' : ''}${y.delta_pct}%</td>
       </tr>
     `).join('');
-    // Add the first year as base
     const firstYear = d.year_over_year[0];
     document.getElementById('year-rows').innerHTML = `
       <tr>
