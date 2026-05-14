@@ -343,6 +343,16 @@
       </div>
 
       <div class="layer-group">
+        <h3>🐝 植生・生物多様性</h3>
+        <label class="layer-row">
+          <input type="checkbox" id="ly-vege67">
+          <span class="swatch" style="background:linear-gradient(90deg,#e8d2a0,#7fb069,#1f4d2b);"></span>
+          <span>環境省 植生図（第6-7回）</span>
+        </label>
+        <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);">出典：環境省生物多様性センター／（株）エコリス。ズーム10以上で詳細表示。</p>
+      </div>
+
+      <div class="layer-group">
         <h3>📑 レポート地点</h3>
         <label class="layer-row">
           <input type="checkbox" id="ly-reports" checked>
@@ -701,6 +711,19 @@ async function loadBasins() {
   });
 }
 
+// ----- 環境省 植生図 第6-7回（エコリス地図タイル, raster） -----
+let vege67Layer = null;
+function buildVege67Layer() {
+  if (vege67Layer) return vege67Layer;
+  vege67Layer = L.tileLayer('https://map.ecoris.info/tiles/vege67/{z}/{x}/{y}.png', {
+    minZoom: 6,
+    maxZoom: 16,
+    opacity: 0.68,
+    attribution: '植生図：© 環境省生物多様性センター ／ © 株式会社エコリス',
+  });
+  return vege67Layer;
+}
+
 // ----- らしんばん 林野庁 LiDAR 20m mesh (vector tile, CC-BY) -----
 // 樹種に応じた色付け（もりみえる パレット）
 const SPECIES_COLORS = {
@@ -935,6 +958,12 @@ window.closeDetail = closeDetail;
   bindRashinbanToggle('ly-rashinban-tochigi', 'tochigi');
   bindRashinbanToggle('ly-rashinban-hyogo', 'hyogo');
   bindRashinbanToggle('ly-rashinban-kochi', 'kochi');
+
+  document.getElementById('ly-vege67').addEventListener('change', e => {
+    const layer = buildVege67Layer();
+    if (e.target.checked) layer.addTo(map);
+    else map.removeLayer(layer);
+  });
 
   document.getElementById('ly-basins').addEventListener('change', async e => {
     if (e.target.checked) {
