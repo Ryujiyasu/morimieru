@@ -128,34 +128,85 @@ NDVI_late  = mean(2024, 2025)
   共有でき、データの一貫性も担保される。
 </div>
 
-<h2>5. 誤差を構造的に圧縮する取り組み</h2>
+<h2>5. Sentinel-1 SAR：全天候・全季節モニタリング</h2>
+
+<p>
+  Sentinel-2 の NDVI は光学観測のため、<strong>雲・霧・夜間で観測できない</strong>。
+  日本のように梅雨・台風シーズンに観測ギャップが生じる地域では、これが大きな弱点になる。
+  そこで C-band SAR（合成開口レーダー）である <strong>Sentinel-1</strong> を組み合わせる。
+</p>
+
+<div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
+  <div class="kpi">
+    <p class="kpi-label">雲を貫通</p>
+    <p class="kpi-value">6-12<span class="unit">日</span></p>
+    <p class="kpi-note">全天候・全季節で観測</p>
+  </div>
+  <div class="kpi alt-effect">
+    <p class="kpi-label">VH 後方散乱</p>
+    <p class="kpi-value">バイオマス<span class="unit">指標</span></p>
+    <p class="kpi-note">林冠構造・蓄積量に相関</p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">伐採検知</p>
+    <p class="kpi-value">即時<span class="unit">可</span></p>
+    <p class="kpi-note">皆伐は -6〜-10 dB 急落</p>
+  </div>
+</div>
+
+<div class="figure-wrap" id="sar-figure-wrap">
+  <p class="figure-label">Sentinel-1 SAR — VH Backscatter (Himi AOI)</p>
+  <div id="sar-image-host" style="position:relative;background:#1a1f1a;border-radius:8px;min-height:280px;display:flex;align-items:center;justify-content:center;color:#a7c498;font-family:ui-monospace,monospace;font-size:13px;">
+    <span>📡 SAR画像取得待ち（次回 fetch_sentinel1_himi.py 実行で表示）</span>
+  </div>
+  <div class="sar-legend" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;font-size:11.5px;">
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;background:#e6c8a0;border-radius:2px;"></span>裸地・水 (&lt; -18 dB)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;background:#a7c498;border-radius:2px;"></span>疎な植生 (-18 〜 -14)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;background:#5a8a3a;border-radius:2px;"></span>中程度の森林 (-14 〜 -11)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;background:#2d5a3d;border-radius:2px;"></span>密な森林 (&gt; -11 dB)</span>
+  </div>
+  <p class="figure-caption" id="sar-caption">
+    VH 偏波（クロスポーラリゼーション）は林冠構造の散乱に強く反応するため、森林バイオマスの代理指標として有効。
+    Gamma0 で地形補正済み、Copernicus DEM 30m でオルソ補正済み。
+  </p>
+</div>
+
+<div class="callout success">
+  <strong>NDVI × SAR のハイブリッド評価</strong>：
+  NDVI（光学・植生活力）と VH 後方散乱（レーダー・バイオマス）を組み合わせることで、
+  <strong>(1) 葉の元気さ</strong>と <strong>(2) 構造としての蓄積量</strong>を独立に推定できる。
+  片方が天候で欠測しても、もう片方が補完するためモニタリングギャップが発生しない。
+</div>
+
+<h2>6. 誤差を構造的に圧縮する取り組み</h2>
 
 <div class="callout warn">
   <strong>本手法の改善ロードマップ</strong>：
   <ul>
     <li>NDVI → AGB 換算は経験式 → <strong>林野庁 LiDAR 統合</strong> で個別林分のバイオマス実測値に置換</li>
     <li>気候年較差の影響 → <strong>移動平均 + AMeDAS 気象補正</strong> で純粋な植生変化を抽出</li>
-    <li>大規模伐採・自然攪乱 → <strong>Sentinel-1 SAR</strong> 統合で雲量・季節に依存しない検知</li>
+    <li>大規模伐採・自然攪乱 → <strong>Sentinel-1 SAR</strong> 統合で雲量・季節に依存しない検知（§5）</li>
     <li>下層植生・若齢林の変化把握 → <strong>多バンド衛星指数（NDMI, SAVI 等）</strong> を併用</li>
     <li>Tier 2 → <strong>Tier 3 化</strong> で不確実性を ±30% → ±10〜15% へ圧縮</li>
   </ul>
 </div>
 
-<h2>6. 次のステップ</h2>
+<h2>7. 次のステップ</h2>
 
 <ul>
   <li>林班単位での時系列差分（静岡県 1,102 林班 → 各林班ごとに変化検知）</li>
   <li>林野庁 LiDAR（栃木・兵庫・高知 オープン化分）と組み合わせて Tier 3 化</li>
   <li>自治体・森林組合がダッシュボードで自分の森の変化を見られる UI</li>
   <li>AMeDAS 連携で気象変動の影響を補正</li>
-  <li>Sentinel-1 SAR で全天候・全季節モニタリング</li>
+  <li>SAR 時系列の差分自動化（伐採アラート）</li>
 </ul>
 
-<h2>7. データソース</h2>
+<h2>8. データソース</h2>
 
 <div class="sources">
   <ul>
     <li><strong>Sentinel-2 L2A</strong>（時系列 NDVI）— CDSE Sentinel Hub Statistical API</li>
+    <li><strong>Sentinel-1 GRD</strong>（C-band SAR, VH 偏波）— CDSE Sentinel Hub Process API</li>
     <li><strong>林野庁 簡易評価法</strong> Ver.1.0（水資源涵養量の基準値）</li>
     <li><strong>IPCC AFOLU 2006</strong>（CO₂ 換算係数）</li>
     <li><strong>Pettorelli et al. 系統</strong>（NDVI → AGB 経験的換算）</li>
@@ -214,6 +265,35 @@ fetch('../data/sentinel/himi_timeseries_diff.json')
       </tr>` + rows;
   })
   .catch(e => console.warn('data load failed', e));
+
+// Sentinel-1 SAR 画像 + メタを動的にロード（無ければプレースホルダのまま）
+fetch('../data/sentinel/himi_sar_meta.json')
+  .then(r => r.ok ? r.json() : Promise.reject())
+  .then(meta => {
+    const host = document.getElementById('sar-image-host');
+    host.innerHTML = '';
+    host.style.background = '#0d1310';
+    host.style.padding = '0';
+    const img = document.createElement('img');
+    img.src = '../data/sentinel/himi_sar.png';
+    img.alt = 'Sentinel-1 VH 後方散乱';
+    img.className = 'ndvi-image';
+    img.style.width = '100%';
+    img.style.height = 'auto';
+    img.style.display = 'block';
+    host.appendChild(img);
+
+    if (meta.scene) {
+      const cap = document.getElementById('sar-caption');
+      const dt = meta.scene.datetime ? new Date(meta.scene.datetime).toISOString().slice(0,10) : '';
+      const plat = meta.scene.platform || '';
+      const orb = meta.scene.orbit_state || '';
+      cap.innerHTML =
+        `観測日 <strong>${dt}</strong>${plat ? ` ／ ${plat.toUpperCase()}` : ''}${orb ? ` ／ ${orb}` : ''}（直近 60 日のうち最新シーン）<br>` +
+        cap.textContent;
+    }
+  })
+  .catch(() => { /* SAR 未取得状態のまま */ });
 </script>
 </body>
 </html>

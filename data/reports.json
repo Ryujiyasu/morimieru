@@ -33,7 +33,7 @@
     {
       "id": "himi-monitoring",
       "title": "氷見市 森林施業効果モニタリングレポート",
-      "subtitle": "Sentinel-2 5 年時系列で施業効果を量化、MRV 代替",
+      "subtitle": "Sentinel-2 5 年時系列 × Sentinel-1 SAR で施業効果を量化、MRV 代替",
       "theme": "monitor",
       "region": "富山県氷見市",
       "category": "施業効果モニタリング",
@@ -43,7 +43,7 @@
       "kpi_label": "5 年 NDVI 変化",
       "kpi_value": "+15.2%",
       "kpi_note": "累計 ΔCO2 +41,566 t / 71 観測点",
-      "tags": ["時系列差分", "Sentinel-2", "MRV代替", "施業効果", "北陸", "富山"]
+      "tags": ["時系列差分", "Sentinel-2", "Sentinel-1 SAR", "MRV代替", "施業効果", "北陸", "富山"]
     }
   ],
   "categories": [
