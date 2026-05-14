@@ -68,9 +68,11 @@
   async function loadWatersheds() {
     if (state.watersheds) return state.watersheds;
     try {
-      const r = await fetch('data/watersheds/japan_lev08.geojson');
+      // Lvl 10 (~8000 basins) — finer than Lvl 8, separates coastal cities
+      // from their upstream sub-basins (e.g. 焼津 gets 9 upstream basins)
+      const r = await fetch('data/watersheds/japan_lev10.geojson');
       state.watersheds = await r.json();
-      console.log(`Loaded ${state.watersheds.features.length} watersheds`);
+      console.log(`Loaded ${state.watersheds.features.length} watersheds (HydroBASINS Lvl 10)`);
     } catch (e) {
       console.warn('watershed load failed', e);
       state.watersheds = { features: [] };
@@ -342,7 +344,7 @@
       title.innerHTML = `<span id="company-name-display">${state.company}</span> の取水域の森、<span id="candidate-count">${inWsCount || state.candidates.length}</span> つ`;
       lead.textContent = '工場や本社で使う水は、流域の森が育んでいます。あなたの取水域内・上流側にある森を優先的に並べています。';
 
-      $('#ws-name').textContent = `流域ID ${state.userBasin.properties.hybas_id}（HydroBASINS Lvl 8）`;
+      $('#ws-name').textContent = `流域ID ${state.userBasin.properties.hybas_id}（HydroBASINS Lvl 10）`;
       $('#ws-area').textContent = upArea.toLocaleString();
       $('#ws-jc-count').textContent = inWsCount;
       $('#ws-upstream-count').textContent = upstreamCount;
