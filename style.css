@@ -410,6 +410,26 @@ button, input, textarea, select { font: inherit; color: inherit; }
   color: var(--ink-500);
   margin-top: 4px;
 }
+.address-row {
+  display: flex; gap: 8px; align-items: stretch;
+}
+.address-row input { flex: 1; }
+.btn-locate {
+  background: var(--paper);
+  border: 1.5px solid var(--green-700);
+  color: var(--green-700);
+  border-radius: var(--radius-sm);
+  padding: 0 16px;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.btn-locate:hover { background: var(--green-700); color: white; }
+.btn-locate:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (max-width: 480px) {
+  .address-row { flex-direction: column; }
+}
 .form-actions {
   display: flex;
   gap: 12px;

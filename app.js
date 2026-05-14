@@ -203,6 +203,57 @@
       budgetDisplay.textContent = `${fmtMan(v)}万円`;
     });
 
+    // "Locate" button — get current location via browser Geolocation API + reverse geocode
+    const locateBtn = document.getElementById('btn-locate');
+    if (locateBtn) {
+      locateBtn.addEventListener('click', () => {
+        if (!navigator.geolocation) {
+          alert('お使いのブラウザは位置情報に対応していません。');
+          return;
+        }
+        locateBtn.disabled = true;
+        const origLabel = locateBtn.textContent;
+        locateBtn.textContent = '取得中…';
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            try {
+              const { latitude: lat, longitude: lon } = pos.coords;
+              // Reverse geocode via 国土地理院
+              const r = await fetch(
+                `https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat=${lat}&lon=${lon}`
+              );
+              const j = await r.json();
+              const res = j.results || {};
+              // muniCd + lv01Nm → 都道府県市区町村名 + 大字
+              const muniCd = res.muniCd;
+              const lv01 = res.lv01Nm || '';
+              // Lookup muni name: we don't have a code→name map embedded;
+              // fall back to placing just the lv01 area name
+              let address = lv01;
+              // Try to fetch a name via the same API's MuniNameTbl
+              try {
+                const tbl = await fetch('https://maps.gsi.go.jp/js/muni.js').then(r => r.text());
+                const m = tbl.match(new RegExp(`'${muniCd}'\\s*:\\s*'([^']+)'`));
+                if (m) address = m[1] + (lv01 ? lv01 : '');
+              } catch (e) { /* keep lv01 only */ }
+              document.getElementById('address-input').value = address || `${lat.toFixed(4)},${lon.toFixed(4)}`;
+            } catch (e) {
+              alert('住所の取得に失敗しました。手入力してください。');
+            } finally {
+              locateBtn.disabled = false;
+              locateBtn.textContent = origLabel;
+            }
+          },
+          (err) => {
+            alert('位置情報の取得に失敗しました：' + err.message);
+            locateBtn.disabled = false;
+            locateBtn.textContent = origLabel;
+          },
+          { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
+        );
+      });
+    }
+
     // "Sample address" button — auto-fills the form with a real Japanese company HQ-ish address
     const sampleBtn = document.getElementById('sample-button');
     if (sampleBtn) {

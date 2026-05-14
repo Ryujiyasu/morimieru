@@ -36,8 +36,125 @@
 
 .map-shell {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 260px 1fr;
   position: relative;
+}
+
+/* Right detail panel (slides in on feature click) */
+.detail-panel {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 360px;
+  background: var(--paper);
+  border-left: 1px solid var(--ink-300);
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.08);
+  z-index: 800;
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+.detail-panel.open { transform: translateX(0); }
+.detail-panel .head {
+  padding: 18px 22px;
+  background: var(--green-700);
+  color: white;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 10px;
+}
+.detail-panel .head h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  margin: 0; line-height: 1.4;
+  color: white;
+}
+.detail-panel .head .badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+.detail-panel .close-btn {
+  background: none; border: none; color: white;
+  cursor: pointer; font-size: 20px; padding: 0;
+  opacity: 0.8;
+}
+.detail-panel .close-btn:hover { opacity: 1; }
+.detail-panel .body {
+  padding: 20px 22px;
+  overflow-y: auto;
+  flex: 1;
+}
+.detail-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+.detail-stats .stat {
+  background: var(--cream);
+  padding: 12px 14px;
+  border-radius: 8px;
+  border-left: 3px solid var(--green-700);
+}
+.detail-stats .stat.water { border-left-color: var(--blue-700); }
+.detail-stats .stat.bare { border-left-color: var(--earth-500); }
+.detail-stats .stat-label {
+  font-size: 10.5px; color: var(--ink-500);
+  margin: 0 0 4px; letter-spacing: 0.04em;
+  text-transform: uppercase; font-weight: 500;
+}
+.detail-stats .stat-value {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 18px;
+  color: var(--green-900); margin: 0; line-height: 1.2;
+}
+.detail-stats .stat-value .unit {
+  font-size: 11px; color: var(--ink-500);
+  font-weight: 500; margin-left: 3px;
+}
+.detail-section {
+  margin: 18px 0;
+  font-size: 13px; line-height: 1.85;
+}
+.detail-section h4 {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 13px;
+  color: var(--green-900); margin: 0 0 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--ink-300);
+}
+.detail-section dl {
+  display: grid; grid-template-columns: auto 1fr;
+  gap: 5px 14px; margin: 0; font-size: 12.5px;
+}
+.detail-section dt { color: var(--ink-500); }
+.detail-section dd { margin: 0; color: var(--ink-900); }
+.detail-section .num { font-family: var(--font-mono); font-weight: 600; color: var(--green-700); }
+.detail-section .formula {
+  background: var(--green-900); color: var(--green-100);
+  padding: 10px 14px; border-radius: 6px;
+  font-family: var(--font-mono); font-size: 11px;
+  line-height: 1.7; white-space: pre-wrap;
+  margin: 8px 0; overflow-x: auto;
+}
+.detail-link {
+  display: inline-block;
+  margin-top: 8px; padding: 9px 16px;
+  background: var(--green-700); color: white;
+  border-radius: 999px;
+  text-decoration: none; font-size: 13px;
+  font-weight: 500;
+}
+.detail-link:hover { background: var(--green-900); }
+
+@media (max-width: 768px) {
+  .detail-panel { width: 100%; }
 }
 .map-sidebar {
   background: var(--cream);
@@ -208,6 +325,16 @@
     </aside>
 
     <div id="map"></div>
+    <aside class="detail-panel" id="detail-panel">
+      <div class="head">
+        <div>
+          <span class="badge" id="dp-badge">情報</span>
+          <h3 id="dp-title">地図上の要素をクリック</h3>
+        </div>
+        <button class="close-btn" onclick="closeDetail()">×</button>
+      </div>
+      <div class="body" id="dp-body"></div>
+    </aside>
   </div>
 </div>
 
@@ -245,31 +372,75 @@ async function loadRinpan() {
   ]);
   muniNames = names.mapping;
 
+  const onRinpanClick = (f) => {
+    const p = f.properties;
+    const mc = p['市町村CD'];
+    const nm = muniNames[mc] || { muni_name: '不明', area: '' };
+    const co2 = p.co2_estimate_t_per_yr || 0;
+    const water = p.water_yield_m3 || 0;
+    const bare = p.bare_yield_m3 || 0;
+    const effect = water - bare;
+    const effectPct = bare ? Math.round((effect / bare) * 100) : 0;
+    openDetail({
+      badge: '林班',
+      title: `${nm.muni_name} ${nm.area} 第${p['林班']}号`,
+      body: `
+        <div class="detail-stats">
+          <div class="stat"><p class="stat-label">面積</p><p class="stat-value">${(p.area_ha||0).toFixed(1)}<span class="unit">ha</span></p></div>
+          <div class="stat"><p class="stat-label">CO₂吸収</p><p class="stat-value">${co2.toLocaleString()}<span class="unit">t/年</span></p></div>
+          <div class="stat water"><p class="stat-label">水源涵養</p><p class="stat-value">${water.toLocaleString()}<span class="unit">m³/年</span></p></div>
+          <div class="stat bare"><p class="stat-label">裸地仮定</p><p class="stat-value">${bare.toLocaleString()}<span class="unit">m³/年</span></p></div>
+        </div>
+        <div class="detail-section">
+          <h4>森林維持効果（裸地比）</h4>
+          <p style="font-family:var(--font-display);font-weight:700;font-size:22px;color:var(--green-700);margin:0 0 4px;">+${effect.toLocaleString()} m³/年</p>
+          <p style="font-size:11.5px;color:var(--ink-500);margin:0;">+${effectPct}% 増（裸地に対して）</p>
+        </div>
+        <div class="detail-section">
+          <h4>現地条件</h4>
+          <dl>
+            <dt>地質</dt><dd>${p.geology || '-'}</dd>
+            <dt>標高</dt><dd>${p.elevation_m || '-'} m</dd>
+            <dt>年降水量</dt><dd class="num">${(p.annual_precip_mm||0).toLocaleString()} mm</dd>
+            <dt>年平均気温</dt><dd class="num">${p.annual_temp_c || '-'} °C</dd>
+          </dl>
+        </div>
+        <div class="detail-section">
+          <h4>水収支の内訳</h4>
+          <dl>
+            <dt>直接流出</dt><dd class="num">${(p.runoff_mm||0)} mm/年</dd>
+            <dt>蒸発散</dt><dd class="num">${(p.evapo_mm||0)} mm/年</dd>
+            <dt>水源涵養</dt><dd class="num">${(p.water_yield_mm||0)} mm/年（${p.forest_pct||0}%）</dd>
+          </dl>
+        </div>
+        <div class="detail-section">
+          <h4>計算手法</h4>
+          <p style="font-size:12px;color:var(--ink-700);">林野庁簡易評価法 Ver.1.0 を林班単位で適用。気象は NASA POWER（2020-2024平均）、地質は産総研シームレス地質図、標高は国土地理院 DEM。</p>
+          <a class="detail-link" href="report/shizuoka-forests.html">静岡県全体レポートへ →</a>
+        </div>
+        <div class="detail-section">
+          <h4>識別子</h4>
+          <dl>
+            <dt>林班ID</dt><dd>${p.ID}</dd>
+            <dt>市町村CD</dt><dd>${mc}</dd>
+          </dl>
+        </div>
+      `,
+    });
+  };
+
   rinpanCo2Layer = L.geoJSON(fc, {
     style: f => ({
-      color: '#fff',
-      weight: 0.4,
-      opacity: 1,
+      color: '#fff', weight: 0.4, opacity: 1,
       fillColor: co2Color(f.properties.co2_estimate_t_per_yr || 0),
       fillOpacity: 0.78,
     }),
     onEachFeature: (f, layer) => {
-      const p = f.properties;
-      const mc = p['市町村CD'];
-      const nm = muniNames[mc] || { muni_name: '不明', area: '' };
-      const html = `
-        <h4>${nm.muni_name} ${nm.area}</h4>
-        <dl>
-          <dt>林班</dt><dd>第${p['林班']}号 (ID ${p.ID})</dd>
-          <dt>面積</dt><dd class="num">${(p.area_ha||0).toLocaleString()} ha</dd>
-          <dt>年間降水量</dt><dd class="num">${(p.annual_precip_mm||0).toLocaleString()} mm</dd>
-          <dt>地質</dt><dd>${p.geology||'-'}</dd>
-          <dt>水資源涵養</dt><dd class="num">${(p.water_yield_m3||0).toLocaleString()} m³/年</dd>
-          <dt>裸地仮定</dt><dd class="num">${(p.bare_yield_m3||0).toLocaleString()} m³/年</dd>
-          <dt>森林維持効果</dt><dd class="num">+${(p.forest_effect_m3||0).toLocaleString()} m³/年</dd>
-          <dt>CO₂ 吸収</dt><dd class="num">${(p.co2_estimate_t_per_yr||0).toLocaleString()} t/年</dd>
-        </dl>`;
-      layer.bindPopup(html, { maxWidth: 320 });
+      layer.on('click', () => onRinpanClick(f));
+      layer.bindTooltip(
+        `${muniNames[f.properties['市町村CD']]?.muni_name || ''} 第${f.properties['林班']}号<br>CO₂ ${(f.properties.co2_estimate_t_per_yr||0).toLocaleString()} t/年`,
+        { sticky: true }
+      );
     },
   });
 
@@ -280,14 +451,11 @@ async function loadRinpan() {
       fillOpacity: 0.78,
     }),
     onEachFeature: (f, layer) => {
-      const p = f.properties;
-      const mc = p['市町村CD'];
-      const nm = muniNames[mc] || { muni_name: '不明', area: '' };
-      layer.bindPopup(`<h4>${nm.muni_name} ${nm.area}</h4>
-        <dl>
-          <dt>水源涵養</dt><dd class="num">${(p.water_yield_m3||0).toLocaleString()} m³/年</dd>
-          <dt>面積</dt><dd class="num">${(p.area_ha||0).toLocaleString()} ha</dd>
-        </dl>`, { maxWidth: 320 });
+      layer.on('click', () => onRinpanClick(f));
+      layer.bindTooltip(
+        `${muniNames[f.properties['市町村CD']]?.muni_name || ''} 第${f.properties['林班']}号<br>水源涵養 ${(f.properties.water_yield_m3||0).toLocaleString()} m³/年`,
+        { sticky: true }
+      );
     },
   });
 
@@ -301,10 +469,42 @@ async function loadJcredit() {
   jcreditLayer = L.layerGroup();
   for (const p of r.projects) {
     const m = L.circleMarker([p.lat, p.lon], {
-      radius: 5, fillColor: '#c47a4a', color: '#fff', weight: 1.5,
+      radius: 6, fillColor: '#c47a4a', color: '#fff', weight: 1.5,
       opacity: 1, fillOpacity: 0.85,
     });
-    m.bindTooltip(`<b>J-${p.no}</b> ${p.location}<br>${p.summary?.slice(0,40)||''}`);
+    m.bindTooltip(`<b>J-${p.no}</b><br>${p.location}<br>${p.summary?.slice(0,40)||''}`);
+    m.on('click', () => {
+      openDetail({
+        badge: 'J-クレジット',
+        title: p.summary || `J-クレジット ${p.no}`,
+        body: `
+          <div class="detail-stats">
+            <div class="stat"><p class="stat-label">登録番号</p><p class="stat-value">No.${p.no}</p></div>
+            <div class="stat"><p class="stat-label">適用方法論</p><p class="stat-value" style="font-size:13px;">${(p.methodology||'').split(' ')[0]||'-'}</p></div>
+          </div>
+          <div class="detail-section">
+            <h4>所在地</h4>
+            <p style="font-size:14px;">${p.location || '-'}</p>
+          </div>
+          <div class="detail-section">
+            <h4>プロジェクト実施者</h4>
+            <p style="font-size:13px;">${p.operator || '-'}</p>
+          </div>
+          ${p.credit_buyer ? `<div class="detail-section"><h4>クレジット取得予定者</h4><p style="font-size:13px;">${p.credit_buyer}</p></div>` : ''}
+          <div class="detail-section">
+            <h4>申請・開始日</h4>
+            <dl>
+              <dt>登録申請日</dt><dd>${p.applied_at || '-'}</dd>
+              <dt>認証期間開始</dt><dd>${p.started_at || '-'}</dd>
+            </dl>
+          </div>
+          ${p.park ? `<div class="detail-section"><h4>保護区</h4><p>${p.park.park_type}${p.park.nearby_km ? '隣接 (' + p.park.nearby_km + 'km)' : '内'}</p></div>` : ''}
+          <div class="detail-section">
+            <a class="detail-link" href="https://japancredit.go.jp/project/index.php?method=FO" target="_blank">J-クレジット公式ページで詳細を見る →</a>
+          </div>
+        `,
+      });
+    });
     jcreditLayer.addLayer(m);
   }
   if (document.getElementById('ly-jcredit').checked) jcreditLayer.addTo(map);
@@ -322,7 +522,7 @@ async function loadReports() {
   reportsLayer = L.layerGroup();
   const points = [
     { id: 'himi-water', lat: 36.857, lon: 136.987, color: '#3b6da1' },
-    { id: 'himi-monitoring', lat: 36.857, lon: 136.987, color: '#c47a4a' },
+    { id: 'himi-monitoring', lat: 36.84, lon: 137.02, color: '#c47a4a' },
     { id: 'shizuoka-forests', lat: 34.85, lon: 137.85, color: '#2d5a3d' },
   ];
   const byId = {};
@@ -330,18 +530,41 @@ async function loadReports() {
   for (const p of points) {
     const rep = byId[p.id];
     if (!rep) continue;
-    const m = L.marker([p.lat + (Math.random() - 0.5) * 0.03, p.lon + (Math.random() - 0.5) * 0.03], {
+    const m = L.marker([p.lat, p.lon], {
       icon: L.divIcon({
-        html: `<div style="background:${p.color};color:white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 10px rgba(0,0,0,0.2);border:3px solid white;">📑</div>`,
-        iconSize: [30, 30], iconAnchor: [15, 15], className: '',
+        html: `<div style="background:${p.color};color:white;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 4px 10px rgba(0,0,0,0.25);border:3px solid white;">📑</div>`,
+        iconSize: [34, 34], iconAnchor: [17, 17], className: '',
       }),
     });
-    m.bindPopup(`
-      <h4>${rep.title}</h4>
-      <p>${rep.subtitle}</p>
-      <p><strong>${rep.kpi_label}</strong>: <span class="num">${rep.kpi_value}</span></p>
-      <a href="${rep.href}" style="color:#2d5a3d;font-weight:600;">レポートを開く →</a>
-    `, { maxWidth: 280 });
+    m.bindTooltip(rep.title);
+    m.on('click', () => {
+      openDetail({
+        badge: 'レポート',
+        title: rep.title,
+        body: `
+          <div style="margin:0 0 14px;border-radius:8px;overflow:hidden;height:120px;background:url('${rep.image}') center/cover;"></div>
+          <p style="font-size:13px;color:var(--ink-700);margin:0 0 14px;line-height:1.85;">${rep.subtitle}</p>
+          <div class="detail-stats">
+            <div class="stat" style="grid-column:1/-1;">
+              <p class="stat-label">${rep.kpi_label}</p>
+              <p class="stat-value" style="font-size:24px;color:var(--green-700);">${rep.kpi_value}</p>
+              <p style="font-size:11.5px;color:var(--ink-500);margin:4px 0 0;">${rep.kpi_note}</p>
+            </div>
+          </div>
+          <div class="detail-section">
+            <h4>対象地域</h4>
+            <p>${rep.region}</p>
+          </div>
+          <div class="detail-section">
+            <h4>カテゴリ</h4>
+            <p>${rep.category}</p>
+          </div>
+          <div class="detail-section">
+            <a class="detail-link" href="${rep.href}">レポートを開く →</a>
+          </div>
+        `,
+      });
+    });
     reportsLayer.addLayer(m);
   }
   if (document.getElementById('ly-reports').checked) reportsLayer.addTo(map);
@@ -365,6 +588,18 @@ function updateLegend() {
   if (document.getElementById('ly-rinpan-co2').checked) document.getElementById('legend-co2').classList.add('active');
   if (document.getElementById('ly-rinpan-water').checked) document.getElementById('legend-water').classList.add('active');
 }
+
+// ----- Detail panel -----
+function openDetail({ badge, title, body }) {
+  document.getElementById('dp-badge').textContent = badge || '情報';
+  document.getElementById('dp-title').textContent = title || '';
+  document.getElementById('dp-body').innerHTML = body || '';
+  document.getElementById('detail-panel').classList.add('open');
+}
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open');
+}
+window.closeDetail = closeDetail;
 
 // Initialize
 (async () => {

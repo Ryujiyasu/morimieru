@@ -83,6 +83,7 @@
     </p>
     <div class="hero-cta-row">
       <a href="#start" class="btn btn-primary">森を探しに行く</a>
+      <a href="map.html" class="btn btn-ghost">🗺 地図で見る</a>
       <a href="#" class="btn btn-ghost" id="quick-look">とりあえず候補を見る</a>
     </div>
     <p class="hero-sub">
@@ -138,7 +139,10 @@
         <span class="field-label">本社・主要拠点の住所
           <span class="field-hint">この住所の取水域・上流の森を優先的にお見せします</span>
         </span>
-        <input type="text" name="address" placeholder="例：静岡県焼津市利右衛門" autocomplete="street-address">
+        <div class="address-row">
+          <input type="text" name="address" id="address-input" placeholder="例：静岡県焼津市利右衛門" autocomplete="street-address">
+          <button type="button" class="btn-locate" id="btn-locate" title="現在地から取得">📍 現在地</button>
+        </div>
       </label>
       <label class="field">
         <span class="field-label">業種</span>
