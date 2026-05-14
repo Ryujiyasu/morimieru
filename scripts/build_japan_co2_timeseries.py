@@ -77,7 +77,7 @@ def fetch_year(geom, year, retries=3):
     payload = {
         "input": {
             "bounds": {
-                "geometry": geom_dict,
+                "bbox": list(geom.bounds),
                 "properties": {"crs": "http://www.opengis.net/def/crs/OGC/1.3/CRS84"},
             },
             "data": [{
@@ -90,7 +90,7 @@ def fetch_year(geom, year, retries=3):
                 "from": f"{year}-07-01T00:00:00Z",
                 "to": f"{year}-09-30T23:59:59Z",
             },
-            "aggregationInterval": {"of": "P3M"},
+            "aggregationInterval": {"of": "P1M"},
             "evalscript": EVALSCRIPT,
             "width": width,
             "height": height,
@@ -116,25 +116,29 @@ def fetch_year(geom, year, retries=3):
             return None
     else:
         return None
+    # Aggregate across all monthly entries — pick the one with highest valid count
+    best = None
     for entry in result.get("data", []):
         try:
-            stats = entry["outputs"]["ndvi"]["bands"]["B0"]["stats"]
-            mean = stats.get("mean")
+            b0 = entry["outputs"]["ndvi"]["bands"]["B0"]
+            stats = b0["stats"]
             sc = stats.get("sampleCount", 0)
             nd = stats.get("noDataCount", 0)
             valid = sc - nd
             if valid == 0:
                 continue
-            hist = entry["outputs"]["ndvi"]["bands"]["B0"]["histogram"]["bins"]
+            hist = b0["histogram"]["bins"]
             forest_count = sum(b.get("count", 0) for b in hist if b.get("lowEdge", 0) >= 0.5)
-            return {
-                "mean_ndvi": round(mean, 3),
+            rec = {
+                "mean_ndvi": round(stats.get("mean", 0), 3),
                 "forest_pct": round(forest_count / valid, 4),
                 "valid_pixels": valid,
             }
+            if best is None or valid > best["valid_pixels"]:
+                best = rec
         except (KeyError, TypeError):
             continue
-    return None
+    return best
 
 
 def main():
