@@ -610,6 +610,12 @@ button, input, textarea, select { font: inherit; color: inherit; }
 }
 .metric-card.highlight .metric-label { color: var(--green-100); }
 .metric-card.highlight .metric-error { color: var(--green-300); }
+.metric-card.highlight-blue {
+  background: #1f4570;
+  color: #e6eef7;
+}
+.metric-card.highlight-blue .metric-label { color: #b6cce4; }
+.metric-card.highlight-blue .metric-error { color: #7fadda; }
 .metric-label {
   font-size: 12px;
   color: var(--ink-500);

@@ -24,6 +24,7 @@
     sentinelMeta: null,
     sentinelSeries: null,
     himiCo2: null,
+    himiWater: null,
     jcreditProjects: [],
     address: '',
     addressLatLon: null,            // [lat, lon] from geocoder
@@ -142,17 +143,20 @@
 
   async function loadSentinelMeta() {
     try {
-      const [meta, series, co2] = await Promise.all([
+      const [meta, series, co2, water] = await Promise.all([
         fetch('data/sentinel/himi_meta.json').then(r => r.json()).catch(() => null),
         fetch('data/sentinel/himi_timeseries.json').then(r => r.json()).catch(() => null),
         fetch('data/sentinel/himi_co2.json').then(r => r.json()).catch(() => null),
+        fetch('data/sentinel/himi_water.json').then(r => r.json()).catch(() => null),
       ]);
       state.sentinelMeta = meta;
       state.sentinelSeries = series;
       state.himiCo2 = co2;
+      state.himiWater = water;
       if (meta) console.log('Sentinel scene:', meta.scene?.scene_id);
       if (series) console.log(`NDVI time series: ${series.points?.length} points`);
       if (co2) console.log(`Himi CO2: ${co2.annual_co2_t.toLocaleString()} t-CO2/yr`);
+      if (water) console.log(`Himi water yield: ${water.aoi_total.water_yield_m3_per_yr.toLocaleString()} m³/yr`);
 
       // Sync the Himi candidate with the live CO2 model result
       if (co2 && window.MORIMIERU_CANDIDATES?.chubu) {
@@ -542,9 +546,22 @@
     }
 
     $('#dd-co2').textContent = fmtMan(c.co2_estimate);
-    const dd = $('#dd-co2').nextElementSibling; // dummy to satisfy lint
     document.querySelector('#deepdive .metric-card.highlight .metric-error').textContent =
       `95% 信頼区間：${fmtMan(c.co2_low)} – ${fmtMan(c.co2_high)} t-CO₂`;
+
+    // Water yield card — Himi only for now
+    const waterCard = $('#dd-water-card');
+    if (waterCard) {
+      if (c.deepdive && state.himiWater) {
+        const w = state.himiWater;
+        waterCard.hidden = false;
+        $('#dd-water-m3').textContent = fmtMan(w.aoi_total.water_yield_m3_per_yr);
+        $('#dd-water-detail').textContent =
+          `${w.results_mm_per_yr.water_yield} mm/年 (降水量の ${w.results_pct.water_yield_pct}%) × ${w.aoi.forest_area_ha.toLocaleString()} ha ≈ ${w.aoi_total.water_yield_million_tons_per_yr} 百万トン／年`;
+      } else {
+        waterCard.hidden = true;
+      }
+    }
     $('#dd-credit').textContent = fmtMan(c.credit_man_yen);
     $('#dd-area').textContent = `${c.area_ha} ha`;
     $('#dd-species').textContent = c.species;
@@ -617,6 +634,7 @@
     const co2 = state.himiCo2;
     const fm = co2.forest_mask_source;
     const p = co2.parameters;
+    const w = state.himiWater;
     block.hidden = false;
     body.innerHTML = `
       <ol class="method-steps">
@@ -659,6 +677,33 @@
             個別森林・施業実態を組み込むことで、より狭い信頼幅と高精度な推定が可能になります。
           </p>
         </li>
+        ${w ? `
+        <li>
+          <h4>4. 水資源涵養量（林野庁簡易評価法 Ver.1.0 準拠）</h4>
+          <p>
+            <a href="${w.method_source_url}" target="_blank" rel="noopener">林野庁が令和8年3月に公開した算定式</a>
+            に、衛星・公開データだけで揃えたインプットを投入：
+          </p>
+          <ul class="method-list">
+            <li>気象（月別気温・降水量）：<strong>NASA POWER API</strong>（${w.inputs.climate.source}）</li>
+            <li>標高：国土地理院 標高API（観測点 ${w.inputs.elevation.weather_station_m} m → 林地 ${w.inputs.elevation.forest_point_m} m）</li>
+            <li>地質区分：産総研 シームレス地質図 API → <strong>${w.inputs.geology.rinya_class}</strong>（${w.inputs.geology.lithology}）</li>
+            <li>林分情報：林野庁 標準値（${w.inputs.forest.type}・密度 ${w.inputs.forest.density_per_ha} 本/ha・DBH ${w.inputs.forest.dbh_cm} cm・樹高 ${w.inputs.forest.height_m} m）</li>
+          </ul>
+          <pre class="method-formula">水資源涵養量 = 年降水量 − 直接流出量 − 蒸発散量
+
+  年降水量（標高補正後）：${w.results_mm_per_yr.precipitation} mm/年 (100%)
+  直接流出量：           ${w.results_mm_per_yr.direct_runoff} mm/年 (${w.results_pct.direct_runoff_pct}%)
+  蒸発散量：             ${w.results_mm_per_yr.evapotranspiration} mm/年 (${w.results_pct.evapotranspiration_pct}%)
+  ────────────────
+  <strong>水資源涵養量：${w.results_mm_per_yr.water_yield} mm/年 (${w.results_pct.water_yield_pct}%)</strong>
+  AOI 全体：${w.aoi_total.water_yield_m3_per_yr.toLocaleString()} m³/年 ≈ ${w.aoi_total.water_yield_million_tons_per_yr} 百万トン/年</pre>
+          <p class="method-note">
+            林野庁の本式は 100 ha 未満の小規模林分向けですが、本サイトでは衛星で抽出した
+            森林ピクセルごとに同じ式を当てはめ、AOI 全体に拡張しています。
+            林分情報（DBH・樹高・密度）は将来、林野庁 LiDAR 80%整備済データの取り込みで個別森林ごとに置き換える計画です。
+          </p>
+        </li>` : ''}
       </ol>
     `;
   }
