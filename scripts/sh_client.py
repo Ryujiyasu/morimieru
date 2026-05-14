@@ -26,29 +26,50 @@ CDSE_STAT_URL = "https://sh.dataspace.copernicus.eu/api/v1/statistics"
 DEFAULT_CREDS_FILE = "/etc/morimieru/sentinel-hub.env"
 TOKEN_CACHE_PATH = Path.home() / ".cache" / "morimieru" / "sh_token.json"
 
+# Round-robin index for multi-account rotation
+_current_account_idx = 0
+_token_cache_by_account = {}
 
-def _load_creds() -> tuple[str, str]:
-    cid = os.environ.get("SH_CLIENT_ID")
-    sec = os.environ.get("SH_CLIENT_SECRET")
-    if cid and sec:
-        return cid, sec
+
+def _load_all_creds() -> list[tuple[str, str]]:
+    """Returns list of (client_id, client_secret) pairs from env + env file.
+    Supports SH_CLIENT_ID / SH_CLIENT_ID_2 / SH_CLIENT_ID_3 ... patterns."""
+    sources = {}
+    # From env vars
+    for k, v in os.environ.items():
+        if k.startswith("SH_CLIENT_ID"):
+            suffix = k[len("SH_CLIENT_ID"):]
+            sec_key = f"SH_CLIENT_SECRET{suffix}"
+            sec = os.environ.get(sec_key)
+            if sec:
+                sources[suffix or "_1"] = (v, sec)
+    # From file
     path = Path(os.environ.get("SH_CREDS_FILE", DEFAULT_CREDS_FILE))
     if path.is_file():
+        file_data = {}
         for line in path.read_text().splitlines():
             line = line.strip()
             if not line or line.startswith("#") or "=" not in line:
                 continue
             k, v = line.split("=", 1)
-            if k == "SH_CLIENT_ID":
-                cid = v.strip().strip('"').strip("'")
-            elif k == "SH_CLIENT_SECRET":
-                sec = v.strip().strip('"').strip("'")
-    if not (cid and sec):
+            file_data[k] = v.strip().strip('"').strip("'")
+        for k, v in file_data.items():
+            if k.startswith("SH_CLIENT_ID"):
+                suffix = k[len("SH_CLIENT_ID"):]
+                sec = file_data.get(f"SH_CLIENT_SECRET{suffix}")
+                if sec and (suffix or "_1") not in sources:
+                    sources[suffix or "_1"] = (v, sec)
+    if not sources:
         raise RuntimeError(
             f"Sentinel Hub credentials not found. Set SH_CLIENT_ID/SH_CLIENT_SECRET "
             f"or readable {DEFAULT_CREDS_FILE}"
         )
-    return cid, sec
+    return list(sources.values())
+
+
+def _load_creds() -> tuple[str, str]:
+    """Returns first account (back-compat)."""
+    return _load_all_creds()[0]
 
 
 def _read_token_cache() -> Optional[str]:
@@ -71,73 +92,90 @@ def _write_token_cache(token: str, expires_in: int):
     TOKEN_CACHE_PATH.chmod(0o600)
 
 
-def get_token(force: bool = False) -> str:
-    if not force:
+def get_token(force: bool = False, account_idx: int = None) -> str:
+    """Get an access token, rotating across accounts. force=True forces refresh."""
+    global _current_account_idx
+    accounts = _load_all_creds()
+    if account_idx is None:
+        account_idx = _current_account_idx % len(accounts)
+    cid, sec = accounts[account_idx]
+    if not force and account_idx in _token_cache_by_account:
+        cached = _token_cache_by_account[account_idx]
+        if cached["expires_at"] > time.time() + 60:
+            return cached["access_token"]
+    # Try fallback cache file for single-account legacy
+    if not force and account_idx == 0:
         cached = _read_token_cache()
         if cached:
+            _token_cache_by_account[0] = {"access_token": cached, "expires_at": time.time() + 1500}
             return cached
-    cid, sec = _load_creds()
     r = requests.post(
         CDSE_TOKEN_URL,
-        data={
-            "grant_type": "client_credentials",
-            "client_id": cid,
-            "client_secret": sec,
-        },
+        data={"grant_type": "client_credentials", "client_id": cid, "client_secret": sec},
         timeout=20,
     )
     r.raise_for_status()
     j = r.json()
-    _write_token_cache(j["access_token"], j.get("expires_in", 1800))
+    _token_cache_by_account[account_idx] = {
+        "access_token": j["access_token"],
+        "expires_at": time.time() + j.get("expires_in", 1800),
+    }
+    if account_idx == 0:
+        _write_token_cache(j["access_token"], j.get("expires_in", 1800))
     return j["access_token"]
 
 
+def rotate_account():
+    """Move to next account in round-robin."""
+    global _current_account_idx
+    accounts = _load_all_creds()
+    _current_account_idx = (_current_account_idx + 1) % len(accounts)
+    return _current_account_idx
+
+
+def _call_with_rotation(url: str, payload: dict, accept: str, return_bytes: bool = False):
+    """Generic API call with multi-account rotation on rate limits / 401."""
+    accounts = _load_all_creds()
+    last_err = None
+    for attempt in range(len(accounts) * 2 + 2):
+        try:
+            token = get_token()
+            r = requests.post(
+                url,
+                headers={"Authorization": f"Bearer {token}", "Accept": accept},
+                json=payload,
+                timeout=120,
+            )
+            if r.status_code == 401:
+                token = get_token(force=True)
+                r = requests.post(
+                    url,
+                    headers={"Authorization": f"Bearer {token}", "Accept": accept},
+                    json=payload,
+                    timeout=120,
+                )
+            if r.status_code == 429:
+                # Rate limited — rotate to next account and retry
+                rotate_account()
+                time.sleep(1.5)
+                last_err = f"429 rate-limited, rotated to account {_current_account_idx}"
+                continue
+            if not r.ok:
+                raise RuntimeError(f"API failed: {r.status_code} {r.text[:400]}")
+            return r.content if return_bytes else r.json()
+        except requests.exceptions.RequestException as e:
+            last_err = str(e)
+            time.sleep(1)
+            continue
+    raise RuntimeError(f"All retries failed: {last_err}")
+
+
 def process(payload: dict, accept: str = "image/png") -> bytes:
-    """Call the Process API. Returns raw response body (bytes for PNG/TIFF, JSON for stats)."""
-    token = get_token()
-    r = requests.post(
-        CDSE_PROCESS_URL,
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Accept": accept,
-        },
-        json=payload,
-        timeout=120,
-    )
-    if r.status_code == 401:
-        # refresh token once
-        token = get_token(force=True)
-        r = requests.post(
-            CDSE_PROCESS_URL,
-            headers={"Authorization": f"Bearer {token}", "Accept": accept},
-            json=payload,
-            timeout=120,
-        )
-    if not r.ok:
-        raise RuntimeError(f"Process API failed: {r.status_code} {r.text[:400]}")
-    return r.content
+    return _call_with_rotation(CDSE_PROCESS_URL, payload, accept, return_bytes=True)
 
 
 def statistics(payload: dict) -> dict:
-    """Call the Statistical API. Returns parsed JSON."""
-    token = get_token()
-    r = requests.post(
-        CDSE_STAT_URL,
-        headers={"Authorization": f"Bearer {token}", "Accept": "application/json"},
-        json=payload,
-        timeout=120,
-    )
-    if r.status_code == 401:
-        token = get_token(force=True)
-        r = requests.post(
-            CDSE_STAT_URL,
-            headers={"Authorization": f"Bearer {token}", "Accept": "application/json"},
-            json=payload,
-            timeout=120,
-        )
-    if not r.ok:
-        raise RuntimeError(f"Statistical API failed: {r.status_code} {r.text[:400]}")
-    return r.json()
+    return _call_with_rotation(CDSE_STAT_URL, payload, "application/json", return_bytes=False)
 
 
 # ----- Evalscripts -----

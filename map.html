@@ -262,16 +262,33 @@
   <div class="map-shell">
     <aside class="map-sidebar">
       <div class="layer-group">
-        <h3>🌳 森林データ</h3>
+        <h3>🌏 全国 CO₂ ヒートマップ（経年）</h3>
         <label class="layer-row">
-          <input type="checkbox" id="ly-rinpan-co2" checked>
+          <input type="checkbox" id="ly-pref-co2" checked>
+          <span class="swatch" style="background:linear-gradient(90deg,#fff4d6,#7ba56f,#1f3d2a);"></span>
+          <span><strong>都道府県別 CO₂吸収</strong>（Sentinel-2）</span>
+        </label>
+        <div class="year-slider-wrap" id="year-slider-wrap" style="margin-top:8px;display:none;">
+          <p style="margin:8px 0 4px;font-size:12px;color:var(--ink-700);">表示年：<strong id="year-label">2025</strong></p>
+          <input type="range" id="year-slider" min="2015" max="2025" value="2025" step="1" style="width:100%;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--ink-500);font-family:var(--font-mono);">
+            <span>2015</span><span>2020</span><span>2025</span>
+          </div>
+          <p style="margin:8px 0 0;font-size:10.5px;color:var(--ink-500);">クリックで都道府県別の10年推移を見る</p>
+        </div>
+      </div>
+
+      <div class="layer-group">
+        <h3>🌳 林班データ（静岡県）</h3>
+        <label class="layer-row">
+          <input type="checkbox" id="ly-rinpan-co2">
           <span class="swatch" style="background:linear-gradient(90deg,#ffe9c4,#5a8a3a,#2d5a3d);"></span>
-          <span>静岡県 林班 <strong>CO₂吸収ヒートマップ</strong></span>
+          <span>林班 <strong>CO₂吸収</strong></span>
         </label>
         <label class="layer-row">
           <input type="checkbox" id="ly-rinpan-water">
           <span class="swatch" style="background:linear-gradient(90deg,#e7f0fa,#3b6da1,#1f4570);"></span>
-          <span>静岡県 林班 <strong>水源涵養ヒートマップ</strong></span>
+          <span>林班 <strong>水源涵養</strong></span>
         </label>
       </div>
 
@@ -363,7 +380,143 @@ function waterColor(m3) {
 
 // ----- layers -----
 let rinpanCo2Layer, rinpanWaterLayer, jcreditLayer, basinsLayer, reportsLayer;
+let prefCo2Layer = null;
+let prefData = null;
+let currentYear = 2025;
 let muniNames = {};
+
+function prefCo2Color(co2) {
+  if (!co2) return '#fff4d6';
+  if (co2 < 100000) return '#ffd685';
+  if (co2 < 500000) return '#d0d989';
+  if (co2 < 1000000) return '#a0c170';
+  if (co2 < 3000000) return '#5a8a3a';
+  if (co2 < 8000000) return '#3a7045';
+  return '#1f3d2a';
+}
+
+async function loadPrefCo2() {
+  try {
+    const r = await fetch('data/co2/japan_prefectures_timeseries.geojson').then(r => r.json());
+    prefData = r;
+    document.getElementById('year-slider-wrap').style.display = 'block';
+    // Set slider range from data
+    const slider = document.getElementById('year-slider');
+    if (r.years && r.years.length) {
+      slider.min = r.years[0];
+      slider.max = r.years[r.years.length - 1];
+      slider.value = r.years[r.years.length - 1];
+      currentYear = parseInt(slider.value);
+      document.getElementById('year-label').textContent = currentYear;
+    }
+    renderPrefLayer();
+  } catch (e) {
+    console.warn('Prefecture data not yet available (computing...)', e);
+    // Show a hint
+    const hint = document.createElement('p');
+    hint.style.cssText = 'font-size:11px;color:var(--ink-500);margin-top:6px;';
+    hint.textContent = '⏳ 全国 CO₂ データ計算中…数分でお見せできます。';
+    document.getElementById('year-slider-wrap').parentNode.appendChild(hint);
+  }
+}
+
+function renderPrefLayer() {
+  if (!prefData) return;
+  if (prefCo2Layer) map.removeLayer(prefCo2Layer);
+
+  prefCo2Layer = L.geoJSON(prefData, {
+    style: f => {
+      const y = f.properties.yearly?.[currentYear];
+      return {
+        color: '#fff',
+        weight: 0.8,
+        opacity: 1,
+        fillColor: prefCo2Color(y?.co2_t || 0),
+        fillOpacity: 0.78,
+      };
+    },
+    onEachFeature: (f, layer) => {
+      const p = f.properties;
+      layer.on('click', () => {
+        const y = p.yearly?.[currentYear];
+        const allYears = p.yearly || {};
+        // Build mini time series sparkline
+        const yearKeys = Object.keys(allYears).sort();
+        const sparkData = yearKeys.map(k => ({ year: k, co2: allYears[k].co2_t, ndvi: allYears[k].ndvi, forest: allYears[k].forest_ha }));
+        const maxCo2 = Math.max(...sparkData.map(d => d.co2 || 0));
+        const minCo2 = Math.min(...sparkData.map(d => d.co2 || 0));
+        const W = 280, H = 70;
+        const lineY = (v) => H - ((v - minCo2) / (maxCo2 - minCo2 || 1)) * (H - 8) - 4;
+        const lineX = (i) => (i / (sparkData.length - 1 || 1)) * W;
+        const pathD = sparkData.map((d, i) => `${i === 0 ? 'M' : 'L'}${lineX(i).toFixed(1)},${lineY(d.co2).toFixed(1)}`).join(' ');
+        const sparkSvg = `
+          <svg viewBox="0 0 ${W} ${H + 16}" style="width:100%;height:auto;">
+            <path d="${pathD} L${lineX(sparkData.length - 1)},${H} L0,${H} Z" fill="rgba(45,90,61,0.18)"/>
+            <path d="${pathD}" fill="none" stroke="#2d5a3d" stroke-width="2"/>
+            ${sparkData.map((d, i) => `<circle cx="${lineX(i).toFixed(1)}" cy="${lineY(d.co2).toFixed(1)}" r="3" fill="${d.year == currentYear ? '#c47a4a' : '#2d5a3d'}"/>`).join('')}
+            ${sparkData.map((d, i) => i % 2 === 0 ? `<text x="${lineX(i).toFixed(1)}" y="${H + 12}" text-anchor="middle" font-size="9" fill="#7a786a" font-family="ui-monospace,monospace">${d.year}</text>` : '').join('')}
+          </svg>`;
+        const first = sparkData[0];
+        const last = sparkData[sparkData.length - 1];
+        const co2Change = last && first ? last.co2 - first.co2 : 0;
+        const co2ChangePct = first?.co2 ? (co2Change / first.co2 * 100) : 0;
+        openDetail({
+          badge: '都道府県',
+          title: `${p.name_ja}（${currentYear} 年）`,
+          body: `
+            <div class="detail-stats">
+              <div class="stat"><p class="stat-label">森林面積</p><p class="stat-value">${(y?.forest_ha||0).toLocaleString()}<span class="unit">ha</span></p></div>
+              <div class="stat"><p class="stat-label">平均 NDVI</p><p class="stat-value">${y?.ndvi || '-'}</p></div>
+              <div class="stat" style="grid-column:1/-1;border-left-color:var(--green-700);background:linear-gradient(180deg,var(--paper),var(--green-100));">
+                <p class="stat-label">推定 CO₂ 吸収量</p>
+                <p class="stat-value" style="color:var(--green-700);font-size:24px;">${((y?.co2_t||0)/1e6).toFixed(2)}<span class="unit">百万 t-CO₂/年</span></p>
+              </div>
+            </div>
+            <div class="detail-section">
+              <h4>10年トレンド（${first?.year} → ${last?.year}）</h4>
+              ${sparkSvg}
+              <p style="font-size:12.5px;margin:8px 0 0;color:${co2Change >= 0 ? 'var(--green-700)' : 'var(--earth-500)'};font-weight:600;">
+                ${co2Change >= 0 ? '↑' : '↓'} ${Math.abs(co2Change).toLocaleString()} t-CO₂ (${co2Change >= 0 ? '+' : ''}${co2ChangePct.toFixed(1)}%)
+              </p>
+            </div>
+            <div class="detail-section">
+              <h4>計算手法</h4>
+              <p style="font-size:12px;">夏期（7-9月）Sentinel-2 NDVI > 0.5 を森林ピクセルと判定。都道府県面積 ${p.pref_area_ha.toLocaleString()} ha × 森林率 ${((y?.forest_pct||0)*100).toFixed(1)}% × 9.62 t-CO₂/ha/年</p>
+            </div>
+            <div class="detail-section">
+              <h4>年次データ</h4>
+              <table style="width:100%;font-size:11.5px;font-family:var(--font-mono);">
+                ${sparkData.map(d => `<tr>
+                  <td style="padding:2px 8px 2px 0;color:var(--ink-500);">${d.year}</td>
+                  <td style="padding:2px 0;">NDVI ${d.ndvi}</td>
+                  <td style="padding:2px 0 2px 8px;text-align:right;">${(d.co2/1e6).toFixed(2)}M t-CO₂</td>
+                </tr>`).join('')}
+              </table>
+            </div>
+          `,
+        });
+      });
+      layer.bindTooltip(`<b>${p.name_ja}</b>`, { sticky: true });
+    },
+  });
+
+  if (document.getElementById('ly-pref-co2').checked) {
+    prefCo2Layer.addTo(map);
+  }
+}
+
+document.addEventListener('change', e => {
+  if (e.target.id === 'year-slider') {
+    currentYear = parseInt(e.target.value);
+    document.getElementById('year-label').textContent = currentYear;
+    renderPrefLayer();
+  }
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'year-slider') {
+    document.getElementById('year-label').textContent = e.target.value;
+  }
+});
 
 async function loadRinpan() {
   const [fc, names] = await Promise.all([
@@ -460,8 +613,6 @@ async function loadRinpan() {
   });
 
   if (document.getElementById('ly-rinpan-co2').checked) rinpanCo2Layer.addTo(map);
-  // Fit to data extent on first load
-  map.fitBounds(rinpanCo2Layer.getBounds(), { padding: [30, 30] });
 }
 
 async function loadJcredit() {
@@ -603,11 +754,12 @@ window.closeDetail = closeDetail;
 
 // Initialize
 (async () => {
-  await Promise.all([loadRinpan(), loadJcredit(), loadReports()]);
+  await Promise.all([loadRinpan(), loadJcredit(), loadReports(), loadPrefCo2()]);
   bindLayerToggle('ly-rinpan-co2', () => rinpanCo2Layer, true);
   bindLayerToggle('ly-rinpan-water', () => rinpanWaterLayer, true);
   bindLayerToggle('ly-jcredit', () => jcreditLayer);
   bindLayerToggle('ly-reports', () => reportsLayer);
+  bindLayerToggle('ly-pref-co2', () => prefCo2Layer);
 
   document.getElementById('ly-basins').addEventListener('change', async e => {
     if (e.target.checked) {
@@ -617,6 +769,8 @@ window.closeDetail = closeDetail;
       map.removeLayer(basinsLayer);
     }
   });
+  // Set initial Japan view
+  map.setView([37.5, 138], 6);
   updateLegend();
 })();
 </script>
