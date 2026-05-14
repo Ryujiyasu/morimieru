@@ -627,9 +627,11 @@
     section.hidden = false;
 
     $('#dd-title').textContent = `${c.pref}・${c.name}`;
-    if (c.deepdive && state.sentinelMeta) {
-      const d = (state.sentinelMeta.datetime || '').slice(0, 10);
-      $('#dd-lead').innerHTML = `林野庁令和7年度委託事業の対象地。<b>${d}</b> の Sentinel-2 衛星画像（雲量${state.sentinelMeta.cloud_cover.toFixed(1)}%）から実際に NDVI を計算し、森林面積を推定しました。地図上の緑が濃い領域ほど植生が活発です。`;
+    if (c.deepdive && state.sentinelMeta?.scene) {
+      const scene = state.sentinelMeta.scene;
+      const d = (scene.datetime || '').slice(0, 10);
+      const cc = (scene.cloud_cover ?? 0).toFixed(1);
+      $('#dd-lead').innerHTML = `林野庁令和7年度委託事業の対象地。<b>${d}</b> の Sentinel-2 衛星画像（雲量${cc}%）から実際に NDVI を計算し、森林面積を推定しました。地図上の緑が濃い領域ほど植生が活発です。`;
     } else if (c.tagline) {
       $('#dd-lead').textContent = `${c.tagline}。実際のJ-クレジット登録プロジェクトです。`;
     } else {
