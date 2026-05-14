@@ -305,6 +305,26 @@
       </div>
 
       <div class="layer-group">
+        <h3>🌲 らしんばん 20m メッシュ（林野庁 LiDAR）</h3>
+        <label class="layer-row">
+          <input type="checkbox" id="ly-rashinban-tochigi">
+          <span class="swatch" style="background:#4a8c3a;"></span>
+          <span>栃木県</span>
+        </label>
+        <label class="layer-row">
+          <input type="checkbox" id="ly-rashinban-hyogo">
+          <span class="swatch" style="background:#4a8c3a;"></span>
+          <span>兵庫県</span>
+        </label>
+        <label class="layer-row">
+          <input type="checkbox" id="ly-rashinban-kochi">
+          <span class="swatch" style="background:#4a8c3a;"></span>
+          <span>高知県</span>
+        </label>
+        <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);">ズーム13以上で表示。CC-BY 林野庁／MIERUNE</p>
+      </div>
+
+      <div class="layer-group">
         <h3>📋 登録森林</h3>
         <label class="layer-row">
           <input type="checkbox" id="ly-jcredit" checked>
@@ -368,6 +388,7 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.vectorgrid@1.3.0/dist/Leaflet.VectorGrid.bundled.js"></script>
 <script>
 const map = L.map('map', { preferCanvas: true }).setView([35.5, 137.5], 8);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -680,6 +701,114 @@ async function loadBasins() {
   });
 }
 
+// ----- らしんばん 林野庁 LiDAR 20m mesh (vector tile, CC-BY) -----
+// 樹種に応じた色付け（もりみえる パレット）
+const SPECIES_COLORS = {
+  'スギ':     '#2d5a3d',
+  'ヒノキ':   '#3a7045',
+  'マツ':     '#5a8a3a',
+  'アカマツ': '#5a8a3a',
+  'クロマツ': '#7ba56f',
+  'カラマツ': '#a7c498',
+  '広葉樹':   '#c47a4a',
+  '針葉樹':   '#3a7045',
+  'その他':   '#bcb094',
+};
+function speciesColor(name) {
+  if (!name) return '#cbc4ad';
+  for (const k of Object.keys(SPECIES_COLORS)) {
+    if (name.indexOf(k) >= 0) return SPECIES_COLORS[k];
+  }
+  return '#cbc4ad';
+}
+
+const RASHINBAN_PREFS = {
+  tochigi: {
+    label: '栃木県',
+    url: 'https://rinya-tochigi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf',
+    layerName: 'fr_mesh20m',
+  },
+  hyogo: {
+    label: '兵庫県',
+    url: 'https://rinya-hyogo.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf',
+    layerName: 'fr_mesh20m',
+  },
+  kochi: {
+    label: '高知県',
+    url: 'https://rinya-kochi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf',
+    layerName: 'fr_mesh20m',
+  },
+};
+const rashinbanLayers = {};
+
+function buildRashinbanLayer(key) {
+  const cfg = RASHINBAN_PREFS[key];
+  if (rashinbanLayers[key]) return rashinbanLayers[key];
+  const layer = L.vectorGrid.protobuf(cfg.url, {
+    minZoom: 13,
+    maxNativeZoom: 16,
+    rendererFactory: L.canvas.tile,
+    interactive: true,
+    attribution: '© 林野庁 / MIERUNE × 日本森林技術協会 (CC-BY)',
+    vectorTileLayerStyles: {
+      [cfg.layerName]: (props) => ({
+        fill: true,
+        fillColor: speciesColor(props['代表樹種'] || props.species),
+        fillOpacity: 0.75,
+        stroke: false,
+      }),
+    },
+    getFeatureId: (f) => f.properties['ID'] || `${f.properties['市町村コード']||''}-${Math.random()}`,
+  });
+  layer.on('click', (e) => {
+    const p = e.layer.properties || {};
+    const species = p['代表樹種'] || '不明';
+    const trees = p['立木本数'] ?? '-';
+    const height = p['平均樹高'] ?? '-';
+    const volume = p['合計材積'] ?? '-';
+    const slope = p['土地傾斜'] ?? '-';
+    const muniCode = p['市町村コード'] || '-';
+    openDetail({
+      badge: 'LiDAR 20m メッシュ',
+      title: `${cfg.label} ${species}`,
+      body: `
+        <div class="detail-stats">
+          <div class="stat"><p class="stat-label">代表樹種</p><p class="stat-value" style="font-size:20px;">${species}</p></div>
+          <div class="stat alt-effect" style="border-left-color:var(--green-700);"><p class="stat-label">合計材積</p><p class="stat-value">${typeof volume === 'number' ? volume.toFixed(1) : volume}<span class="unit">m³</span></p></div>
+          <div class="stat"><p class="stat-label">立木本数</p><p class="stat-value">${trees}<span class="unit">本</span></p></div>
+          <div class="stat"><p class="stat-label">平均樹高</p><p class="stat-value">${typeof height === 'number' ? height.toFixed(1) : height}<span class="unit">m</span></p></div>
+        </div>
+        <div class="detail-section">
+          <h4>地形</h4>
+          <dl>
+            <dt>傾斜区分</dt><dd>${slope}</dd>
+            <dt>市町村コード</dt><dd>${muniCode}</dd>
+          </dl>
+        </div>
+        <div class="detail-section">
+          <h4>データソース</h4>
+          <p style="font-size:12px;">林野庁 高精度森林資源データ（${cfg.label}・20m メッシュ）。航空 LiDAR + 写真判読による Tier 3 級実測値。配信：MIERUNE × 日本森林技術協会「らしんばん」（CC-BY）</p>
+        </div>
+      `,
+    });
+    L.DomEvent.stop(e);
+  });
+  rashinbanLayers[key] = layer;
+  return layer;
+}
+
+function bindRashinbanToggle(id, key) {
+  document.getElementById(id).addEventListener('change', e => {
+    const layer = buildRashinbanLayer(key);
+    if (e.target.checked) {
+      layer.addTo(map);
+      if (map.getZoom() < 13) map.setZoom(13);
+    } else {
+      map.removeLayer(layer);
+    }
+  });
+}
+
 async function loadReports() {
   const r = await fetch('data/reports.json').then(r => r.json());
   reportsLayer = L.layerGroup();
@@ -802,6 +931,10 @@ window.closeDetail = closeDetail;
   bindLayerToggle('ly-jcredit', () => jcreditLayer);
   bindLayerToggle('ly-reports', () => reportsLayer);
   bindLayerToggle('ly-pref-co2', () => prefCo2Layer);
+
+  bindRashinbanToggle('ly-rashinban-tochigi', 'tochigi');
+  bindRashinbanToggle('ly-rashinban-hyogo', 'hyogo');
+  bindRashinbanToggle('ly-rashinban-kochi', 'kochi');
 
   document.getElementById('ly-basins').addEventListener('change', async e => {
     if (e.target.checked) {
