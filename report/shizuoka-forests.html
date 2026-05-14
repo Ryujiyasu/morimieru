@@ -12,6 +12,14 @@
 <style>
 .report-hero { --bg-image: url('../assets/report-co2-hero.jpg'); }
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
 </head>
 <body class="theme-co2">
 
@@ -84,7 +92,7 @@
 
 <h2>2. 市町村別 内訳</h2>
 
-<p>面積の大きい順。市町村コードは静岡県森林クラウドの内部コード（61-76）。</p>
+<p>面積の大きい順。本データは <strong>浜松市・湖西市の森林計画区</strong>（静岡県森林クラウドの内部コード）が対象。コード→市町村名は国土地理院の逆引き API で同定。</p>
 
 <table class="data-table">
   <thead>
@@ -203,22 +211,27 @@ fetch('../data/rinpan/shizuoka_rinpan_water.geojson')
       byMuni[m].co2 += p.co2_estimate_t_per_yr || 0;
     }
 
-    const sorted = Object.entries(byMuni).sort((a, b) => b[1].area_ha - a[1].area_ha);
-    const rows = sorted.map(([mc, d]) => {
-      const eff = d.water - d.bare;
-      const effPct = d.bare ? (eff / d.bare * 100) : 0;
-      return `
-      <tr>
-        <td><strong>市町村-${mc}</strong><br><small>コード ${mc}</small></td>
-        <td class="num">${d.stands.toLocaleString()}</td>
-        <td class="num">${Math.round(d.area_ha).toLocaleString()}</td>
-        <td class="num">${d.water.toLocaleString()}</td>
-        <td class="num neg">${d.bare.toLocaleString()}</td>
-        <td class="num effect">+${eff.toLocaleString()}<br><small>+${Math.round(effPct)}%</small></td>
-        <td class="num">${d.co2.toLocaleString()}</td>
-      </tr>`;
-    }).join('');
-    document.getElementById('muni-rows').innerHTML = rows;
+    // Load muni name mapping
+    return fetch('../data/rinpan/shizuoka_muni_names.json').then(r => r.json()).then(nameData => {
+      const muniNames = nameData.mapping;
+      const sorted = Object.entries(byMuni).sort((a, b) => b[1].area_ha - a[1].area_ha);
+      const rows = sorted.map(([mc, d]) => {
+        const nm = muniNames[mc] || { muni_name: '不明', area: '' };
+        const eff = d.water - d.bare;
+        const effPct = d.bare ? (eff / d.bare * 100) : 0;
+        return `
+        <tr>
+          <td><strong>${nm.muni_name}</strong> ${nm.area}<br><small>静岡県森林クラウドコード ${mc}</small></td>
+          <td class="num">${d.stands.toLocaleString()}</td>
+          <td class="num">${Math.round(d.area_ha).toLocaleString()}</td>
+          <td class="num">${d.water.toLocaleString()}</td>
+          <td class="num neg">${d.bare.toLocaleString()}</td>
+          <td class="num effect">+${eff.toLocaleString()}<br><small>+${Math.round(effPct)}%</small></td>
+          <td class="num">${d.co2.toLocaleString()}</td>
+        </tr>`;
+      }).join('');
+      document.getElementById('muni-rows').innerHTML = rows;
+    });
   })
   .catch(e => console.error('data load failed', e));
 </script>

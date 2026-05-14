@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地図で見る｜もりみえる</title>
+<meta name="description" content="衛星と公開データで描いた、森のヒートマップ。CO2吸収量・水資源涵養量・林班・流域・J-クレジット登録森林を地図上で重ねて見ることができます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="style.css">
+<style>
+.map-page {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+.map-header {
+  padding: 14px 28px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--ink-300);
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  flex-wrap: wrap;
+  z-index: 100;
+}
+.map-header h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 20px;
+  color: var(--green-900);
+  margin: 0;
+}
+.map-header h1 .small { font-size: 12px; color: var(--ink-500); font-weight: 400; margin-left: 8px; }
+
+.map-shell {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  position: relative;
+}
+.map-sidebar {
+  background: var(--cream);
+  border-right: 1px solid var(--ink-300);
+  overflow-y: auto;
+  padding: 20px 22px 28px;
+}
+.layer-group { margin-bottom: 24px; }
+.layer-group h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--green-900);
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ink-300);
+  letter-spacing: 0.04em;
+}
+.layer-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 0; font-size: 13.5px; color: var(--ink-700);
+  cursor: pointer; user-select: none;
+}
+.layer-row input { margin: 0; }
+.layer-row .swatch {
+  display: inline-block; width: 14px; height: 14px;
+  border-radius: 3px; vertical-align: middle;
+}
+.layer-row span { vertical-align: middle; }
+
+.legend {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: var(--paper);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--ink-700);
+  display: none;
+}
+.legend.active { display: block; }
+.legend h4 { font-size: 12px; margin: 0 0 8px; color: var(--green-900); font-weight: 700; }
+.legend-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 3px 0; font-family: var(--font-mono); font-size: 11px;
+}
+.legend-row .bar {
+  display: inline-block; width: 18px; height: 14px; border-radius: 2px;
+}
+
+#map { width: 100%; height: 100%; }
+
+.leaflet-popup-content {
+  font-family: var(--font-jp);
+  font-size: 13px;
+}
+.leaflet-popup-content h4 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 14px; color: var(--green-900);
+}
+.leaflet-popup-content dl {
+  margin: 0; display: grid;
+  grid-template-columns: auto 1fr; gap: 4px 12px;
+  font-size: 12px;
+}
+.leaflet-popup-content dt { color: var(--ink-500); }
+.leaflet-popup-content dd { margin: 0; color: var(--ink-900); font-weight: 500; }
+.leaflet-popup-content .num {
+  font-family: var(--font-mono);
+  font-weight: 600; color: var(--green-700);
+}
+
+@media (max-width: 768px) {
+  .map-shell { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .map-sidebar {
+    height: 220px;
+    overflow-y: auto;
+    border-right: none; border-bottom: 1px solid var(--ink-300);
+  }
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body>
+
+<div class="map-page">
+  <header class="map-header">
+    <h1>
+      <a href="/" style="text-decoration:none;color:inherit;">🌲 もりみえる</a>
+      <span class="small">地図で見る｜全国の森林公益機能</span>
+    </h1>
+    <nav class="nav">
+      <a href="reports.html">レポート</a>
+      <a href="/#start" class="cta">森を探す</a>
+    </nav>
+  </header>
+
+  <div class="map-shell">
+    <aside class="map-sidebar">
+      <div class="layer-group">
+        <h3>🌳 森林データ</h3>
+        <label class="layer-row">
+          <input type="checkbox" id="ly-rinpan-co2" checked>
+          <span class="swatch" style="background:linear-gradient(90deg,#ffe9c4,#5a8a3a,#2d5a3d);"></span>
+          <span>静岡県 林班 <strong>CO₂吸収ヒートマップ</strong></span>
+        </label>
+        <label class="layer-row">
+          <input type="checkbox" id="ly-rinpan-water">
+          <span class="swatch" style="background:linear-gradient(90deg,#e7f0fa,#3b6da1,#1f4570);"></span>
+          <span>静岡県 林班 <strong>水源涵養ヒートマップ</strong></span>
+        </label>
+      </div>
+
+      <div class="layer-group">
+        <h3>📋 登録森林</h3>
+        <label class="layer-row">
+          <input type="checkbox" id="ly-jcredit" checked>
+          <span class="swatch" style="background:#c47a4a;"></span>
+          <span>J-クレジット森林 264 件</span>
+        </label>
+      </div>
+
+      <div class="layer-group">
+        <h3>🌊 流域</h3>
+        <label class="layer-row">
+          <input type="checkbox" id="ly-basins">
+          <span class="swatch" style="background:#7fadda;"></span>
+          <span>HydroBASINS Lvl 10</span>
+        </label>
+      </div>
+
+      <div class="layer-group">
+        <h3>📑 レポート地点</h3>
+        <label class="layer-row">
+          <input type="checkbox" id="ly-reports" checked>
+          <span class="swatch" style="background:#2d5a3d;"></span>
+          <span>公開レポート 3 件</span>
+        </label>
+      </div>
+
+      <div class="legend active" id="legend-co2">
+        <h4>CO₂ 吸収量（t-CO₂/年）</h4>
+        <div class="legend-row"><span class="bar" style="background:#fff4d6;"></span><span>0 – 500</span></div>
+        <div class="legend-row"><span class="bar" style="background:#d0d989;"></span><span>500 – 1,500</span></div>
+        <div class="legend-row"><span class="bar" style="background:#7ba56f;"></span><span>1,500 – 3,000</span></div>
+        <div class="legend-row"><span class="bar" style="background:#3a7045;"></span><span>3,000 – 6,000</span></div>
+        <div class="legend-row"><span class="bar" style="background:#1f3d2a;"></span><span>6,000+</span></div>
+      </div>
+
+      <div class="legend" id="legend-water">
+        <h4>水源涵養量（m³/年）</h4>
+        <div class="legend-row"><span class="bar" style="background:#e7f0fa;"></span><span>少</span></div>
+        <div class="legend-row"><span class="bar" style="background:#7fadda;"></span><span>中</span></div>
+        <div class="legend-row"><span class="bar" style="background:#3b6da1;"></span><span>多</span></div>
+        <div class="legend-row"><span class="bar" style="background:#1f4570;"></span><span>極大</span></div>
+      </div>
+
+      <p style="margin-top:24px;font-size:11.5px;color:var(--ink-500);line-height:1.7;">
+        ⓘ 静岡県（浜松・湖西エリア）以外の林班は未取り込み。順次他県も追加予定。
+      </p>
+    </aside>
+
+    <div id="map"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const map = L.map('map', { preferCanvas: true }).setView([35.5, 137.5], 8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OSM',
+  maxZoom: 18,
+}).addTo(map);
+
+// ----- color scales -----
+function co2Color(co2) {
+  if (co2 < 500) return '#fff4d6';
+  if (co2 < 1500) return '#d0d989';
+  if (co2 < 3000) return '#7ba56f';
+  if (co2 < 6000) return '#3a7045';
+  return '#1f3d2a';
+}
+function waterColor(m3) {
+  if (m3 < 5e5) return '#e7f0fa';
+  if (m3 < 2e6) return '#7fadda';
+  if (m3 < 5e6) return '#3b6da1';
+  return '#1f4570';
+}
+
+// ----- layers -----
+let rinpanCo2Layer, rinpanWaterLayer, jcreditLayer, basinsLayer, reportsLayer;
+let muniNames = {};
+
+async function loadRinpan() {
+  const [fc, names] = await Promise.all([
+    fetch('data/rinpan/shizuoka_rinpan_water.geojson').then(r => r.json()),
+    fetch('data/rinpan/shizuoka_muni_names.json').then(r => r.json()),
+  ]);
+  muniNames = names.mapping;
+
+  rinpanCo2Layer = L.geoJSON(fc, {
+    style: f => ({
+      color: '#fff',
+      weight: 0.4,
+      opacity: 1,
+      fillColor: co2Color(f.properties.co2_estimate_t_per_yr || 0),
+      fillOpacity: 0.78,
+    }),
+    onEachFeature: (f, layer) => {
+      const p = f.properties;
+      const mc = p['市町村CD'];
+      const nm = muniNames[mc] || { muni_name: '不明', area: '' };
+      const html = `
+        <h4>${nm.muni_name} ${nm.area}</h4>
+        <dl>
+          <dt>林班</dt><dd>第${p['林班']}号 (ID ${p.ID})</dd>
+          <dt>面積</dt><dd class="num">${(p.area_ha||0).toLocaleString()} ha</dd>
+          <dt>年間降水量</dt><dd class="num">${(p.annual_precip_mm||0).toLocaleString()} mm</dd>
+          <dt>地質</dt><dd>${p.geology||'-'}</dd>
+          <dt>水資源涵養</dt><dd class="num">${(p.water_yield_m3||0).toLocaleString()} m³/年</dd>
+          <dt>裸地仮定</dt><dd class="num">${(p.bare_yield_m3||0).toLocaleString()} m³/年</dd>
+          <dt>森林維持効果</dt><dd class="num">+${(p.forest_effect_m3||0).toLocaleString()} m³/年</dd>
+          <dt>CO₂ 吸収</dt><dd class="num">${(p.co2_estimate_t_per_yr||0).toLocaleString()} t/年</dd>
+        </dl>`;
+      layer.bindPopup(html, { maxWidth: 320 });
+    },
+  });
+
+  rinpanWaterLayer = L.geoJSON(fc, {
+    style: f => ({
+      color: '#fff', weight: 0.4, opacity: 1,
+      fillColor: waterColor(f.properties.water_yield_m3 || 0),
+      fillOpacity: 0.78,
+    }),
+    onEachFeature: (f, layer) => {
+      const p = f.properties;
+      const mc = p['市町村CD'];
+      const nm = muniNames[mc] || { muni_name: '不明', area: '' };
+      layer.bindPopup(`<h4>${nm.muni_name} ${nm.area}</h4>
+        <dl>
+          <dt>水源涵養</dt><dd class="num">${(p.water_yield_m3||0).toLocaleString()} m³/年</dd>
+          <dt>面積</dt><dd class="num">${(p.area_ha||0).toLocaleString()} ha</dd>
+        </dl>`, { maxWidth: 320 });
+    },
+  });
+
+  if (document.getElementById('ly-rinpan-co2').checked) rinpanCo2Layer.addTo(map);
+  // Fit to data extent on first load
+  map.fitBounds(rinpanCo2Layer.getBounds(), { padding: [30, 30] });
+}
+
+async function loadJcredit() {
+  const r = await fetch('data/jcredit_projects.json').then(r => r.json());
+  jcreditLayer = L.layerGroup();
+  for (const p of r.projects) {
+    const m = L.circleMarker([p.lat, p.lon], {
+      radius: 5, fillColor: '#c47a4a', color: '#fff', weight: 1.5,
+      opacity: 1, fillOpacity: 0.85,
+    });
+    m.bindTooltip(`<b>J-${p.no}</b> ${p.location}<br>${p.summary?.slice(0,40)||''}`);
+    jcreditLayer.addLayer(m);
+  }
+  if (document.getElementById('ly-jcredit').checked) jcreditLayer.addTo(map);
+}
+
+async function loadBasins() {
+  const r = await fetch('data/watersheds/japan_lev10.geojson').then(r => r.json());
+  basinsLayer = L.geoJSON(r, {
+    style: { color: '#3b6da1', weight: 0.4, opacity: 0.6, fill: false },
+  });
+}
+
+async function loadReports() {
+  const r = await fetch('data/reports.json').then(r => r.json());
+  reportsLayer = L.layerGroup();
+  const points = [
+    { id: 'himi-water', lat: 36.857, lon: 136.987, color: '#3b6da1' },
+    { id: 'himi-monitoring', lat: 36.857, lon: 136.987, color: '#c47a4a' },
+    { id: 'shizuoka-forests', lat: 34.85, lon: 137.85, color: '#2d5a3d' },
+  ];
+  const byId = {};
+  for (const r of r.reports) byId[r.id] = r;
+  for (const p of points) {
+    const rep = byId[p.id];
+    if (!rep) continue;
+    const m = L.marker([p.lat + (Math.random() - 0.5) * 0.03, p.lon + (Math.random() - 0.5) * 0.03], {
+      icon: L.divIcon({
+        html: `<div style="background:${p.color};color:white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 10px rgba(0,0,0,0.2);border:3px solid white;">📑</div>`,
+        iconSize: [30, 30], iconAnchor: [15, 15], className: '',
+      }),
+    });
+    m.bindPopup(`
+      <h4>${rep.title}</h4>
+      <p>${rep.subtitle}</p>
+      <p><strong>${rep.kpi_label}</strong>: <span class="num">${rep.kpi_value}</span></p>
+      <a href="${rep.href}" style="color:#2d5a3d;font-weight:600;">レポートを開く →</a>
+    `, { maxWidth: 280 });
+    reportsLayer.addLayer(m);
+  }
+  if (document.getElementById('ly-reports').checked) reportsLayer.addTo(map);
+}
+
+// ----- toggles -----
+function bindLayerToggle(id, getLayer, legendId) {
+  document.getElementById(id).addEventListener('change', e => {
+    const layer = getLayer();
+    if (!layer) return;
+    if (e.target.checked) {
+      layer.addTo(map);
+    } else {
+      map.removeLayer(layer);
+    }
+    if (legendId) updateLegend();
+  });
+}
+function updateLegend() {
+  document.querySelectorAll('.legend').forEach(l => l.classList.remove('active'));
+  if (document.getElementById('ly-rinpan-co2').checked) document.getElementById('legend-co2').classList.add('active');
+  if (document.getElementById('ly-rinpan-water').checked) document.getElementById('legend-water').classList.add('active');
+}
+
+// Initialize
+(async () => {
+  await Promise.all([loadRinpan(), loadJcredit(), loadReports()]);
+  bindLayerToggle('ly-rinpan-co2', () => rinpanCo2Layer, true);
+  bindLayerToggle('ly-rinpan-water', () => rinpanWaterLayer, true);
+  bindLayerToggle('ly-jcredit', () => jcreditLayer);
+  bindLayerToggle('ly-reports', () => reportsLayer);
+
+  document.getElementById('ly-basins').addEventListener('change', async e => {
+    if (e.target.checked) {
+      if (!basinsLayer) await loadBasins();
+      basinsLayer.addTo(map);
+    } else if (basinsLayer) {
+      map.removeLayer(basinsLayer);
+    }
+  });
+  updateLegend();
+})();
+</script>
+</body>
+</html>

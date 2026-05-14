@@ -4,13 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>もりみえる｜あなたと森のつながりを、見つけよう</title>
-<meta name="description" content="豊かな森を未来につなぐため、衛星の目で森を可視化し、企業と森をつなぎます。">
+<meta name="description" content="衛星と公開データで描く、日本の森の見えない価値。水資源涵養・CO2吸収・流域マッチング・施業効果モニタリングを、自治体・住民・教育機関のために無料で公開。">
+<meta name="keywords" content="森林,衛星画像,Sentinel-2,Sentinel-1,水源涵養,CO2吸収,J-クレジット,森林モニタリング,林業,自治体,森林整備,NDVI,林班,流域,カーボンクレジット">
+<meta name="author" content="株式会社エムスクエア・ラボ">
+<link rel="canonical" href="https://mori-mieru.jp/">
 <meta property="og:title" content="もりみえる｜あなたと森のつながりを、見つけよう">
-<meta property="og:description" content="衛星 × J-クレジット × 暗号で、日本の森と会社をつなぐ。すべて無料の公開データから。">
+<meta property="og:description" content="衛星と公開データで、森の見えない価値を可視化する公益基盤。水資源涵養・CO2吸収・流域マッチング・施業効果モニタリングを無料公開。">
 <meta property="og:image" content="https://mori-mieru.jp/assets/og-image.jpg">
 <meta property="og:url" content="https://mori-mieru.jp/">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="もりみえる">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="もりみえる｜あなたと森のつながりを、見つけよう">
+<meta name="twitter:description" content="衛星と公開データで森の見えない価値を可視化。水資源涵養・CO2吸収・流域マッチング・施業効果モニタリング無料公開。">
+<meta name="twitter:image" content="https://mori-mieru.jp/assets/og-image.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "もりみえる",
+  "alternateName": "morimieru",
+  "url": "https://mori-mieru.jp/",
+  "description": "衛星と公開データで森の見えない価値を可視化する公益基盤",
+  "publisher": {
+    "@type": "Organization",
+    "name": "株式会社エムスクエア・ラボ",
+    "url": "https://m2-labo.jp/"
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://mori-mieru.jp/reports.html?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -26,9 +62,9 @@
     <span class="logo-en">morimieru</span>
   </a>
   <nav class="nav">
+    <a href="map.html">地図</a>
     <a href="reports.html">レポート</a>
     <a href="#about">これは何？</a>
-    <a href="#technology">技術</a>
     <a href="#start" class="cta">森を探す</a>
   </nav>
 </header>
@@ -316,54 +352,24 @@
   </div>
 </section>
 
-<!-- ============== Reports ============== -->
+<!-- ============== Reports (compact) ============== -->
 <section id="reports" class="section reports">
   <div class="container">
-    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
-      <div>
-        <p class="section-eyebrow">Reports</p>
-        <h2 class="section-title">公開レポート（最新）</h2>
+    <p class="section-eyebrow">Reports</p>
+    <h2 class="section-title">レポート公開中</h2>
+    <p class="section-lead">衛星と公開データから自動生成したレポート。地域・テーマ別に増えていきます。</p>
+
+    <div class="reports-summary">
+      <div class="reports-count">
+        <span class="big" id="reports-count-num">3</span>
+        <span class="label">本公開中</span>
       </div>
-      <a href="reports.html" class="btn btn-ghost" style="white-space:nowrap;">すべてのレポート →</a>
-    </div>
-    <p class="section-lead">衛星と公開データで作った、PDFにもできるレポート。新しいレポート（自治体・林班・流域別）を順次追加中。</p>
-
-    <div class="reports-grid">
-      <a class="report-card" href="report/himi-water.html">
-        <div class="report-badge">水資源涵養</div>
-        <h3>富山県 氷見市周辺森林 水資源涵養量レポート</h3>
-        <p class="report-figure">約 <strong>1.19 億トン</strong> / 年</p>
-        <ul class="report-meta-list">
-          <li>森林 12,398 ha（衛星推定）/ 13,486 ha（公式）= 一致率 92%</li>
-          <li>林野庁簡易評価法 Ver.1.0 準拠</li>
-          <li>NASA POWER + 国土地理院 + 産総研</li>
-        </ul>
-        <p class="report-cta">レポートを開く →</p>
-      </a>
-
-      <a class="report-card upcoming" href="report/shizuoka-forests.html">
-        <div class="report-badge alt">自治体スコア</div>
-        <h3>静岡県 森林公益機能 市町村別レポート</h3>
-        <p class="report-figure"><strong>1,102 林班</strong> / 13 市町村</p>
-        <ul class="report-meta-list">
-          <li>静岡県森林クラウド × 林野庁 Tier 2</li>
-          <li>林班別 水源涵養・CO2・裸地比較</li>
-          <li>自治体向け「森林維持の経済合理性」資料</li>
-        </ul>
-        <p class="report-cta">レポートを開く →</p>
-      </a>
-
-      <a class="report-card" href="report/himi-monitoring.html">
-        <div class="report-badge earth">時系列差分</div>
-        <h3>氷見市 森林施業効果モニタリングレポート</h3>
-        <p class="report-figure">NDVI <strong>+15.2%</strong> / 5年</p>
-        <ul class="report-meta-list">
-          <li>Sentinel-2 71 観測点（2021-2025）</li>
-          <li>累積 CO2 +41,566 t / 水源涵養 +0.3%</li>
-          <li>クレジット制度 MRV の低コスト代替</li>
-        </ul>
-        <p class="report-cta">レポートを開く →</p>
-      </a>
+      <ul class="reports-themes">
+        <li>📘 水資源涵養（富山）</li>
+        <li>📗 自治体スコア（静岡 1,102 林班）</li>
+        <li>📙 施業効果モニタリング（5 年差分）</li>
+      </ul>
+      <a href="reports.html" class="btn btn-primary">すべて見る →</a>
     </div>
   </div>
 </section>

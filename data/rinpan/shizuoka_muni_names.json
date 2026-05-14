@@ -1,0 +1,19 @@
+{
+  "source": "国土地理院 LonLatToAddress API 逆引き + 静岡県森林クラウド 市町村CD",
+  "note": "コード61-76は静岡県森林クラウドの内部市町村コード。実際の市町村は浜松市・湖西市の各区/旧町村単位。",
+  "mapping": {
+    "61": { "muni_code": "22140", "muni_name": "浜松市天竜区", "area": "神沢" },
+    "62": { "muni_code": "22140", "muni_name": "浜松市天竜区", "area": "水窪町" },
+    "63": { "muni_code": "22140", "muni_name": "浜松市天竜区", "area": "佐久間町" },
+    "65": { "muni_code": "22140", "muni_name": "浜松市天竜区", "area": "龍山" },
+    "66": { "muni_code": "22140", "muni_name": "浜松市天竜区", "area": "春野町" },
+    "67": { "muni_code": "22138", "muni_name": "浜松市旧西区", "area": "庄内" },
+    "68": { "muni_code": "22139", "muni_name": "浜松市旧北区", "area": "三方原" },
+    "69": { "muni_code": "22138", "muni_name": "浜松市旧西区", "area": "雄踏町" },
+    "70": { "muni_code": "22138", "muni_name": "浜松市旧西区", "area": "舞阪町" },
+    "73": { "muni_code": "22221", "muni_name": "湖西市", "area": "大知波" },
+    "74": { "muni_code": "22139", "muni_name": "浜松市旧北区", "area": "細江町" },
+    "75": { "muni_code": "22139", "muni_name": "浜松市旧北区", "area": "引佐町" },
+    "76": { "muni_code": "22139", "muni_name": "浜松市旧北区", "area": "三ヶ日町" }
+  }
+}
