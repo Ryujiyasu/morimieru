@@ -344,6 +344,16 @@
       const co2_estimate = Math.round(ha * co2_per_ha);
       const uncertainty = co2_estimate * 0.18;
       const inWatershed = !!p._basin;
+      // Park badge: "国立公園内" if inside, "🏔 国立公園隣接 (◯km)" if nearby
+      let park_badge = null;
+      if (p.park) {
+        if (p.park.nearby_km != null) {
+          park_badge = `🏔 ${p.park.park_type}隣接（${p.park.nearby_km}km）`;
+        } else {
+          park_badge = `🏞 ${p.park.park_type}内`;
+        }
+      }
+
       return {
         id: `jc-${p.no}`,
         name: shortenSummary(p.summary),
@@ -363,6 +373,7 @@
         deepdive: false,
         tagline: inWatershed ? '🌊 あなたの取水域・上流の森' : `J-クレジット登録番号 ${p.no}・${p.methodology.split(' ')[0]}`,
         in_watershed: inWatershed,
+        park_badge: park_badge,
         _jcredit: p
       };
     });
@@ -385,7 +396,8 @@
           <h3 class="candidate-name">${c.name}</h3>
           <span class="candidate-pref">${c.pref}</span>
         </div>
-        ${c.tagline ? `<p style="margin:6px 0 10px;font-size:12px;color:var(--earth-600);font-weight:500;">✦ ${c.tagline}</p>` : ''}
+        ${c.tagline ? `<p style="margin:6px 0 4px;font-size:12px;color:var(--earth-600);font-weight:500;">✦ ${c.tagline}</p>` : ''}
+        ${c.park_badge ? `<p style="margin:0 0 10px;font-size:11px;color:#3b6da1;font-weight:500;">${c.park_badge}</p>` : ''}
         <dl class="candidate-meta">
           <dt>面積</dt><dd>${c.area_ha} ha</dd>
           <dt>樹種</dt><dd>${c.species.replace(/ /g, '')}</dd>

@@ -42,7 +42,12 @@
       "credit_buyer": "入谷生産森林組合 6370505000254",
       "summary": "私有林における森林経営活動",
       "started_at": "2013/6/1",
-      "methodology": "FO-001 Ver. 2.0"
+      "methodology": "FO-001 Ver. 2.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "宮城県",
+        "nearby_km": 2.4
+      }
     },
     {
       "no": "31",
@@ -55,7 +60,11 @@
       "credit_buyer": "御嵩町 4000020215210",
       "summary": "町有林における森林経営活動",
       "started_at": "2013/4/1",
-      "methodology": "FO-001 Ver. 2.0"
+      "methodology": "FO-001 Ver. 2.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "滋賀県"
+      }
     },
     {
       "no": "34",
@@ -94,7 +103,12 @@
       "credit_buyer": "リベレステ株式会社 3030001038249",
       "summary": "私有林における森林経営活動",
       "started_at": "2013/4/1",
-      "methodology": "FO-001 Ver. 2.0"
+      "methodology": "FO-001 Ver. 2.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "北海道",
+        "nearby_km": 0.9
+      }
     },
     {
       "no": "58",
@@ -107,7 +121,12 @@
       "credit_buyer": "木曽町 1000020204323",
       "summary": "町有林における森林経営活動",
       "started_at": "2014/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "長野県",
+        "nearby_km": 4.7
+      }
     },
     {
       "no": "59",
@@ -120,7 +139,12 @@
       "credit_buyer": "公益社団法人長崎県林業公社 4310005005174",
       "summary": "私有林における森林経営活動",
       "started_at": "2014/4/1",
-      "methodology": "FO-001 ver.2.1"
+      "methodology": "FO-001 ver.2.1",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "熊本県",
+        "nearby_km": 4.8
+      }
     },
     {
       "no": "60",
@@ -133,7 +157,12 @@
       "credit_buyer": "鳥取県東部森林組合 7270005000359",
       "summary": "私有林における森林経営活動",
       "started_at": "2014/4/1",
-      "methodology": "FO-001 ver.2.1"
+      "methodology": "FO-001 ver.2.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "鳥取県",
+        "nearby_km": 3.1
+      }
     },
     {
       "no": "81",
@@ -159,7 +188,12 @@
       "credit_buyer": "-",
       "summary": "私有林における森林経営活動",
       "started_at": "2015/4/1",
-      "methodology": "FO-001 Ver. 4.2"
+      "methodology": "FO-001 Ver. 4.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "愛媛県",
+        "nearby_km": 3.2
+      }
     },
     {
       "no": "100",
@@ -172,7 +206,12 @@
       "credit_buyer": "鳥取県 7000020310000",
       "summary": "県有林における森林経営活動",
       "started_at": "2015/4/1",
-      "methodology": "FO-001 ver.2.1"
+      "methodology": "FO-001 ver.2.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "岡山県",
+        "nearby_km": 0.3
+      }
     },
     {
       "no": "102",
@@ -185,7 +224,11 @@
       "credit_buyer": "川場村 8000020104442",
       "summary": "村有林における森林経営活動",
       "started_at": "2015/4/1",
-      "methodology": "FO-001 ver.2.1"
+      "methodology": "FO-001 ver.2.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "埼玉県"
+      }
     },
     {
       "no": "103",
@@ -198,7 +241,12 @@
       "credit_buyer": "長野県 1000020200000",
       "summary": "県有林における森林経営活動",
       "started_at": "2015/4/1",
-      "methodology": "FO-001 Ver. 3.1"
+      "methodology": "FO-001 Ver. 3.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "新潟県",
+        "nearby_km": 3.8
+      }
     },
     {
       "no": "104",
@@ -211,7 +259,12 @@
       "credit_buyer": "金勝生産森林組合 6160005008488",
       "summary": "私有林における森林経営活動",
       "started_at": "2015/4/1",
-      "methodology": "FO-001 ver.2.1"
+      "methodology": "FO-001 ver.2.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "滋賀県",
+        "nearby_km": 3.3
+      }
     },
     {
       "no": "105",
@@ -224,7 +277,12 @@
       "credit_buyer": "檜垣産業株式会社 4500001012188",
       "summary": "社有林における森林経営活動",
       "started_at": "2013/4/1",
-      "methodology": "FO-001 ver.2.1"
+      "methodology": "FO-001 ver.2.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "鹿児島県",
+        "nearby_km": 1.8
+      }
     },
     {
       "no": "106",
@@ -237,7 +295,12 @@
       "credit_buyer": "根羽村森林組合 6100005009599",
       "summary": "私有林における森林経営活動",
       "started_at": "2015/4/1",
-      "methodology": "FO-001 ver.2.1"
+      "methodology": "FO-001 ver.2.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "長野県",
+        "nearby_km": 2.3
+      }
     },
     {
       "no": "107",
@@ -276,7 +339,12 @@
       "credit_buyer": "株式会社SOLABLEフォレスト 4013101003767",
       "summary": "私有林における森林経営活動",
       "started_at": "2016/4/1",
-      "methodology": "FO-001 Ver. 2.1"
+      "methodology": "FO-001 Ver. 2.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "徳島県",
+        "nearby_km": 4.7
+      }
     },
     {
       "no": "149",
@@ -289,7 +357,11 @@
       "credit_buyer": "-",
       "summary": "市有林における森林経営活動",
       "started_at": "2016/4/1",
-      "methodology": "FO-001 ver.2.1"
+      "methodology": "FO-001 ver.2.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "福井県"
+      }
     },
     {
       "no": "198",
@@ -302,7 +374,12 @@
       "credit_buyer": "対馬市 3000020422096",
       "summary": "市有林における森林経営系活動",
       "started_at": "2017/4/1",
-      "methodology": "FO-001 ver.2.3"
+      "methodology": "FO-001 ver.2.3",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "熊本県",
+        "nearby_km": 0.2
+      }
     },
     {
       "no": "204",
@@ -341,7 +418,12 @@
       "credit_buyer": "小山町 7000020223441",
       "summary": "町有林における森林経営活動",
       "started_at": "2018/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "静岡県",
+        "nearby_km": 1.1
+      }
     },
     {
       "no": "213",
@@ -354,7 +436,12 @@
       "credit_buyer": "青南建設株式会社 8010101001938",
       "summary": "社有林における森林経営活動",
       "started_at": "2018/4/1",
-      "methodology": "FO-001 Ver. 2.3"
+      "methodology": "FO-001 Ver. 2.3",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "秋田県",
+        "nearby_km": 4.6
+      }
     },
     {
       "no": "214",
@@ -497,7 +584,12 @@
       "credit_buyer": "真樹フォレスト株式会社 3310001016309",
       "summary": "社有林における森林経営活動",
       "started_at": "2020/4/1",
-      "methodology": "FO-001 Ver. 6.2"
+      "methodology": "FO-001 Ver. 6.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "佐賀県",
+        "nearby_km": 4.5
+      }
     },
     {
       "no": "252",
@@ -510,7 +602,12 @@
       "credit_buyer": "大台町 5000020244431",
       "summary": "町有林における森林経営活動",
       "started_at": "2020/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "滋賀県",
+        "nearby_km": 2.8
+      }
     },
     {
       "no": "253",
@@ -523,7 +620,12 @@
       "credit_buyer": "九州林産株式会社",
       "summary": "社有林における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001 Ver. 5.0"
+      "methodology": "FO-001 Ver. 5.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "大分県",
+        "nearby_km": 2.8
+      }
     },
     {
       "no": "254",
@@ -536,7 +638,11 @@
       "credit_buyer": "三井物産フォレスト株式会社 2010001089740",
       "summary": "私有林における森林経営活動",
       "started_at": "2020/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "三重県"
+      }
     },
     {
       "no": "262",
@@ -562,7 +668,12 @@
       "credit_buyer": "株式会社栃毛木材工業 7060001010960",
       "summary": "社有林における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001 Ver. 4.2"
+      "methodology": "FO-001 Ver. 4.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "栃木県",
+        "nearby_km": 4.0
+      }
     },
     {
       "no": "267",
@@ -575,7 +686,11 @@
       "credit_buyer": "北海道瓦斯株式会社 5430001021815",
       "summary": "社有林における森林経営活動",
       "started_at": "2021/7/30",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "北海道"
+      }
     },
     {
       "no": "268",
@@ -588,7 +703,12 @@
       "credit_buyer": "長崎県 4000020420000",
       "summary": "県有林、県営林における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "長崎県",
+        "nearby_km": 3.7
+      }
     },
     {
       "no": "270",
@@ -627,7 +747,12 @@
       "credit_buyer": "久万高原町 6000020383864",
       "summary": "町有林における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001Ver 2.6"
+      "methodology": "FO-001Ver 2.6",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "愛媛県",
+        "nearby_km": 0.3
+      }
     },
     {
       "no": "274",
@@ -653,7 +778,12 @@
       "credit_buyer": "公益社団法人ひょうご農林機構 9140005001590",
       "summary": "機構分収林における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001Ver 2.6"
+      "methodology": "FO-001Ver 2.6",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "大阪府",
+        "nearby_km": 2.7
+      }
     },
     {
       "no": "276",
@@ -666,7 +796,12 @@
       "credit_buyer": "公益社団法人岐阜県森林公社 6200005000069",
       "summary": "分収造林事業地における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "滋賀県",
+        "nearby_km": 3.7
+      }
     },
     {
       "no": "280",
@@ -679,7 +814,12 @@
       "credit_buyer": "一般社団法人滋賀県造林公社 9160005000079",
       "summary": "分収造林事業地における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "滋賀県",
+        "nearby_km": 2.1
+      }
     },
     {
       "no": "283",
@@ -692,7 +832,12 @@
       "credit_buyer": "三井物産フォレスト株式会社 2010001089740",
       "summary": "私有林における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001 Ver. 2.6"
+      "methodology": "FO-001 Ver. 2.6",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "北海道",
+        "nearby_km": 5.0
+      }
     },
     {
       "no": "285",
@@ -705,7 +850,11 @@
       "credit_buyer": "東急不動産株式会社 7011001016580",
       "summary": "社有林における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001 ver. 2.6"
+      "methodology": "FO-001 ver. 2.6",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "長野県"
+      }
     },
     {
       "no": "287",
@@ -731,7 +880,12 @@
       "credit_buyer": "公益社団法人長野県林業公社 2100005000116",
       "summary": "分収造林事業地における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "新潟県",
+        "nearby_km": 4.0
+      }
     },
     {
       "no": "291",
@@ -744,7 +898,12 @@
       "credit_buyer": "梼原町 8000020394050",
       "summary": "町有林における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "高知県",
+        "nearby_km": 1.6
+      }
     },
     {
       "no": "293",
@@ -757,7 +916,12 @@
       "credit_buyer": "綿向生産森林組合 5160005006484",
       "summary": "組合所有林における森林経営活動",
       "started_at": "2021/4/1",
-      "methodology": "FO-001 Ver. 2.6"
+      "methodology": "FO-001 Ver. 2.6",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "大阪府",
+        "nearby_km": 0.7
+      }
     },
     {
       "no": "298",
@@ -783,7 +947,12 @@
       "credit_buyer": "公益社団法人熊本県林業公社 6330005000114",
       "summary": "分収造林事業地における森林経営活動",
       "started_at": "2022/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "熊本県",
+        "nearby_km": 0.7
+      }
     },
     {
       "no": "300",
@@ -796,7 +965,11 @@
       "credit_buyer": "佐賀市 3000020412015",
       "summary": "区域計画における森林経営活動",
       "started_at": "2022/4/1",
-      "methodology": "FO-001 ver.2.6"
+      "methodology": "FO-001 ver.2.6",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "佐賀県"
+      }
     },
     {
       "no": "303",
@@ -874,7 +1047,12 @@
       "credit_buyer": "松阪市 5000020242047",
       "summary": "市有林、私有林における森林経営活動",
       "started_at": "2022/6/7",
-      "methodology": "FO-001 Ver. 4.2"
+      "methodology": "FO-001 Ver. 4.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "三重県",
+        "nearby_km": 5.4
+      }
     },
     {
       "no": "317",
@@ -887,7 +1065,12 @@
       "credit_buyer": "天川村 2000020294462",
       "summary": "村有林における森林経営活動",
       "started_at": "2022/5/1",
-      "methodology": "FO-001 Ver. 3.0"
+      "methodology": "FO-001 Ver. 3.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "奈良県",
+        "nearby_km": 3.9
+      }
     },
     {
       "no": "319",
@@ -900,7 +1083,12 @@
       "credit_buyer": "公益社団法人鹿児島県森林整備公社 4340005007606",
       "summary": "分収造林事業地及び公社林における森林経営活動",
       "started_at": "2022/4/1",
-      "methodology": "FO-001 Ver. 5.0"
+      "methodology": "FO-001 Ver. 5.0",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "鹿児島県",
+        "nearby_km": 4.1
+      }
     },
     {
       "no": "320",
@@ -926,7 +1114,12 @@
       "credit_buyer": "石川県 2000020170003",
       "summary": "県有林における森林経営活動",
       "started_at": "2022/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "石川県",
+        "nearby_km": 4.4
+      }
     },
     {
       "no": "323",
@@ -965,7 +1158,12 @@
       "credit_buyer": "一般社団法人大和森林管理協会 6150005008869",
       "summary": "私有林における森林経営活動",
       "started_at": "2022/4/1",
-      "methodology": "FO-001 Ver. 5.0"
+      "methodology": "FO-001 Ver. 5.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "和歌山県",
+        "nearby_km": 1.9
+      }
     },
     {
       "no": "327",
@@ -978,7 +1176,12 @@
       "credit_buyer": "岐阜県 4000020210005",
       "summary": "県有林、分収造林事業地における森林経営活動",
       "started_at": "2022/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "岐阜県",
+        "nearby_km": 4.7
+      }
     },
     {
       "no": "329",
@@ -1043,7 +1246,11 @@
       "credit_buyer": "小国町 4000020434248",
       "summary": "町有林における森林経営活動",
       "started_at": "2022/4/1",
-      "methodology": "FO-001 Ver. 3.1"
+      "methodology": "FO-001 Ver. 3.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "熊本県"
+      }
     },
     {
       "no": "344",
@@ -1108,7 +1315,12 @@
       "credit_buyer": "株式会社山田林業 9140001065796",
       "summary": "私有林における森林経営活動",
       "started_at": "2022/4/1",
-      "methodology": "FO-001 Ver. 3.3"
+      "methodology": "FO-001 Ver. 3.3",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "兵庫県",
+        "nearby_km": 4.3
+      }
     },
     {
       "no": "352",
@@ -1134,7 +1346,11 @@
       "credit_buyer": "公益社団法人長崎県林業公社 4310005005174",
       "summary": "公社林における森林経営活動",
       "started_at": "2022/4/1",
-      "methodology": "FO-001 Ver. 4.2"
+      "methodology": "FO-001 Ver. 4.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "熊本県"
+      }
     },
     {
       "no": "358",
@@ -1160,7 +1376,12 @@
       "credit_buyer": "清水産業株式会社 2120001043777",
       "summary": "社有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 5.0"
+      "methodology": "FO-001 Ver. 5.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "熊本県",
+        "nearby_km": 1.9
+      }
     },
     {
       "no": "360",
@@ -1173,7 +1394,12 @@
       "credit_buyer": "上伊那森林組合 7100005008889",
       "summary": "私有林、生産森林組合所有林、社寺林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "新潟県",
+        "nearby_km": 4.1
+      }
     },
     {
       "no": "361",
@@ -1212,7 +1438,12 @@
       "credit_buyer": "特定非営利活動法人西林 1350005002708",
       "summary": "私有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "熊本県",
+        "nearby_km": 3.9
+      }
     },
     {
       "no": "365",
@@ -1238,7 +1469,11 @@
       "credit_buyer": "甲賀市 7000020252093",
       "summary": "市有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "三重県"
+      }
     },
     {
       "no": "367",
@@ -1290,7 +1525,12 @@
       "credit_buyer": "岡崎市 3000020232025",
       "summary": "市有林、私有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "愛知県",
+        "nearby_km": 2.0
+      }
     },
     {
       "no": "371",
@@ -1303,7 +1543,12 @@
       "credit_buyer": "株式会社江間忠ホールディングス 5010001038876",
       "summary": "社有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 3.3"
+      "methodology": "FO-001 Ver. 3.3",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "静岡県",
+        "nearby_km": 2.8
+      }
     },
     {
       "no": "373",
@@ -1342,7 +1587,11 @@
       "credit_buyer": "合同会社Wood one 6330003006006",
       "summary": "社有林、市有林、私有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "熊本県"
+      }
     },
     {
       "no": "378",
@@ -1355,7 +1604,12 @@
       "credit_buyer": "五木村 6000020435112",
       "summary": "村有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "熊本県",
+        "nearby_km": 2.7
+      }
     },
     {
       "no": "379",
@@ -1368,7 +1622,11 @@
       "credit_buyer": "三重県 5000020240001",
       "summary": "分収造林事業地(県行造林地)における森林経営活動",
       "started_at": "2023/5/2",
-      "methodology": "FO-001 Ver. 4.1"
+      "methodology": "FO-001 Ver. 4.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "三重県"
+      }
     },
     {
       "no": "381",
@@ -1381,7 +1639,12 @@
       "credit_buyer": "-",
       "summary": "社有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "兵庫県",
+        "nearby_km": 0.4
+      }
     },
     {
       "no": "382",
@@ -1394,7 +1657,12 @@
       "credit_buyer": "岩手県 4000020030007",
       "summary": "県有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "岩手県",
+        "nearby_km": 2.2
+      }
     },
     {
       "no": "383",
@@ -1407,7 +1675,12 @@
       "credit_buyer": "宍粟市 1000020282278",
       "summary": "市有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "兵庫県",
+        "nearby_km": 1.9
+      }
     },
     {
       "no": "384",
@@ -1433,7 +1706,12 @@
       "credit_buyer": "白川町森林組合 6200005007089",
       "summary": "私有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "岐阜県",
+        "nearby_km": 1.6
+      }
     },
     {
       "no": "388",
@@ -1459,7 +1737,12 @@
       "credit_buyer": "尾鷲市 3000020242098",
       "summary": "市有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "三重県",
+        "nearby_km": 2.0
+      }
     },
     {
       "no": "390",
@@ -1472,7 +1755,12 @@
       "credit_buyer": "住田町 6000020034410",
       "summary": "町有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "秋田県",
+        "nearby_km": 2.9
+      }
     },
     {
       "no": "391",
@@ -1524,7 +1812,11 @@
       "credit_buyer": "有限会社天竜フォレスター 6080402016424",
       "summary": "私有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.1"
+      "methodology": "FO-001 Ver. 4.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "静岡県"
+      }
     },
     {
       "no": "395",
@@ -1537,7 +1829,12 @@
       "credit_buyer": "岐阜県 4000020210005",
       "summary": "県有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "滋賀県",
+        "nearby_km": 1.8
+      }
     },
     {
       "no": "396",
@@ -1563,7 +1860,12 @@
       "credit_buyer": "王滝村 6000020204293",
       "summary": "村有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.0"
+      "methodology": "FO-001 Ver. 4.0",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "長野県",
+        "nearby_km": 0.0
+      }
     },
     {
       "no": "398",
@@ -1615,7 +1917,12 @@
       "credit_buyer": "佐川林業株式会社 6130001010681",
       "summary": "社有林、私有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "高知県",
+        "nearby_km": 4.2
+      }
     },
     {
       "no": "406",
@@ -1628,7 +1935,12 @@
       "credit_buyer": "北海道 7000020010006",
       "summary": "道有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 6.2"
+      "methodology": "FO-001 Ver. 6.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "北海道",
+        "nearby_km": 3.9
+      }
     },
     {
       "no": "411",
@@ -1654,7 +1966,12 @@
       "credit_buyer": "延岡市 6000020452033",
       "summary": "市有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.1"
+      "methodology": "FO-001 Ver. 4.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "宮崎県",
+        "nearby_km": 2.0
+      }
     },
     {
       "no": "415",
@@ -1706,7 +2023,12 @@
       "credit_buyer": "公益社団法人とくしま森林バンク 4480005006858",
       "summary": "私有林・社有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 6.2"
+      "methodology": "FO-001 Ver. 6.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "兵庫県",
+        "nearby_km": 2.1
+      }
     },
     {
       "no": "420",
@@ -1732,7 +2054,12 @@
       "credit_buyer": "丹波市 3000020282235",
       "summary": "市有林、私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 4.1"
+      "methodology": "FO-001 Ver. 4.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "兵庫県",
+        "nearby_km": 4.0
+      }
     },
     {
       "no": "422",
@@ -1771,7 +2098,12 @@
       "credit_buyer": "愛知県 1000020230006",
       "summary": "県有林における森林経営活動",
       "started_at": "2023/5/1",
-      "methodology": "FO-001 Ver. 4.2"
+      "methodology": "FO-001 Ver. 4.2",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "三重県",
+        "nearby_km": 4.9
+      }
     },
     {
       "no": "426",
@@ -1784,7 +2116,11 @@
       "credit_buyer": "養父市役所 3000020282227",
       "summary": "市有林、分収林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.1"
+      "methodology": "FO-001 Ver. 4.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "大阪府"
+      }
     },
     {
       "no": "427",
@@ -1797,7 +2133,12 @@
       "credit_buyer": "-",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 4.1"
+      "methodology": "FO-001 Ver. 4.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "鳥取県",
+        "nearby_km": 1.9
+      }
     },
     {
       "no": "428",
@@ -1810,7 +2151,12 @@
       "credit_buyer": "森町 6000020013455",
       "summary": "町有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 4.2"
+      "methodology": "FO-001 Ver. 4.2",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "北海道",
+        "nearby_km": 4.5
+      }
     },
     {
       "no": "430",
@@ -1823,7 +2169,12 @@
       "credit_buyer": "株式会社サンワ 9070001001453",
       "summary": "私有林および社有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.2"
+      "methodology": "FO-001 Ver. 4.2",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "群馬県",
+        "nearby_km": 1.9
+      }
     },
     {
       "no": "432",
@@ -1875,7 +2226,11 @@
       "credit_buyer": "株式会社 北田木材 6080101018317",
       "summary": "私有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.2"
+      "methodology": "FO-001 Ver. 4.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "山梨県"
+      }
     },
     {
       "no": "436",
@@ -1888,7 +2243,12 @@
       "credit_buyer": "恵那市 8000020212105",
       "summary": "市有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.2"
+      "methodology": "FO-001 Ver. 4.2",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "愛知県",
+        "nearby_km": 5.5
+      }
     },
     {
       "no": "437",
@@ -1901,7 +2261,12 @@
       "credit_buyer": "栃木県 5000020090000",
       "summary": "県有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 4.1"
+      "methodology": "FO-001 Ver. 4.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "栃木県",
+        "nearby_km": 0.6
+      }
     },
     {
       "no": "438",
@@ -1953,7 +2318,12 @@
       "credit_buyer": "株式会社日立システムズ 6010701025710",
       "summary": "社有林・私有林における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.2"
+      "methodology": "FO-001 Ver. 4.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "広島県",
+        "nearby_km": 3.9
+      }
     },
     {
       "no": "444",
@@ -1966,7 +2336,12 @@
       "credit_buyer": "公益財団法人やまぐち農林振興公社 5250005000189",
       "summary": "分収造林事業地における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 4.1"
+      "methodology": "FO-001 Ver. 4.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "山口県",
+        "nearby_km": 3.5
+      }
     },
     {
       "no": "445",
@@ -1992,7 +2367,12 @@
       "credit_buyer": "久留米市田主丸財産区 8000030400137",
       "summary": "財産区所有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "福岡県",
+        "nearby_km": 2.6
+      }
     },
     {
       "no": "447",
@@ -2018,7 +2398,12 @@
       "credit_buyer": "公益財団法人鳥取県造林公社 5270005000427",
       "summary": "分収造林事業地における森林経営活動",
       "started_at": "2023/4/1",
-      "methodology": "FO-001 Ver. 6.2"
+      "methodology": "FO-001 Ver. 6.2",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "岡山県",
+        "nearby_km": 0.8
+      }
     },
     {
       "no": "449",
@@ -2044,7 +2429,12 @@
       "credit_buyer": "御殿場市 1000020222151",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "静岡県",
+        "nearby_km": 2.1
+      }
     },
     {
       "no": "452",
@@ -2057,7 +2447,11 @@
       "credit_buyer": "山形市 7000020062014",
       "summary": "市有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "宮城県"
+      }
     },
     {
       "no": "453",
@@ -2070,7 +2464,12 @@
       "credit_buyer": "株式会社森林所有者支援企画 6220001024094",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "石川県",
+        "nearby_km": 1.6
+      }
     },
     {
       "no": "455",
@@ -2083,7 +2482,12 @@
       "credit_buyer": "森庄銘木産業株式会社 7150001009820",
       "summary": "私有林、社有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "滋賀県",
+        "nearby_km": 2.2
+      }
     },
     {
       "no": "458",
@@ -2096,7 +2500,11 @@
       "credit_buyer": "有限会社内山林業 6070002008905",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.0"
+      "methodology": "FO-001 Ver. 5.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "埼玉県"
+      }
     },
     {
       "no": "459",
@@ -2109,7 +2517,12 @@
       "credit_buyer": "有限会社志田工房 3260002030173",
       "summary": "社有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "岡山県",
+        "nearby_km": 3.4
+      }
     },
     {
       "no": "460",
@@ -2135,7 +2548,12 @@
       "credit_buyer": "宇摩森林組合 4500005005972",
       "summary": "市有林、私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.0"
+      "methodology": "FO-001 Ver. 5.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "愛媛県",
+        "nearby_km": 2.9
+      }
     },
     {
       "no": "463",
@@ -2148,7 +2566,11 @@
       "credit_buyer": "新得町 8000020016357",
       "summary": "町有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.0"
+      "methodology": "FO-001 Ver. 5.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "北海道"
+      }
     },
     {
       "no": "465",
@@ -2200,7 +2622,12 @@
       "credit_buyer": "久米財産区 5000030430021",
       "summary": "財産区有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.0"
+      "methodology": "FO-001 Ver. 5.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "福岡県",
+        "nearby_km": 0.5
+      }
     },
     {
       "no": "469",
@@ -2226,7 +2653,12 @@
       "credit_buyer": "株式会社佐藤木材 9300001004052",
       "summary": "社有林、私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.0"
+      "methodology": "FO-001 Ver. 5.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "福岡県",
+        "nearby_km": 3.2
+      }
     },
     {
       "no": "472",
@@ -2239,7 +2671,12 @@
       "credit_buyer": "-",
       "summary": "組合所有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "滋賀県",
+        "nearby_km": 5.1
+      }
     },
     {
       "no": "473",
@@ -2252,7 +2689,12 @@
       "credit_buyer": "中勢森林組合 3190005002128",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.0"
+      "methodology": "FO-001 Ver. 5.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "三重県",
+        "nearby_km": 0.3
+      }
     },
     {
       "no": "477",
@@ -2265,7 +2707,12 @@
       "credit_buyer": "日本フォレスト株式会社 4320001010251",
       "summary": "社有林・私有林等における再造林活動(プログラム型)",
       "started_at": "2024/4/1",
-      "methodology": "FO-003 Ver. 3.1"
+      "methodology": "FO-003 Ver. 3.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "福岡県",
+        "nearby_km": 0.0
+      }
     },
     {
       "no": "479",
@@ -2278,7 +2725,12 @@
       "credit_buyer": "加子母森林組合 2200005009279",
       "summary": "私有林、市有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "岐阜県",
+        "nearby_km": 1.1
+      }
     },
     {
       "no": "480",
@@ -2304,7 +2756,12 @@
       "credit_buyer": "日南町 3000020314013",
       "summary": "町有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "鳥取県",
+        "nearby_km": 0.5
+      }
     },
     {
       "no": "488",
@@ -2343,7 +2800,12 @@
       "credit_buyer": "岐阜県 4000020210005",
       "summary": "県有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "岐阜県",
+        "nearby_km": 3.4
+      }
     },
     {
       "no": "497",
@@ -2369,7 +2831,12 @@
       "credit_buyer": "日本森林トラスト株式会社 2010401169885",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "北海道",
+        "nearby_km": 3.3
+      }
     },
     {
       "no": "501",
@@ -2382,7 +2849,12 @@
       "credit_buyer": "清水産業株式会社 2120001043777",
       "summary": "社有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "愛媛県",
+        "nearby_km": 3.5
+      }
     },
     {
       "no": "504",
@@ -2408,7 +2880,12 @@
       "credit_buyer": "一般社団法人わかやま森林と緑の公社 2170005000893",
       "summary": "分収造林事業地における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "和歌山県",
+        "nearby_km": 2.0
+      }
     },
     {
       "no": "506",
@@ -2421,7 +2898,12 @@
       "credit_buyer": "株式会社バイウィル 9010001156996",
       "summary": "町有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "岡山県",
+        "nearby_km": 2.4
+      }
     },
     {
       "no": "508",
@@ -2486,7 +2968,12 @@
       "credit_buyer": "富士市 2000020222101",
       "summary": "市有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "静岡県",
+        "nearby_km": 0.9
+      }
     },
     {
       "no": "517",
@@ -2551,7 +3038,12 @@
       "credit_buyer": "太良町 2000020414417",
       "summary": "町有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "佐賀県",
+        "nearby_km": 3.9
+      }
     },
     {
       "no": "532",
@@ -2590,7 +3082,12 @@
       "credit_buyer": "-",
       "summary": "組合所有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "宮城県",
+        "nearby_km": 3.3
+      }
     },
     {
       "no": "539",
@@ -2603,7 +3100,11 @@
       "credit_buyer": "上田市 2000020202037",
       "summary": "市有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "群馬県"
+      }
     },
     {
       "no": "546",
@@ -2642,7 +3143,12 @@
       "credit_buyer": "秋田県 1000020050008",
       "summary": "県有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "秋田県",
+        "nearby_km": 3.5
+      }
     },
     {
       "no": "552",
@@ -2655,7 +3161,12 @@
       "credit_buyer": "温海町森林組合 1390005004114",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "福島県",
+        "nearby_km": 2.8
+      }
     },
     {
       "no": "553",
@@ -2668,7 +3179,12 @@
       "credit_buyer": "京丹波町 4000020264075",
       "summary": "町有林、寺社有林、組合所有林、団体所有林、分収造林事業地における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "京都府",
+        "nearby_km": 4.3
+      }
     },
     {
       "no": "554",
@@ -2681,7 +3197,12 @@
       "credit_buyer": "京都府 2000020260002",
       "summary": "県有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.2"
+      "methodology": "FO-001 Ver. 6.2",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "京都府",
+        "nearby_km": 1.7
+      }
     },
     {
       "no": "556",
@@ -2785,7 +3306,12 @@
       "credit_buyer": "-",
       "summary": "村有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "青森県",
+        "nearby_km": 3.9
+      }
     },
     {
       "no": "567",
@@ -2811,7 +3337,12 @@
       "credit_buyer": "株式会社バイウィル 9010001156996",
       "summary": "私有林、市有林、組合所有林等における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国定公園",
+        "prefecture": "滋賀県",
+        "nearby_km": 3.5
+      }
     },
     {
       "no": "571",
@@ -2850,7 +3381,12 @@
       "credit_buyer": "株式会社ZTV 8190001000667",
       "summary": "社有林、子会社社有林における森林経営活動",
       "started_at": "2024/4/12",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "三重県",
+        "nearby_km": 5.3
+      }
     },
     {
       "no": "574",
@@ -2915,7 +3451,11 @@
       "credit_buyer": "北海道 7000020010006",
       "summary": "道有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "北海道"
+      }
     },
     {
       "no": "580",
@@ -2928,7 +3468,12 @@
       "credit_buyer": "株式会社バイウィル 9010001156996",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "三重県",
+        "nearby_km": 0.6
+      }
     },
     {
       "no": "581",
@@ -2941,7 +3486,12 @@
       "credit_buyer": "日本製紙株式会社 8011501009422",
       "summary": "分収造林事業地における森林経営活動",
       "started_at": "2024/7/16",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "静岡県",
+        "nearby_km": 3.7
+      }
     },
     {
       "no": "582",
@@ -2993,7 +3543,12 @@
       "credit_buyer": "住友林業株式会社 4010001090011",
       "summary": "社有林における森林経営活動",
       "started_at": "2024/6/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "滋賀県",
+        "nearby_km": 0.1
+      }
     },
     {
       "no": "587",
@@ -3019,7 +3574,12 @@
       "credit_buyer": "龍山森林組合 6080405003270",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/5/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "静岡県",
+        "nearby_km": 4.1
+      }
     },
     {
       "no": "590",
@@ -3097,7 +3657,12 @@
       "credit_buyer": "龍山森林組合 6080405003270",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "静岡県",
+        "nearby_km": 4.7
+      }
     },
     {
       "no": "596",
@@ -3110,7 +3675,11 @@
       "credit_buyer": "株式会社バイウィル 9010001156996",
       "summary": "私有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "広島県"
+      }
     },
     {
       "no": "597",
@@ -3136,7 +3705,11 @@
       "credit_buyer": "株式会社ヤマゲン 1010601006856",
       "summary": "私有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "奈良県"
+      }
     },
     {
       "no": "603",
@@ -3149,7 +3722,12 @@
       "credit_buyer": "新見市森林組合 9260005006413",
       "summary": "社有林、組合所有林における森林経営活動",
       "started_at": "2024/7/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "香川県",
+        "nearby_km": 3.0
+      }
     },
     {
       "no": "604",
@@ -3162,7 +3740,12 @@
       "credit_buyer": "神奈川県森林組合連合会 7021005003707",
       "summary": "私有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 6.2"
+      "methodology": "FO-001 Ver. 6.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "千葉県",
+        "nearby_km": 4.6
+      }
     },
     {
       "no": "606",
@@ -3188,7 +3771,11 @@
       "credit_buyer": "大野郡森林組合 5320005006220",
       "summary": "組合所有林、市有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "大分県"
+      }
     },
     {
       "no": "611",
@@ -3240,7 +3827,12 @@
       "credit_buyer": "鹿島建設株式会社 8010401006744",
       "summary": "社有林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 5.1"
+      "methodology": "FO-001 Ver. 5.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "北海道",
+        "nearby_km": 3.3
+      }
     },
     {
       "no": "622",
@@ -3253,7 +3845,11 @@
       "credit_buyer": "公益社団法人富山県農林水産公社 7230005007936",
       "summary": "分収契約林における森林経営活動",
       "started_at": "2024/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "長野県"
+      }
     },
     {
       "no": "624",
@@ -3279,7 +3875,11 @@
       "credit_buyer": "-",
       "summary": "私有林、社有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 6.2"
+      "methodology": "FO-001 Ver. 6.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "青森県"
+      }
     },
     {
       "no": "629",
@@ -3292,7 +3892,12 @@
       "credit_buyer": "株式会社バイウィル 9010001156996",
       "summary": "町有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "北海道",
+        "nearby_km": 0.1
+      }
     },
     {
       "no": "630",
@@ -3305,7 +3910,12 @@
       "credit_buyer": "株式会社バイウィル 9010001156996",
       "summary": "私有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "滋賀県",
+        "nearby_km": 0.9
+      }
     },
     {
       "no": "638",
@@ -3357,7 +3967,12 @@
       "credit_buyer": "株式会社バイウィル 9010001156996",
       "summary": "私有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 6.2"
+      "methodology": "FO-001 Ver. 6.2",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "兵庫県",
+        "nearby_km": 4.8
+      }
     },
     {
       "no": "664",
@@ -3370,7 +3985,11 @@
       "credit_buyer": "株式会社あしだ 5130001035127",
       "summary": "私有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 6.0"
+      "methodology": "FO-001 Ver. 6.0",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "滋賀県"
+      }
     },
     {
       "no": "665",
@@ -3435,7 +4054,11 @@
       "credit_buyer": "飯田市 2000020202053",
       "summary": "市有林における森林経営活動",
       "started_at": "2025/4/1",
-      "methodology": "FO-001 Ver. 6.1"
+      "methodology": "FO-001 Ver. 6.1",
+      "park": {
+        "park_type": "国立公園",
+        "prefecture": "長野県"
+      }
     }
   ]
 }
