@@ -150,37 +150,56 @@ no text.
 **「衛星から見た森の冠（樹冠）が、水滴あるいは流域の形に重なる」**
 もりみえるの本質：**衛星 × 流域 × 山** の三層構造をひとつのアイコンに収める
 
-### プロンプト（英語版・推奨）
+> ⚠️ **2026-05-15 学び**：初回 Gemini 出力で「中央水滴＋放射状ストローク＋環」を
+> 重ねたら「目玉／顔」っぽい不気味アイコンになった。要素は **1〜2個に絞る** こと。
+> シンメトリ強調・中央フォーカス・要素重ね合わせ は顔に化けやすい。
+> 下記 A/B/C のいずれか1つだけのプロンプトで回すこと。
+
+### プロンプト案 A — 「3つの山と1本の川」家紋スタイル ★第一候補
 ```
-Minimalist vector logo mark for an environmental tech brand. A single abstract
-symbol: a stylized aerial-view circular tree canopy that gradually morphs at the
-bottom into a single water droplet, OR into the contour of a small watershed
-basin. Three concentric layers visible inside: an outer ring suggesting the
-satellite's field of view (very thin), a middle layer of soft pine-needle-like
-radial strokes (suggesting forest canopy from above), and an inner darker
-droplet shape (water). Color palette: deep forest green (#2d5a3d) as primary,
-sage green (#a7c498) as secondary, warm earth (#c47a4a) used only on one tiny
-accent mark (a leaf tip or a peak). Geometric, calm, contemporary Japanese
-aesthetic — think the simplicity of MUJI or the warmth of a small craft
-workshop, NOT corporate startup minimalism. Hand-feel touches OK (slight
-imperfection in stroke weights). Flat illustration, no gradients, no shadows,
-no text. Centered on a 1:1 transparent background with breathing room.
-The symbol should read clearly at 24px and still feel rich at 512px.
+Minimalist Japanese family-crest style logo (kamon). Three overlapping
+mountain silhouettes (front mountain smallest, back mountain tallest),
+all flat shapes with no outlines, in graduating shades of deep forest
+green: front #5a8a3a, middle #3a7045, back #1f3d2a. A single thin
+river-stroke flows down from between the front two mountains, terminating
+in a small soft droplet shape at the bottom. No outer frame, no circle,
+no satellite ring. No human-like features, no eye-like center. No text.
+Flat vector illustration, centered on a 1:1 transparent background with
+generous margins. Calm and dignified, like a 19th-century Japanese
+family crest redrawn for modern UX.
 ```
 
-### プロンプト（日本語版）
+### プロンプト案 B — 「俯瞰の樹1本」極小ミニマル
 ```
-環境テック系ブランドの最小限ベクターロゴマーク。1つの抽象シンボル：
-俯瞰視点の円形樹冠が下部で水滴あるいは小さな流域の輪郭に変化していく。
-内部に3層の同心構造が見える — 外周に衛星の視野を示す極細リング、
-中間層に俯瞰の松葉のような放射状ストローク、内側に暗めの水滴シェイプ。
-カラー：深い森緑（#2d5a3d）が主色、青磁緑（#a7c498）が副色、
-暖かい大地色（#c47a4a）はごく小さなアクセント1点のみ。
-幾何学的で静かで現代的な日本の美学 — 無印良品のシンプルさや
-小さな工芸工房の温かみ。スタートアップ的なミニマリズム ではない。
-手作り感のある不揃いストローク OK。フラットイラスト、グラデーション・
-影なし、文字なし。1:1 の透過背景に余白を取って中央配置。
+Single abstract tree seen from directly above (bird's-eye view). Hexagonal
+geometric canopy made of six rounded triangular leaf-shapes radiating
+from a center, all filled flat without an outline. Primary color deep
+forest green #2d5a3d, two of the six leaves in sage #a7c498 for subtle
+asymmetry. Tiny single warm-earth dot (#c47a4a) at the very center as the
+trunk. No outer ring, no water drop, no second element. Looks like a
+single calm symbol. Flat vector, no gradients, no shadow, no text,
+transparent 1:1 background, generous breathing room. Should feel like a
+typographic mark, not an illustration.
 ```
+
+### プロンプト案 C — 「山＋衛星」シンプル組み合わせ
+```
+Minimalist vector mark. Lower 60% of the canvas: a single triangular
+mountain silhouette in deep forest green #2d5a3d, flat shape, no outline.
+Upper 30%: a small open arc-line (less than half a circle) above the
+mountain peak, in warm earth color #c47a4a — this arc represents a
+satellite's pass overhead. The arc has a tiny dot at one end (the
+satellite). One mountain, one arc, one dot. That's all. No water, no
+trees, no rings around the whole composition. Flat, no gradient, no
+shadow, no text. Transparent 1:1 background, generous margins.
+```
+
+### 共通ガード（A/B/C どれを選んでも必ず含める）
+- **NO eyes, NO faces, NO concentric rings around the whole composition**
+- **NO radial strokes that could read as teeth or rays from a face**
+- **NO water droplet placed in the center of another shape** （重ね合わせ禁止）
+- **Symmetric is OK only for the mountain silhouettes; the rest can be slightly asymmetric**
+- 透過 PNG, 1:1, 512×512 以上, 余白多め
 
 ### ワードマーク（任意）
 - 日本語：「もりみえる」筆風ひらがな・深緑、温かい
