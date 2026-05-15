@@ -393,6 +393,16 @@ map.on('load', async () => {
     'star-intensity': ['interpolate', ['linear'], ['zoom'], 5.5, 0.35, 7, 0],
   });
 
+  // Mapbox 標準ラベルを日本語化（name_ja → 無ければ name にフォールバック）
+  for (const layer of map.getStyle().layers) {
+    if (layer.type !== 'symbol') continue;
+    const tf = layer.layout && layer.layout['text-field'];
+    if (!tf) continue;
+    try {
+      map.setLayoutProperty(layer.id, 'text-field', ['coalesce', ['get', 'name_ja'], ['get', 'name']]);
+    } catch (e) { /* layer may not support override */ }
+  }
+
   // 河川・水域の強調（Mapbox satellite-streets-v12 の composite に既に入ってる waterway/water を上書き）
   // Mapbox 標準スタイルの id は固定なので setPaintProperty で色味だけ振り直す。
   for (const id of ['waterway', 'waterway-shadow', 'water', 'water-shadow']) {
