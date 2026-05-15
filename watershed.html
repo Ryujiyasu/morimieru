@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css" rel="stylesheet">
 <style>
 :root {
   --green-900: #1f3d2a;
@@ -247,8 +247,8 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 
   <div class="layer-group">
     <h3>地形</h3>
-    <label class="layer-row"><input type="checkbox" id="ly-hillshade" checked><span>陰影起伏</span></label>
-    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">出典：国土地理院 陰影起伏図</p>
+    <label class="layer-row"><input type="checkbox" id="ly-terrain" checked><span>3D 地形（exaggeration ×1.4）</span></label>
+    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">Mapbox terrain-rgb DEM。右ドラッグで視点回転、ホイールで拡大。</p>
   </div>
 
   <div class="layer-group">
@@ -282,47 +282,34 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 </aside>
 
 <div class="bottom-bar">
-  © もりみえる / Tiles: <a href="https://maps.gsi.go.jp/" target="_blank">国土地理院</a> ／ Basins: HydroBASINS ／ Peaks: <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>
+  © もりみえる / Map &amp; terrain: <a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a> ／ Basins: HydroBASINS ／ Peaks: <a href="https://www.openstreetmap.org/copyright" target="_blank">OSM contributors</a> ／ Hazards: 国交省ハザードマップポータル
 </div>
 
-<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
+<script src="config.js"></script>
 <script>
-// ====== MapLibre 3D map ======
-const map = new maplibregl.Map({
+// ====== Mapbox GL JS — 3D 流域マップ ======
+// Token は config.js (gitignore) または config.example.js (placeholder) から読む
+mapboxgl.accessToken = window.MAPBOX_TOKEN || '';
+if (!mapboxgl.accessToken) {
+  document.body.insertAdjacentHTML('beforeend',
+    '<div style="position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#fef0e3;border:1px solid #c47a4a;padding:14px 22px;border-radius:10px;z-index:9999;max-width:500px;font-size:13px;">' +
+    '⚠️ Mapbox token が設定されていません。<code>config.js</code> を作成して <code>window.MAPBOX_TOKEN</code> を設定してください。' +
+    '</div>');
+}
+const map = new mapboxgl.Map({
   container: 'map',
   hash: true,
   center: [137.7, 36.5],
   zoom: 5.4,
-  pitch: 0,
-  bearing: 0,
-  maxPitch: 60,
-  style: {
-    version: 8,
-    glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
-    sources: {
-      gsi: {
-        type: 'raster',
-        tiles: ['https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png'],
-        tileSize: 256,
-        attribution: '© 国土地理院 淡色地図',
-        maxzoom: 18,
-      },
-      gsiRelief: {
-        type: 'raster',
-        tiles: ['https://cyberjapandata.gsi.go.jp/xyz/hillshademap/{z}/{x}/{y}.png'],
-        tileSize: 256,
-        attribution: '© 国土地理院 陰影起伏図',
-        maxzoom: 16,
-      },
-    },
-    layers: [
-      { id: 'gsi-base', type: 'raster', source: 'gsi' },
-      { id: 'gsi-hillshade', type: 'raster', source: 'gsiRelief', paint: { 'raster-opacity': 0.28 } },
-    ],
-  },
+  pitch: 55,
+  bearing: -10,
+  maxPitch: 80,
+  style: 'mapbox://styles/mapbox/outdoors-v12',
+  projection: 'mercator',
 });
-map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
-map.addControl(new maplibregl.ScaleControl({ maxWidth: 120, unit: 'metric' }), 'bottom-right');
+map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
+map.addControl(new mapboxgl.ScaleControl({ maxWidth: 120, unit: 'metric' }), 'bottom-right');
 
 let watershedsGJ = null;
 let peaksGJ = null;
@@ -340,6 +327,34 @@ function scoreToColor(score) {
 }
 
 map.on('load', async () => {
+  // ----- 3D terrain (Mapbox terrain-rgb) + sky -----
+  map.addSource('mapbox-dem', {
+    type: 'raster-dem',
+    url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+    tileSize: 512,
+    maxzoom: 14,
+  });
+  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.4 });
+  map.setFog({
+    'range': [-1, 12],
+    'horizon-blend': 0.04,
+    'color': '#f2efe5',
+    'high-color': '#cfd9e8',
+    'space-color': '#dde6ed',
+    'star-intensity': 0,
+  });
+  try {
+    map.addLayer({
+      id: 'sky',
+      type: 'sky',
+      paint: {
+        'sky-type': 'atmosphere',
+        'sky-atmosphere-sun': [0, 90],
+        'sky-atmosphere-sun-intensity': 5,
+      },
+    });
+  } catch (e) { /* style may not allow extra sky */ }
+
   // ----- watersheds -----
   watershedsGJ = await fetch('data/watersheds/japan_lev10_scored.geojson').then(r => r.json());
   for (const f of watershedsGJ.features) {
@@ -672,9 +687,11 @@ function bindVisToggle(checkboxId, ...layerIds) {
 map.on('load', () => {
   bindVisToggle('ly-watersheds', 'watershed-fill', 'watershed-line');
   bindVisToggle('ly-peaks', 'peak-symbol', 'peak-label');
-  bindVisToggle('ly-hillshade', 'gsi-hillshade');
   bindVisToggle('ly-flood', 'haz-flood-layer');
   bindVisToggle('ly-doseki', 'haz-doseki-layer');
+  document.getElementById('ly-terrain').addEventListener('change', e => {
+    map.setTerrain(e.target.checked ? { source: 'mapbox-dem', exaggeration: 1.4 } : null);
+  });
 });
 </script>
 </body>

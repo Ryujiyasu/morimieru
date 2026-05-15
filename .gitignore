@@ -9,3 +9,4 @@ data/protected/japan_natural_parks.geojson
 # Local-only images uploaded mid-conversation
 *.png
 !assets/*.png
+config.js
