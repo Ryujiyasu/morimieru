@@ -132,6 +132,75 @@ no text.
 
 ---
 
+## 6. ブランドロゴ（最優先）
+
+**保存先**:
+- `assets/logo.svg`（推奨。ベクター。テキストはアウトライン化）
+- `assets/logo.png`（512×512、透過 PNG、フォールバック）
+- `assets/logo-mark.svg`（マーク単体）
+- `assets/logo-mark.png`（256×256、透過、ファビコン・SNS アイコン用）
+
+**用途**:
+- ヘッダーバーのブランド（30〜40px 高）
+- ファビコン
+- レポート PDF 表紙
+- 名刺・スライド資料
+
+### コンセプト
+**「衛星から見た森の冠（樹冠）が、水滴あるいは流域の形に重なる」**
+もりみえるの本質：**衛星 × 流域 × 山** の三層構造をひとつのアイコンに収める
+
+### プロンプト（英語版・推奨）
+```
+Minimalist vector logo mark for an environmental tech brand. A single abstract
+symbol: a stylized aerial-view circular tree canopy that gradually morphs at the
+bottom into a single water droplet, OR into the contour of a small watershed
+basin. Three concentric layers visible inside: an outer ring suggesting the
+satellite's field of view (very thin), a middle layer of soft pine-needle-like
+radial strokes (suggesting forest canopy from above), and an inner darker
+droplet shape (water). Color palette: deep forest green (#2d5a3d) as primary,
+sage green (#a7c498) as secondary, warm earth (#c47a4a) used only on one tiny
+accent mark (a leaf tip or a peak). Geometric, calm, contemporary Japanese
+aesthetic — think the simplicity of MUJI or the warmth of a small craft
+workshop, NOT corporate startup minimalism. Hand-feel touches OK (slight
+imperfection in stroke weights). Flat illustration, no gradients, no shadows,
+no text. Centered on a 1:1 transparent background with breathing room.
+The symbol should read clearly at 24px and still feel rich at 512px.
+```
+
+### プロンプト（日本語版）
+```
+環境テック系ブランドの最小限ベクターロゴマーク。1つの抽象シンボル：
+俯瞰視点の円形樹冠が下部で水滴あるいは小さな流域の輪郭に変化していく。
+内部に3層の同心構造が見える — 外周に衛星の視野を示す極細リング、
+中間層に俯瞰の松葉のような放射状ストローク、内側に暗めの水滴シェイプ。
+カラー：深い森緑（#2d5a3d）が主色、青磁緑（#a7c498）が副色、
+暖かい大地色（#c47a4a）はごく小さなアクセント1点のみ。
+幾何学的で静かで現代的な日本の美学 — 無印良品のシンプルさや
+小さな工芸工房の温かみ。スタートアップ的なミニマリズム ではない。
+手作り感のある不揃いストローク OK。フラットイラスト、グラデーション・
+影なし、文字なし。1:1 の透過背景に余白を取って中央配置。
+```
+
+### ワードマーク（任意）
+- 日本語：「もりみえる」筆風ひらがな・深緑、温かい
+- 英語：`morimieru` 小文字、Josefin 系スレンダーサンセリフ、`i` のドットを小さな松葉に置換（任意）
+
+### ネガティブ要素
+- 樹木のリアル描写・写真調
+- Tech ブルー / ティール
+- 過度に幾何学的・クール
+- 文字同梱
+- 影・グラデ・3D
+- 既製フォント直貼り感
+
+### 派生
+1. ホリゾンタル：マーク + 「もりみえる」 + 「morimieru」(小)
+2. スタック：マーク上 / テキスト下
+3. モノクロ：1色判読確認
+
+---
+
 ## 共通ガイドライン
 
 ### カラーパレット（生成画像に含めたい色）
