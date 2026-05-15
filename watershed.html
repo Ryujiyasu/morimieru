@@ -68,42 +68,58 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 
 #map { position: fixed; top: 56px; left: 0; right: 0; bottom: 0; }
 
-.fly-left {
-  position: fixed; top: 76px; left: 18px; z-index: 800;
-  width: 290px; max-height: calc(100vh - 100px);
-  overflow-y: auto;
-  background: rgba(255,255,255,0.96);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  padding: 18px 20px;
+/* 下部中央 モード切替ピル */
+.mode-bar {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  z-index: 800;
+  background: rgba(20,28,22,0.88);
+  backdrop-filter: blur(14px);
+  border-radius: 999px;
+  padding: 5px;
+  display: flex; gap: 2px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
-.fly-left h2 {
-  margin: 0 0 4px; font-family: var(--font-display);
-  font-size: 17px; font-weight: 700; color: var(--green-900);
+.mode-bar button {
+  border: none; background: transparent;
+  color: rgba(255,255,255,0.78);
+  font-family: var(--font-display); font-weight: 600; font-size: 13px;
+  padding: 9px 20px; border-radius: 999px; cursor: pointer;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
 }
-.fly-left .sub { font-size: 12px; color: var(--ink-500); margin: 0 0 14px; line-height: 1.7; }
-.layer-group { margin-bottom: 18px; padding-top: 14px; border-top: 1px solid var(--ink-300); }
-.layer-group:first-of-type { border-top: none; padding-top: 0; }
-.layer-group h3 {
-  margin: 0 0 8px; font-family: var(--font-display);
-  font-size: 12px; letter-spacing: .04em; color: var(--green-700);
+.mode-bar button:hover { color: #fff; }
+.mode-bar button.active {
+  background: #ffffff; color: var(--green-900);
 }
-.layer-row {
-  display: flex; align-items: center; gap: 8px;
-  margin: 6px 0; font-size: 13px; cursor: pointer;
-}
-.layer-row input { margin: 0; }
-.layer-row span { vertical-align: middle; }
-.swatch-bar { display: inline-block; width: 16px; height: 14px; border-radius: 3px; }
 
-.score-legend {
-  display: flex; justify-content: space-between;
-  margin: 8px 0 0; font-size: 10px; font-family: var(--font-mono); color: var(--ink-500);
+/* 右上 ミニ凡例 */
+.mini-legend {
+  position: fixed; top: 76px; right: 18px; z-index: 700;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  font-size: 11px;
+  max-width: 220px;
 }
-.score-gradient {
-  height: 12px; border-radius: 999px;
-  background: linear-gradient(90deg, #f4ecd5, #d8e5b8, #a7c498, #5a8a3a, #2d5a3d, #1f3d2a);
+.mini-legend.hidden-when-detail { display: block; }
+.detail-panel.open ~ .mini-legend { display: none; }
+.mini-legend h4 {
+  margin: 0 0 6px; font-family: var(--font-display);
+  font-size: 11px; color: var(--green-700); letter-spacing: .08em;
+}
+.mini-legend .row {
+  display: flex; align-items: center; gap: 8px;
+  margin: 4px 0; color: var(--ink-700);
+}
+.mini-legend .dot {
+  width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+  border: 1.5px solid #c47a4a; background: #fff;
+}
+.mini-legend .line-acc {
+  width: 18px; height: 3px; border-radius: 999px; background: #d4ff3a;
+  box-shadow: 0 0 8px rgba(212,255,58,0.6);
 }
 
 .detail-panel {
@@ -200,9 +216,10 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 .bottom-bar a { color: var(--ink-700); text-decoration: underline dotted; }
 
 @media (max-width: 720px) {
-  .fly-left { width: calc(100vw - 36px); max-height: 40vh; }
-  .detail-panel { width: calc(100vw - 36px); top: auto; bottom: 18px; right: 18px; left: 18px; max-height: 60vh; }
-  .detail-panel { transform: translateY(calc(100% + 36px)); }
+  .mini-legend { top: auto; bottom: 100px; right: 14px; max-width: 200px; }
+  .mode-bar { bottom: 18px; }
+  .mode-bar button { padding: 8px 14px; font-size: 12px; }
+  .detail-panel { width: calc(100vw - 28px); top: auto; bottom: 86px; right: 14px; left: 14px; max-height: 55vh; transform: translateY(calc(100% + 100px)); }
   .detail-panel.open { transform: translateY(0); }
 }
 </style>
@@ -230,41 +247,18 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
   <a href="/" class="nav-link">← TOP</a>
 </div>
 
-<aside class="fly-left">
-  <h2>🌊 流域 × 山 × 森の価値</h2>
-  <p class="sub">日本全国 <strong>7,941</strong> の流域と <strong>13,611</strong> の山頂を、森の公益機能スコア（CO₂・水・生物多様性）と一緒に見られる地図。</p>
+<div class="mini-legend">
+  <h4>READ THE MAP</h4>
+  <div class="row"><span class="line-acc"></span>選択中の流域</div>
+  <div class="row"><span class="dot"></span>山頂（標高で出現）</div>
+  <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);line-height:1.5;">流域や山頂をクリックで詳細</p>
+</div>
 
-  <div class="layer-group">
-    <h3>主役レイヤー</h3>
-    <label class="layer-row"><input type="checkbox" id="ly-watersheds" checked><span>流域 公益機能スコア</span></label>
-    <label class="layer-row"><input type="checkbox" id="ly-peaks" checked><span>山頂（標高でフィルタ）</span></label>
-    <div class="score-gradient" style="margin-top:8px;"></div>
-    <div class="score-legend"><span>0</span><span>50</span><span>100</span></div>
-    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">流域の<strong>線色</strong> = 公益機能スコア。クリックで詳細表示。</p>
-  </div>
-
-  <div class="layer-group">
-    <h3>地形</h3>
-    <label class="layer-row"><input type="checkbox" id="ly-terrain" checked><span>3D 地形（exaggeration ×1.4）</span></label>
-    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">Mapbox terrain-rgb DEM。右ドラッグで視点回転、ホイールで拡大。</p>
-  </div>
-
-  <div class="layer-group">
-    <h3>ハザードマップ</h3>
-    <label class="layer-row"><input type="checkbox" id="ly-flood"><span>洪水浸水想定（想定最大規模）</span></label>
-    <label class="layer-row"><input type="checkbox" id="ly-doseki"><span>土砂災害警戒区域</span></label>
-    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">出典：国交省ハザードマップポータル</p>
-  </div>
-
-  <div class="layer-group">
-    <h3>使い方</h3>
-    <p style="font-size:11.5px;color:var(--ink-700);line-height:1.85;margin:0;">
-      🖱️ <strong>流域をクリック</strong> → スコア・含む山頂が表示<br>
-      ⛰️ <strong>山頂をクリック</strong> → その山を含む流域へフォーカス<br>
-      🖐️ <strong>右ドラッグ</strong>で視点回転、<strong>ホイール</strong>で拡大
-    </p>
-  </div>
-</aside>
+<div class="mode-bar" role="tablist">
+  <button id="mode-standard" class="active" type="button">標準</button>
+  <button id="mode-hazard" type="button">ハザード</button>
+  <button id="mode-all" type="button">すべて</button>
+</div>
 
 <div id="map"></div>
 
@@ -298,12 +292,12 @@ if (!mapboxgl.accessToken) {
 const map = new mapboxgl.Map({
   container: 'map',
   hash: true,
-  center: [138.73, 35.36],     // 富士山ほぼ真上
-  zoom: 11.2,
-  pitch: 62,
-  bearing: -22,
+  center: [138.73, 35.36],     // 富士山真上
+  zoom: 12,
+  pitch: 55,
+  bearing: -18,
   maxPitch: 80,
-  style: 'mapbox://styles/mapbox/outdoors-v12',
+  style: 'mapbox://styles/mapbox/satellite-streets-v12',
   projection: 'mercator',
 });
 map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
@@ -325,33 +319,38 @@ function scoreToColor(score) {
 }
 
 map.on('load', async () => {
-  // ----- 3D terrain (Mapbox terrain-rgb) + sky -----
+  // ----- 3D terrain (Mapbox terrain-rgb) + cinematic fog -----
   map.addSource('mapbox-dem', {
     type: 'raster-dem',
     url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
     tileSize: 512,
     maxzoom: 14,
   });
-  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.4 });
+  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.2 });
+
+  // ズーム連動 fog ─ 低ズームは暗く荘厳、高ズームは明るく地表に降りた感じ。
   map.setFog({
-    'range': [-1, 12],
-    'horizon-blend': 0.04,
-    'color': '#f2efe5',
-    'high-color': '#cfd9e8',
-    'space-color': '#dde6ed',
-    'star-intensity': 0,
+    'range': [0, 12],
+    'horizon-blend': ['interpolate', ['linear'], ['zoom'], 5.5, 0.02, 8, 0.12],
+    'color':       ['interpolate', ['linear'], ['zoom'], 5.5, 'hsl(40, 8%, 16%)', 7.5, 'hsl(40, 60%, 92%)'],
+    'high-color':  ['interpolate', ['linear'], ['zoom'], 5.5, 'hsl(220, 30%, 12%)', 7.5, 'hsl(210, 55%, 78%)'],
+    'space-color': ['interpolate', ['linear'], ['zoom'], 5.5, 'hsl(220, 20%, 5%)',  7.5, 'hsl(200, 60%, 80%)'],
+    'star-intensity': ['interpolate', ['linear'], ['zoom'], 5.5, 0.35, 7, 0],
   });
-  try {
-    map.addLayer({
-      id: 'sky',
-      type: 'sky',
-      paint: {
-        'sky-type': 'atmosphere',
-        'sky-atmosphere-sun': [0, 90],
-        'sky-atmosphere-sun-intensity': 5,
-      },
-    });
-  } catch (e) { /* style may not allow extra sky */ }
+
+  // 河川・水域の強調（Mapbox satellite-streets-v12 の composite に既に入ってる waterway/water を上書き）
+  // Mapbox 標準スタイルの id は固定なので setPaintProperty で色味だけ振り直す。
+  for (const id of ['waterway', 'waterway-shadow', 'water', 'water-shadow']) {
+    if (!map.getLayer(id)) continue;
+    if (id.startsWith('water') && map.getLayer(id) && map.getPaintProperty(id, 'fill-color') !== undefined) {
+      map.setPaintProperty(id, 'fill-color', '#4ea7c9');
+      map.setPaintProperty(id, 'fill-opacity', 0.55);
+    }
+    if (id.startsWith('waterway') && map.getPaintProperty(id, 'line-color') !== undefined) {
+      map.setPaintProperty(id, 'line-color', '#5bc4e8');
+      map.setPaintProperty(id, 'line-opacity', 0.9);
+    }
+  }
 
   // ----- watersheds -----
   watershedsGJ = await fetch('data/watersheds/japan_lev10_scored.geojson').then(r => r.json());
@@ -361,25 +360,43 @@ map.on('load', async () => {
     f.properties._height = Math.max(200, s * 60);  // 0–100 → 200–6000m 浮き上がり
   }
   map.addSource('watersheds', { type: 'geojson', data: watershedsGJ, promoteId: 'hybas_id' });
-  // Transparent fill — used ONLY for click target. No visible polygon.
+  // Transparent fill — used ONLY for click target.
   map.addLayer({
     id: 'watershed-fill',
     type: 'fill',
     source: 'watersheds',
-    paint: {
-      'fill-color': '#000000',
-      'fill-opacity': 0,           // 完全透明 — クリック判定にだけ使う
-    },
+    paint: { 'fill-color': '#000000', 'fill-opacity': 0 },
   });
-  // 線のみ：スコア色で薄く全流域、選択時は同じ色で太く
+  // 通常の流域線：白に近い淡色で衛星上に「水墨画」的に乗せる。
+  // 選択時のみ蛍光イエローグリーンで強くハイライト。
   map.addLayer({
     id: 'watershed-line',
     type: 'line',
     source: 'watersheds',
     paint: {
-      'line-color': ['get', '_fill'],
-      'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 0.6],
-      'line-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 1, 0.5],
+      'line-color': ['case',
+        ['boolean', ['feature-state', 'selected'], false], '#d4ff3a',
+        'rgba(255,255,255,0.55)'
+      ],
+      'line-width': ['case',
+        ['boolean', ['feature-state', 'selected'], false], 3,
+        ['interpolate', ['linear'], ['zoom'], 6, 0.35, 10, 0.7, 14, 1.2]
+      ],
+      'line-opacity': ['case',
+        ['boolean', ['feature-state', 'selected'], false], 1, 0.6
+      ],
+    },
+  });
+  // 選択中の流域 内側にもう一本ぼかし線（グロー風） — 衛星上で蛍光感を出す
+  map.addLayer({
+    id: 'watershed-line-glow',
+    type: 'line',
+    source: 'watersheds',
+    paint: {
+      'line-color': '#d4ff3a',
+      'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 12, 0],
+      'line-opacity': 0.25,
+      'line-blur': 6,
     },
   });
 
@@ -387,6 +404,7 @@ map.on('load', async () => {
   peaksGJ = await fetch('data/mountains/japan_peaks.geojson').then(r => r.json());
   // Filter peaks for client perf — keep all but rely on zoom expression for visibility
   map.addSource('peaks', { type: 'geojson', data: peaksGJ });
+  // 山頂：衛星上で見やすい小さな白丸＋細い土色アウトライン
   map.addLayer({
     id: 'peak-symbol',
     type: 'circle',
@@ -394,13 +412,11 @@ map.on('load', async () => {
     paint: {
       'circle-radius': [
         'interpolate', ['linear'], ['zoom'],
-        5, 2.4,
-        9, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 0, 1.8, 3000, 5],
-        13, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 0, 2.5, 3000, 7],
+        5, 2, 9, 2.6, 13, 4,
       ],
-      'circle-color': '#c47a4a',
-      'circle-stroke-color': '#fff',
-      'circle-stroke-width': 1.2,
+      'circle-color': '#ffffff',
+      'circle-stroke-color': '#c47a4a',
+      'circle-stroke-width': 1.6,
       'circle-opacity': [
         'interpolate', ['linear'], ['zoom'],
         5, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2500], 0.95, 0],
@@ -409,6 +425,13 @@ map.on('load', async () => {
         11, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 800], 0.88, 0],
         13, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 400], 0.9, 0],
         15, 0.92,
+      ],
+      'circle-stroke-opacity': [
+        'interpolate', ['linear'], ['zoom'],
+        5, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2500], 0.95, 0],
+        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1400], 0.9, 0],
+        11, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 800], 0.88, 0],
+        13, 0.9,
       ],
     },
   });
@@ -421,19 +444,20 @@ map.on('load', async () => {
       'text-field': ['get', 'name'],
       'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
       'text-size': 11,
-      'text-offset': [0.8, 0],
+      'text-offset': [0.7, 0],
       'text-anchor': 'left',
       'text-optional': true,
       'text-allow-overlap': false,
     },
     paint: {
-      'text-color': '#1f3d2a',
-      'text-halo-color': '#ffffff',
-      'text-halo-width': 1.2,
+      'text-color': '#ffffff',
+      'text-halo-color': '#1a2516',
+      'text-halo-width': 1.4,
+      'text-halo-blur': 0.4,
       'text-opacity': [
         'interpolate', ['linear'], ['zoom'],
-        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1500], 0.9, 0],
-        12, 0.95,
+        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1500], 0.95, 0],
+        12, 0.98,
       ],
     },
   });
@@ -677,23 +701,26 @@ window.flyToPeak = flyToPeak;
 window.focusBasin = focusBasin;
 window.focusWatershedAt = focusWatershedAt;
 
-// ----- toggles -----
-function bindVisToggle(checkboxId, ...layerIds) {
-  document.getElementById(checkboxId).addEventListener('change', e => {
-    const vis = e.target.checked ? 'visible' : 'none';
-    for (const lid of layerIds) {
-      if (map.getLayer(lid)) map.setLayoutProperty(lid, 'visibility', vis);
-    }
-  });
+// ----- モード切替 -----
+function setLayerVis(lid, on) {
+  if (map.getLayer(lid)) map.setLayoutProperty(lid, 'visibility', on ? 'visible' : 'none');
+}
+function applyMode(mode) {
+  // 流域・山頂は全モード ON
+  ['watershed-fill','watershed-line','watershed-line-glow','peak-symbol','peak-label'].forEach(l => setLayerVis(l, true));
+  // ハザードは ハザード／すべて で ON
+  const hazOn = (mode === 'hazard' || mode === 'all');
+  setLayerVis('haz-flood-layer', hazOn);
+  setLayerVis('haz-doseki-layer', hazOn);
+  // active class
+  document.querySelectorAll('.mode-bar button').forEach(b => b.classList.remove('active'));
+  document.getElementById('mode-' + mode).classList.add('active');
 }
 map.on('load', () => {
-  bindVisToggle('ly-watersheds', 'watershed-fill', 'watershed-line');
-  bindVisToggle('ly-peaks', 'peak-symbol', 'peak-label');
-  bindVisToggle('ly-flood', 'haz-flood-layer');
-  bindVisToggle('ly-doseki', 'haz-doseki-layer');
-  document.getElementById('ly-terrain').addEventListener('change', e => {
-    map.setTerrain(e.target.checked ? { source: 'mapbox-dem', exaggeration: 1.4 } : null);
-  });
+  document.getElementById('mode-standard').addEventListener('click', () => applyMode('standard'));
+  document.getElementById('mode-hazard').addEventListener('click', () => applyMode('hazard'));
+  document.getElementById('mode-all').addEventListener('click', () => applyMode('all'));
+  applyMode('standard');
 });
 </script>
 </body>
