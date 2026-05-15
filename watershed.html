@@ -296,6 +296,8 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 <div class="mini-legend">
   <h4>READ THE MAP</h4>
   <div class="row"><span class="line-acc"></span>選択中の流域</div>
+  <div class="row"><span style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#5bc4e8;"></span>下流チェーン</div>
+  <div class="row"><span style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#c47a4a;"></span>上流チェーン</div>
   <div class="row"><span style="font-size:14px;line-height:1;color:#3a2616;text-shadow:0 0 2px #fff;">▲</span>1500m 以上の山頂</div>
   <div class="row"><span class="dot"></span>1500m 未満の山頂</div>
   <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);line-height:1.5;">流域や山頂をクリックで詳細</p>
@@ -353,6 +355,10 @@ map.addControl(new mapboxgl.ScaleControl({ maxWidth: 120, unit: 'metric' }), 'bo
 let watershedsGJ = null;
 let peaksGJ = null;
 let selectedHybas = null;
+let basinById = new Map();         // hybas_id → feature
+let basinChildrenById = new Map(); // hybas_id → array of upstream basin features (next_down == this)
+let chainState = [];               // currently-lit chain basins (for clear-on-new-selection)
+let chainToken = { cancelled: false };
 
 function scoreToColor(score) {
   // Quantile-ish ramp (mean 26, top 80+ = 1.4%):
@@ -404,7 +410,13 @@ map.on('load', async () => {
   for (const f of watershedsGJ.features) {
     const s = f.properties.scores.total;
     f.properties._fill = scoreToColor(s);
-    f.properties._height = Math.max(200, s * 60);  // 0–100 → 200–6000m 浮き上がり
+    f.properties._height = Math.max(200, s * 60);
+    basinById.set(f.properties.hybas_id, f);
+    const nd = f.properties.next_down;
+    if (nd) {
+      if (!basinChildrenById.has(nd)) basinChildrenById.set(nd, []);
+      basinChildrenById.get(nd).push(f);
+    }
   }
   map.addSource('watersheds', { type: 'geojson', data: watershedsGJ, promoteId: 'hybas_id' });
   // Transparent fill — used ONLY for click target.
@@ -446,6 +458,28 @@ map.on('load', async () => {
       'line-blur': 6,
     },
   });
+
+  // 上流／下流チェーン — feature-state.chain で色分けし、アニメで順次点灯
+  map.addLayer({
+    id: 'watershed-chain',
+    type: 'line',
+    source: 'watersheds',
+    paint: {
+      'line-color': [
+        'case',
+        ['==', ['feature-state', 'chain'], 'down'], '#5bc4e8',
+        ['==', ['feature-state', 'chain'], 'up'],   '#c47a4a',
+        'rgba(0,0,0,0)',
+      ],
+      'line-width': [
+        'case',
+        ['boolean', ['feature-state', 'chain'], false], 2.2,
+        0,
+      ],
+      'line-opacity': 0.9,
+    },
+  });
+  map.setPaintProperty('watershed-chain', 'line-width-transition', { duration: 350, delay: 0 });
 
   // ----- peaks -----
   peaksGJ = await fetch('data/mountains/japan_peaks.geojson').then(r => r.json());
@@ -605,6 +639,70 @@ function setSelectedHybas(id) {
   }
 }
 
+// ----- 上下流チェーン アニメ -----
+function clearChain() {
+  for (const id of chainState) {
+    map.setFeatureState({ source: 'watersheds', id }, { chain: null });
+  }
+  chainState = [];
+}
+function animateChain(rootId) {
+  // 既存アニメをキャンセル
+  chainToken.cancelled = true;
+  chainToken = { cancelled: false };
+  const token = chainToken;
+  clearChain();
+
+  // 下流：rootから next_down を辿って海まで（or null）
+  const downChain = [];
+  {
+    let cur = basinById.get(rootId);
+    let guard = 0;
+    while (cur && cur.properties.next_down && guard < 80) {
+      const nxt = basinById.get(cur.properties.next_down);
+      if (!nxt) break;
+      downChain.push(nxt.properties.hybas_id);
+      cur = nxt;
+      guard++;
+    }
+  }
+  // 上流：rootに流れ込む basins を BFS（深さ最大3 で広がりすぎ防止）
+  const upChain = [];
+  {
+    const queue = [{ id: rootId, depth: 0 }];
+    const seen = new Set([rootId]);
+    while (queue.length) {
+      const { id, depth } = queue.shift();
+      if (depth >= 3) continue;
+      const kids = basinChildrenById.get(id) || [];
+      for (const child of kids) {
+        const cid = child.properties.hybas_id;
+        if (seen.has(cid)) continue;
+        seen.add(cid);
+        upChain.push(cid);
+        queue.push({ id: cid, depth: depth + 1 });
+      }
+    }
+  }
+
+  // 順次点灯：下流をまず（水の流れに沿って）、その後 上流
+  const step = (i) => {
+    if (token.cancelled) return;
+    if (i < downChain.length) {
+      const id = downChain[i];
+      map.setFeatureState({ source: 'watersheds', id }, { chain: 'down' });
+      chainState.push(id);
+      setTimeout(() => step(i + 1), 160);
+    } else if (i - downChain.length < upChain.length) {
+      const id = upChain[i - downChain.length];
+      map.setFeatureState({ source: 'watersheds', id }, { chain: 'up' });
+      chainState.push(id);
+      setTimeout(() => step(i + 1), 110);
+    }
+  };
+  setTimeout(() => step(0), 200);
+}
+
 function showSelectionPill(props, kind) {
   const pill = document.getElementById('selection-pill');
   document.getElementById('selection-badge').textContent = kind === 'peak' ? '山頂' : '流域';
@@ -621,6 +719,7 @@ function hideSelectionPill() {
 function showWatershedDetail(feature) {
   const p = feature.properties;
   showSelectionPill(p, 'watershed');
+  animateChain(p.hybas_id);
   // properties may be stringified by MapLibre
   const scores = typeof p.scores === 'string' ? JSON.parse(p.scores) : p.scores;
   const top_peaks = typeof p.top_peaks === 'string' ? JSON.parse(p.top_peaks) : (p.top_peaks || []);
@@ -794,6 +893,8 @@ function closeDetail() {
   document.getElementById('detail-panel').classList.remove('open');
   hideSelectionPill();
   setSelectedHybas(null);
+  chainToken.cancelled = true;
+  clearChain();
 }
 window.closeDetail = closeDetail;
 document.getElementById('selection-clear').addEventListener('click', () => {
@@ -809,7 +910,7 @@ function setLayerVis(lid, on) {
 }
 function applyMode(mode) {
   // 流域・山頂は全モード ON
-  ['watershed-fill','watershed-line','watershed-line-glow','peak-symbol','peak-mountain','peak-label'].forEach(l => setLayerVis(l, true));
+  ['watershed-fill','watershed-line','watershed-line-glow','watershed-chain','peak-symbol','peak-mountain','peak-label'].forEach(l => setLayerVis(l, true));
   // ハザードは ハザード／すべて で ON
   const hazOn = (mode === 'hazard' || mode === 'all');
   setLayerVis('haz-flood-layer', hazOn);
