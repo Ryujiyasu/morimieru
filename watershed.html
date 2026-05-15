@@ -52,15 +52,12 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--ink-300);
 }
-.brand { display: flex; align-items: center; gap: 10px; }
-.brand-logo {
-  width: 36px; height: 36px;
-  background: var(--green-700); color: white;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 10px; font-family: var(--font-display); font-weight: 900; font-size: 16px;
-}
-.brand-name { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--green-900); }
-.brand-name small { font-weight: 400; color: var(--ink-500); font-size: 12px; margin-left: 8px; }
+.brand { display: flex; align-items: baseline; gap: 6px; text-decoration: none; }
+.brand .logo-mark { font-size: 22px; line-height: 1; transform: translateY(2px); }
+.brand .logo-text { font-family: var(--font-display); font-weight: 900; font-size: 18px; color: var(--green-900); letter-spacing: 0.02em; }
+.brand .logo-en { font-family: var(--font-en); font-weight: 500; font-size: 12px; color: var(--ink-500); letter-spacing: 0.15em; }
+.brand .logo-divider { color: var(--ink-300); margin: 0 4px; font-weight: 300; }
+.brand .page-label { font-family: var(--font-display); font-weight: 500; font-size: 13px; color: var(--green-700); }
 .nav-link {
   margin-left: auto; font-size: 14px; color: var(--ink-700); text-decoration: none;
   padding: 8px 14px; border-radius: 999px;
@@ -221,11 +218,12 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 <body>
 
 <div id="topbar">
-  <a href="/" style="text-decoration:none;">
-    <div class="brand">
-      <div class="brand-logo">森</div>
-      <div class="brand-name">もりみえる<small>流域マップ</small></div>
-    </div>
+  <a href="/" class="brand">
+    <span class="logo-mark">🌲</span>
+    <span class="logo-text">もりみえる</span>
+    <span class="logo-en">morimieru</span>
+    <span class="logo-divider">/</span>
+    <span class="page-label">流域マップ</span>
   </a>
   <a href="map.html" class="nav-link">📊 データマップ</a>
   <a href="reports.html" class="nav-link">📑 レポート</a>
