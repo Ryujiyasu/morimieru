@@ -296,7 +296,8 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 <div class="mini-legend">
   <h4>READ THE MAP</h4>
   <div class="row"><span class="line-acc"></span>選択中の流域</div>
-  <div class="row"><span class="dot"></span>山頂（標高で出現）</div>
+  <div class="row"><span style="font-size:14px;line-height:1;color:#3a2616;text-shadow:0 0 2px #fff;">▲</span>1500m 以上の山頂</div>
+  <div class="row"><span class="dot"></span>1500m 未満の山頂</div>
   <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);line-height:1.5;">流域や山頂をクリックで詳細</p>
 </div>
 
@@ -450,34 +451,63 @@ map.on('load', async () => {
   peaksGJ = await fetch('data/mountains/japan_peaks.geojson').then(r => r.json());
   // Filter peaks for client perf — keep all but rely on zoom expression for visibility
   map.addSource('peaks', { type: 'geojson', data: peaksGJ });
-  // 山頂：衛星上で見やすい小さな白丸＋細い土色アウトライン
+  // 山頂 - 低標高（< 1500m）：小さな白丸＋土色アウトライン
   map.addLayer({
     id: 'peak-symbol',
     type: 'circle',
     source: 'peaks',
+    filter: ['<', ['coalesce', ['get', 'elevation_m'], 0], 1500],
     paint: {
       'circle-radius': [
         'interpolate', ['linear'], ['zoom'],
-        5, 2, 9, 2.6, 13, 4,
+        5, 2, 9, 2.4, 13, 3.6,
       ],
       'circle-color': '#ffffff',
       'circle-stroke-color': '#c47a4a',
-      'circle-stroke-width': 1.6,
+      'circle-stroke-width': 1.4,
       'circle-opacity': [
         'interpolate', ['linear'], ['zoom'],
-        5, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2500], 0.95, 0],
-        7, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2000], 0.92, 0],
-        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1400], 0.9, 0],
-        11, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 800], 0.88, 0],
-        13, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 400], 0.9, 0],
+        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1000], 0.9, 0],
+        11, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 600], 0.88, 0],
+        13, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 300], 0.9, 0],
         15, 0.92,
       ],
       'circle-stroke-opacity': [
         'interpolate', ['linear'], ['zoom'],
-        5, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2500], 0.95, 0],
-        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1400], 0.9, 0],
-        11, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 800], 0.88, 0],
+        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1000], 0.9, 0],
+        11, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 600], 0.88, 0],
         13, 0.9,
+      ],
+    },
+  });
+  // 山頂 - 高標高（>= 1500m）：▲ 三角シルエットで「山感」を出す
+  map.addLayer({
+    id: 'peak-mountain',
+    type: 'symbol',
+    source: 'peaks',
+    filter: ['>=', ['coalesce', ['get', 'elevation_m'], 0], 1500],
+    layout: {
+      'text-field': '▲',
+      'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+      'text-size': [
+        'interpolate', ['linear'], ['zoom'],
+        5, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 1500, 9, 3000, 14],
+        9, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 1500, 11, 3000, 18],
+        13, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 1500, 14, 3000, 22],
+      ],
+      'text-allow-overlap': true,
+      'symbol-z-elevate': true,
+    },
+    paint: {
+      'text-color': '#3a2616',
+      'text-halo-color': '#ffffff',
+      'text-halo-width': 1.8,
+      'text-halo-blur': 0.4,
+      'text-opacity': [
+        'interpolate', ['linear'], ['zoom'],
+        5, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2500], 0.92, 0],
+        7, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2000], 0.92, 0],
+        9, 0.95,
       ],
     },
   });
@@ -541,24 +571,26 @@ map.on('load', async () => {
     setSelectedHybas(f.properties.hybas_id);
     e.preventDefault?.();
   });
-  map.on('click', 'peak-symbol', (e) => {
+  const peakClick = (e) => {
     if (e.originalEvent.defaultPrevented) return;
     const f = e.features[0];
     showPeakDetail(f);
     e.preventDefault?.();
-  });
+  };
+  map.on('click', 'peak-symbol', peakClick);
+  map.on('click', 'peak-mountain', peakClick);
   map.on('click', (e) => {
-    // empty-area click closes panel
-    const feats = map.queryRenderedFeatures(e.point, { layers: ['watershed-fill', 'peak-symbol'] });
+    const feats = map.queryRenderedFeatures(e.point, { layers: ['watershed-fill', 'peak-symbol', 'peak-mountain'] });
     if (feats.length === 0) {
       closeDetail();
-      setSelectedHybas(null);
     }
   });
   map.on('mouseenter', 'watershed-fill', () => map.getCanvas().style.cursor = 'pointer');
   map.on('mouseleave', 'watershed-fill', () => map.getCanvas().style.cursor = '');
-  map.on('mouseenter', 'peak-symbol', () => map.getCanvas().style.cursor = 'pointer');
-  map.on('mouseleave', 'peak-symbol', () => map.getCanvas().style.cursor = '');
+  for (const lid of ['peak-symbol', 'peak-mountain']) {
+    map.on('mouseenter', lid, () => map.getCanvas().style.cursor = 'pointer');
+    map.on('mouseleave', lid, () => map.getCanvas().style.cursor = '');
+  }
 });
 
 function setSelectedHybas(id) {
@@ -777,7 +809,7 @@ function setLayerVis(lid, on) {
 }
 function applyMode(mode) {
   // 流域・山頂は全モード ON
-  ['watershed-fill','watershed-line','watershed-line-glow','peak-symbol','peak-label'].forEach(l => setLayerVis(l, true));
+  ['watershed-fill','watershed-line','watershed-line-glow','peak-symbol','peak-mountain','peak-label'].forEach(l => setLayerVis(l, true));
   // ハザードは ハザード／すべて で ON
   const hazOn = (mode === 'hazard' || mode === 'all');
   setLayerVis('haz-flood-layer', hazOn);
