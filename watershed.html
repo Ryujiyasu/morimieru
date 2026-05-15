@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>もりみえる 流域マップ — 山・森・水のつながりを見える化</title>
+<meta name="description" content="日本全国 7,941 の流域と 13,611 の山頂を 3D で可視化。それぞれの「公益機能スコア」（CO₂ 吸収・水源涵養・生物多様性）を量化し、ハザードマップと重ねて見られる、もりみえるの流域マップ。">
+<meta property="og:title" content="もりみえる 流域マップ">
+<meta property="og:description" content="日本全国の流域と山頂を 3D で可視化。森の公益機能スコア × ハザードマップ。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mori-mieru.jp/watershed.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<style>
+:root {
+  --green-900: #1f3d2a;
+  --green-700: #2d5a3d;
+  --green-500: #5a8a3a;
+  --green-300: #a7c498;
+  --green-100: #e7efde;
+  --earth-600: #8c5a3a;
+  --earth-500: #c47a4a;
+  --earth-300: #e6c4a0;
+  --blue-700: #3b6da1;
+  --blue-300: #7fadda;
+  --cream: #faf6ef;
+  --paper: #ffffff;
+  --ink-900: #2a2820;
+  --ink-700: #4a4838;
+  --ink-500: #7a786a;
+  --ink-300: #bcbaae;
+  --shadow-sm: 0 1px 3px rgba(31,61,42,.08);
+  --shadow-md: 0 4px 16px rgba(31,61,42,.10);
+  --shadow-lg: 0 12px 40px rgba(31,61,42,.14);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --font-jp: 'Noto Sans JP', system-ui, sans-serif;
+  --font-display: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
+  --font-en: 'Josefin Sans', 'M PLUS Rounded 1c', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); color: var(--ink-900); background: var(--cream); overflow: hidden; }
+
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 56px; z-index: 1000;
+  display: flex; align-items: center; gap: 18px;
+  padding: 0 22px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--ink-300);
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-logo {
+  width: 36px; height: 36px;
+  background: var(--green-700); color: white;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; font-family: var(--font-display); font-weight: 900; font-size: 16px;
+}
+.brand-name { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--green-900); }
+.brand-name small { font-weight: 400; color: var(--ink-500); font-size: 12px; margin-left: 8px; }
+.nav-link {
+  margin-left: auto; font-size: 14px; color: var(--ink-700); text-decoration: none;
+  padding: 8px 14px; border-radius: 999px;
+  border: 1px solid var(--ink-300);
+  transition: all .15s;
+}
+.nav-link:hover { border-color: var(--green-700); color: var(--green-700); }
+
+#map { position: fixed; top: 56px; left: 0; right: 0; bottom: 0; }
+
+.fly-left {
+  position: fixed; top: 76px; left: 18px; z-index: 800;
+  width: 290px; max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 18px 20px;
+}
+.fly-left h2 {
+  margin: 0 0 4px; font-family: var(--font-display);
+  font-size: 17px; font-weight: 700; color: var(--green-900);
+}
+.fly-left .sub { font-size: 12px; color: var(--ink-500); margin: 0 0 14px; line-height: 1.7; }
+.layer-group { margin-bottom: 18px; padding-top: 14px; border-top: 1px solid var(--ink-300); }
+.layer-group:first-of-type { border-top: none; padding-top: 0; }
+.layer-group h3 {
+  margin: 0 0 8px; font-family: var(--font-display);
+  font-size: 12px; letter-spacing: .04em; color: var(--green-700);
+}
+.layer-row {
+  display: flex; align-items: center; gap: 8px;
+  margin: 6px 0; font-size: 13px; cursor: pointer;
+}
+.layer-row input { margin: 0; }
+.layer-row span { vertical-align: middle; }
+.swatch-bar { display: inline-block; width: 16px; height: 14px; border-radius: 3px; }
+
+.score-legend {
+  display: flex; justify-content: space-between;
+  margin: 8px 0 0; font-size: 10px; font-family: var(--font-mono); color: var(--ink-500);
+}
+.score-gradient {
+  height: 12px; border-radius: 999px;
+  background: linear-gradient(90deg, #f4ecd5, #d8e5b8, #a7c498, #5a8a3a, #2d5a3d, #1f3d2a);
+}
+
+.detail-panel {
+  position: fixed; top: 76px; right: 18px; z-index: 800;
+  width: 360px; max-height: calc(100vh - 100px);
+  background: var(--paper);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column;
+  transform: translateX(calc(100% + 36px));
+  transition: transform .35s cubic-bezier(.16,1,.3,1);
+  overflow: hidden;
+}
+.detail-panel.open { transform: translateX(0); }
+.detail-head {
+  padding: 18px 22px 16px;
+  border-bottom: 1px solid var(--ink-300);
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+}
+.detail-badge {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  letter-spacing: .12em; color: var(--blue-700);
+  background: #e8f0fa; padding: 4px 10px; border-radius: 999px;
+  font-family: var(--font-en);
+}
+.detail-badge.peak { color: var(--earth-600); background: #faeede; }
+.detail-title { margin: 8px 0 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--green-900); }
+.detail-close {
+  border: none; background: none; cursor: pointer; font-size: 24px; line-height: 1;
+  color: var(--ink-500); padding: 0 4px;
+}
+.detail-close:hover { color: var(--green-900); }
+.detail-body { flex: 1; overflow-y: auto; padding: 18px 22px 22px; }
+
+.score-card {
+  background: linear-gradient(180deg, var(--paper), var(--green-100));
+  border-left: 4px solid var(--green-700);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.score-card .total {
+  font-family: var(--font-display); font-weight: 900; font-size: 42px;
+  color: var(--green-700); line-height: 1;
+}
+.score-card .total .unit { font-size: 18px; color: var(--ink-500); font-weight: 400; margin-left: 4px; }
+.score-card .label { font-size: 11px; color: var(--ink-500); letter-spacing: .12em; font-family: var(--font-en); }
+
+.score-bars { display: grid; gap: 10px; margin-top: 14px; }
+.score-bar-row { display: grid; grid-template-columns: 90px 1fr 40px; align-items: center; gap: 10px; font-size: 12px; }
+.score-bar-row .name { color: var(--ink-700); }
+.score-bar-row .num { text-align: right; font-family: var(--font-mono); color: var(--ink-700); }
+.score-bar-row .bar {
+  height: 8px; border-radius: 999px;
+  background: var(--ink-300); overflow: hidden;
+}
+.score-bar-row .bar > .fill { height: 100%; background: var(--green-500); border-radius: 999px; }
+.score-bar-row.co2 .bar > .fill { background: var(--green-700); }
+.score-bar-row.water .bar > .fill { background: var(--blue-700); }
+.score-bar-row.bio .bar > .fill { background: var(--earth-500); }
+
+.detail-section { margin: 16px 0; padding-top: 14px; border-top: 1px dashed var(--ink-300); }
+.detail-section:first-child { padding-top: 0; border-top: none; }
+.detail-section h4 {
+  margin: 0 0 8px; font-family: var(--font-display);
+  font-size: 11px; font-weight: 700; letter-spacing: .12em;
+  color: var(--green-700);
+}
+.detail-section dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; font-size: 13px; }
+.detail-section dt { color: var(--ink-500); font-weight: 500; }
+.detail-section dd { margin: 0; color: var(--ink-900); font-family: var(--font-mono); }
+
+.peak-list { list-style: none; padding: 0; margin: 0; }
+.peak-list li {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; border-bottom: 1px solid var(--ink-300);
+  font-size: 13px; cursor: pointer;
+  transition: background .12s;
+}
+.peak-list li:hover { background: var(--cream); }
+.peak-list li:last-child { border-bottom: none; }
+.peak-list .pn { font-weight: 600; color: var(--green-900); }
+.peak-list .pm { font-family: var(--font-mono); font-size: 11px; color: var(--ink-500); }
+.peak-list .ps { font-family: var(--font-mono); font-size: 11px; color: var(--green-700); font-weight: 600; }
+
+.bottom-bar {
+  position: fixed; bottom: 8px; left: 18px; z-index: 700;
+  font-size: 10px; color: var(--ink-500);
+  background: rgba(255,255,255,.84);
+  padding: 4px 10px; border-radius: 999px;
+  font-family: var(--font-mono);
+  max-width: 80vw;
+}
+.bottom-bar a { color: var(--ink-700); text-decoration: underline dotted; }
+
+@media (max-width: 720px) {
+  .fly-left { width: calc(100vw - 36px); max-height: 40vh; }
+  .detail-panel { width: calc(100vw - 36px); top: auto; bottom: 18px; right: 18px; left: 18px; max-height: 60vh; }
+  .detail-panel { transform: translateY(calc(100% + 36px)); }
+  .detail-panel.open { transform: translateY(0); }
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body>
+
+<div id="topbar">
+  <a href="/" style="text-decoration:none;">
+    <div class="brand">
+      <div class="brand-logo">森</div>
+      <div class="brand-name">もりみえる<small>流域マップ</small></div>
+    </div>
+  </a>
+  <a href="map.html" class="nav-link">📊 データマップ</a>
+  <a href="reports.html" class="nav-link">📑 レポート</a>
+  <a href="/" class="nav-link">← TOP</a>
+</div>
+
+<aside class="fly-left">
+  <h2>🌊 流域 × 山 × 森の価値</h2>
+  <p class="sub">日本全国 <strong>7,941</strong> の流域と <strong>13,611</strong> の山頂を、森の公益機能スコア（CO₂・水・生物多様性）と一緒に見られる地図。</p>
+
+  <div class="layer-group">
+    <h3>主役レイヤー</h3>
+    <label class="layer-row"><input type="checkbox" id="ly-watersheds" checked><span>流域 公益機能スコア</span></label>
+    <label class="layer-row"><input type="checkbox" id="ly-peaks" checked><span>山頂（標高でフィルタ）</span></label>
+    <div class="score-gradient" style="margin-top:8px;"></div>
+    <div class="score-legend"><span>0</span><span>50</span><span>100</span></div>
+    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">流域の色 = 公益機能スコア（0–100）</p>
+  </div>
+
+  <div class="layer-group">
+    <h3>地形・標高</h3>
+    <label class="layer-row"><input type="checkbox" id="ly-terrain" checked><span>3D 地形</span></label>
+    <label class="layer-row"><input type="checkbox" id="ly-hillshade" checked><span>陰影起伏</span></label>
+    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">出典：国土地理院 標高タイル</p>
+  </div>
+
+  <div class="layer-group">
+    <h3>ハザードマップ</h3>
+    <label class="layer-row"><input type="checkbox" id="ly-flood"><span>洪水浸水想定（想定最大規模）</span></label>
+    <label class="layer-row"><input type="checkbox" id="ly-doseki"><span>土砂災害警戒区域</span></label>
+    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">出典：国交省ハザードマップポータル</p>
+  </div>
+
+  <div class="layer-group">
+    <h3>使い方</h3>
+    <p style="font-size:11.5px;color:var(--ink-700);line-height:1.85;margin:0;">
+      🖱️ <strong>流域をクリック</strong> → スコア・含む山頂が表示<br>
+      ⛰️ <strong>山頂をクリック</strong> → その山を含む流域へフォーカス<br>
+      🖐️ <strong>右ドラッグ</strong>で視点回転、<strong>ホイール</strong>で拡大
+    </p>
+  </div>
+</aside>
+
+<div id="map"></div>
+
+<aside class="detail-panel" id="detail-panel">
+  <div class="detail-head">
+    <div>
+      <span class="detail-badge" id="dp-badge">情報</span>
+      <h3 class="detail-title" id="dp-title">地図上の要素をクリック</h3>
+    </div>
+    <button class="detail-close" onclick="closeDetail()">×</button>
+  </div>
+  <div class="detail-body" id="dp-body"></div>
+</aside>
+
+<div class="bottom-bar">
+  © もりみえる / Tiles: <a href="https://maps.gsi.go.jp/" target="_blank">国土地理院</a> ／ Basins: HydroBASINS ／ Peaks: <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script>
+// ====== MapLibre 3D map ======
+const map = new maplibregl.Map({
+  container: 'map',
+  hash: true,
+  center: [137.7, 36.5],
+  zoom: 5.4,
+  pitch: 55,
+  bearing: -10,
+  maxPitch: 75,
+  style: {
+    version: 8,
+    glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+    sources: {
+      gsi: {
+        type: 'raster',
+        tiles: ['https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png'],
+        tileSize: 256,
+        attribution: '© 国土地理院 淡色地図',
+        maxzoom: 18,
+      },
+      gsiRelief: {
+        type: 'raster',
+        tiles: ['https://cyberjapandata.gsi.go.jp/xyz/hillshademap/{z}/{x}/{y}.png'],
+        tileSize: 256,
+        attribution: '© 国土地理院 陰影起伏図',
+        maxzoom: 16,
+      },
+      gsiDem: {
+        type: 'raster-dem',
+        // GSI dem_png: height = (R*65536 + G*256 + B) * 0.01
+        // MapLibre custom encoding maps that linearly.
+        tiles: ['https://cyberjapandata.gsi.go.jp/xyz/dem_png/{z}/{x}/{y}.png'],
+        tileSize: 256,
+        maxzoom: 14,
+        encoding: 'custom',
+        redFactor: 655.36,
+        greenFactor: 2.56,
+        blueFactor: 0.01,
+        baseShift: 0,
+        attribution: '© 国土地理院 DEM',
+      },
+    },
+    layers: [
+      { id: 'gsi-base', type: 'raster', source: 'gsi' },
+      { id: 'gsi-hillshade', type: 'raster', source: 'gsiRelief', paint: { 'raster-opacity': 0.55 } },
+    ],
+    terrain: { source: 'gsiDem', exaggeration: 1.4 },
+    sky: { 'sky-color': '#cfd9e8', 'horizon-color': '#f2efe5', 'fog-color': '#e8e3d0', 'fog-ground-blend': 0.6 },
+  },
+});
+map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
+map.addControl(new maplibregl.ScaleControl({ maxWidth: 120, unit: 'metric' }), 'bottom-right');
+
+let watershedsGJ = null;
+let peaksGJ = null;
+let selectedHybas = null;
+
+function scoreToColor(score) {
+  // Quantile-ish ramp (mean 26, top 80+ = 1.4%):
+  // 0–10 sand → 10–25 light yellow-green → 25–45 sage → 45–65 mid green → 65–80 deep green → 80+ forest
+  if (score < 10) return '#f4ecd5';
+  if (score < 25) return '#dfe3a8';
+  if (score < 45) return '#a7c498';
+  if (score < 65) return '#5a8a3a';
+  if (score < 80) return '#2d5a3d';
+  return '#1f3d2a';
+}
+
+map.on('load', async () => {
+  // ----- watersheds -----
+  watershedsGJ = await fetch('data/watersheds/japan_lev10_scored.geojson').then(r => r.json());
+  for (const f of watershedsGJ.features) {
+    f.properties._fill = scoreToColor(f.properties.scores.total);
+  }
+  map.addSource('watersheds', { type: 'geojson', data: watershedsGJ, promoteId: 'hybas_id' });
+  map.addLayer({
+    id: 'watershed-fill',
+    type: 'fill',
+    source: 'watersheds',
+    paint: {
+      'fill-color': ['get', '_fill'],
+      'fill-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 0.85, 0.55],
+    },
+  });
+  map.addLayer({
+    id: 'watershed-line',
+    type: 'line',
+    source: 'watersheds',
+    paint: {
+      'line-color': ['case', ['boolean', ['feature-state', 'selected'], false], '#1f3d2a', '#ffffff'],
+      'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 0.5],
+      'line-opacity': 0.85,
+    },
+  });
+
+  // ----- peaks -----
+  peaksGJ = await fetch('data/mountains/japan_peaks.geojson').then(r => r.json());
+  // Filter peaks for client perf — keep all but rely on zoom expression for visibility
+  map.addSource('peaks', { type: 'geojson', data: peaksGJ });
+  map.addLayer({
+    id: 'peak-symbol',
+    type: 'circle',
+    source: 'peaks',
+    paint: {
+      'circle-radius': [
+        'interpolate', ['linear'], ['zoom'],
+        5, 1.6,
+        9, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 0, 1.5, 3000, 5],
+        13, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 0, 2.5, 3000, 8],
+      ],
+      'circle-color': '#c47a4a',
+      'circle-stroke-color': '#fff',
+      'circle-stroke-width': 1,
+      'circle-opacity': [
+        'interpolate', ['linear'], ['zoom'],
+        5, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2000], 0.95, 0],
+        7, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1500], 0.92, 0],
+        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1000], 0.9, 0],
+        11, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 500], 0.88, 0],
+        13, 0.92,
+      ],
+    },
+  });
+  map.addLayer({
+    id: 'peak-label',
+    type: 'symbol',
+    source: 'peaks',
+    minzoom: 9,
+    layout: {
+      'text-field': ['get', 'name'],
+      'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+      'text-size': 11,
+      'text-offset': [0.8, 0],
+      'text-anchor': 'left',
+      'text-optional': true,
+      'text-allow-overlap': false,
+    },
+    paint: {
+      'text-color': '#1f3d2a',
+      'text-halo-color': '#ffffff',
+      'text-halo-width': 1.2,
+      'text-opacity': [
+        'interpolate', ['linear'], ['zoom'],
+        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1500], 0.9, 0],
+        12, 0.95,
+      ],
+    },
+  });
+
+  // ----- hazard tiles -----
+  map.addSource('haz-flood', {
+    type: 'raster',
+    tiles: ['https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png'],
+    tileSize: 256,
+    maxzoom: 17,
+    attribution: '洪水浸水想定区域：© 国交省 ハザードマップポータル',
+  });
+  map.addLayer({
+    id: 'haz-flood-layer', type: 'raster', source: 'haz-flood',
+    paint: { 'raster-opacity': 0.5 },
+    layout: { visibility: 'none' },
+  });
+  map.addSource('haz-doseki', {
+    type: 'raster',
+    tiles: ['https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png'],
+    tileSize: 256,
+    maxzoom: 17,
+    attribution: '土砂災害警戒区域：© 国交省 ハザードマップポータル',
+  });
+  map.addLayer({
+    id: 'haz-doseki-layer', type: 'raster', source: 'haz-doseki',
+    paint: { 'raster-opacity': 0.55 },
+    layout: { visibility: 'none' },
+  });
+
+  // ----- interactions -----
+  map.on('click', 'watershed-fill', (e) => {
+    const f = e.features[0];
+    showWatershedDetail(f);
+    setSelectedHybas(f.properties.hybas_id);
+    e.preventDefault?.();
+  });
+  map.on('click', 'peak-symbol', (e) => {
+    if (e.originalEvent.defaultPrevented) return;
+    const f = e.features[0];
+    showPeakDetail(f);
+    e.preventDefault?.();
+  });
+  map.on('click', (e) => {
+    // empty-area click closes panel
+    const feats = map.queryRenderedFeatures(e.point, { layers: ['watershed-fill', 'peak-symbol'] });
+    if (feats.length === 0) {
+      closeDetail();
+      setSelectedHybas(null);
+    }
+  });
+  map.on('mouseenter', 'watershed-fill', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave', 'watershed-fill', () => map.getCanvas().style.cursor = '');
+  map.on('mouseenter', 'peak-symbol', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave', 'peak-symbol', () => map.getCanvas().style.cursor = '');
+});
+
+function setSelectedHybas(id) {
+  if (selectedHybas !== null && selectedHybas !== id) {
+    map.setFeatureState({ source: 'watersheds', id: selectedHybas }, { selected: false });
+  }
+  selectedHybas = id;
+  if (id !== null) {
+    map.setFeatureState({ source: 'watersheds', id }, { selected: true });
+  }
+}
+
+function showWatershedDetail(feature) {
+  const p = feature.properties;
+  // properties may be stringified by MapLibre
+  const scores = typeof p.scores === 'string' ? JSON.parse(p.scores) : p.scores;
+  const top_peaks = typeof p.top_peaks === 'string' ? JSON.parse(p.top_peaks) : (p.top_peaks || []);
+  const bid = p.hybas_id;
+  const peakRows = top_peaks.map(pk => `
+    <li onclick="flyToPeak(${pk.lon},${pk.lat},'${pk.name.replace(/'/g, "\\'")}')">
+      <span class="pn">${pk.name}</span>
+      <span class="pm">${pk.elevation_m ? pk.elevation_m + 'm' : ''}</span>
+      <span class="ps">★${pk.score}</span>
+    </li>
+  `).join('');
+  document.getElementById('dp-badge').textContent = '流域';
+  document.getElementById('dp-badge').className = 'detail-badge';
+  document.getElementById('dp-title').textContent = `${p.main_pref_name || '?'} 流域（${p.hybas_id}）`;
+  document.getElementById('dp-body').innerHTML = `
+    <div class="score-card">
+      <p class="label">PUBLIC GOOD SCORE</p>
+      <p class="total">${scores.total}<span class="unit">/100</span></p>
+      <div class="score-bars">
+        <div class="score-bar-row co2"><span class="name">CO₂ 吸収</span><span class="bar"><span class="fill" style="width:${scores.co2}%"></span></span><span class="num">${scores.co2}</span></div>
+        <div class="score-bar-row water"><span class="name">水源涵養</span><span class="bar"><span class="fill" style="width:${scores.water}%"></span></span><span class="num">${scores.water}</span></div>
+        <div class="score-bar-row bio"><span class="name">生物多様性</span><span class="bar"><span class="fill" style="width:${scores.bio}%"></span></span><span class="num">${scores.bio}</span></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h4>流域の基本情報</h4>
+      <dl>
+        <dt>主要県</dt><dd>${p.main_pref_name || '-'}</dd>
+        <dt>面積</dt><dd>${p.area_sqkm} km²</dd>
+        <dt>上流面積</dt><dd>${p.up_area_sqkm?.toLocaleString() || '-'} km²</dd>
+        <dt>森林率</dt><dd>${Math.round(p.forest_pct * 100)}%</dd>
+        <dt>CO₂/ha/年</dt><dd>${p.co2_per_ha_yr} t</dd>
+        <dt>自然公園 重複</dt><dd>${p.park_overlap_pct}%</dd>
+        <dt>山頂数</dt><dd>${p.peak_count} 座</dd>
+        <dt>最高点</dt><dd>${p.max_elev_m ? p.max_elev_m + ' m' : '-'}</dd>
+      </dl>
+    </div>
+    ${peakRows ? `<div class="detail-section">
+      <h4>含む山頂（スコア上位）</h4>
+      <ul class="peak-list">${peakRows}</ul>
+    </div>` : ''}
+    <div class="detail-section">
+      <h4>下流・上流</h4>
+      <dl>
+        <dt>下流流域 ID</dt><dd>${p.next_down || '海/沈降地'}</dd>
+        <dt>最終排出</dt><dd>${p.next_sink || '-'}</dd>
+        <dt>Pfafstetter</dt><dd>${p.pfaf_id}</dd>
+      </dl>
+      ${p.next_down ? `<button onclick="focusBasin(${p.next_down})" style="margin-top:8px;padding:6px 12px;border:1px solid var(--ink-300);background:var(--cream);border-radius:8px;font-size:12px;cursor:pointer;">↓ 下流流域へ</button>` : ''}
+    </div>
+  `;
+  openDetail();
+}
+
+function showPeakDetail(feature) {
+  const p = feature.properties;
+  const scores = typeof p.scores === 'string' ? JSON.parse(p.scores) : p.scores;
+  document.getElementById('dp-badge').textContent = '山頂';
+  document.getElementById('dp-badge').className = 'detail-badge peak';
+  document.getElementById('dp-title').textContent = `${p.name}${p.elevation_m ? `（${p.elevation_m}m）` : ''}`;
+  document.getElementById('dp-body').innerHTML = `
+    <div class="score-card">
+      <p class="label">PUBLIC GOOD SCORE</p>
+      <p class="total">${scores.total}<span class="unit">/100</span></p>
+      <div class="score-bars">
+        <div class="score-bar-row co2"><span class="name">CO₂ 吸収</span><span class="bar"><span class="fill" style="width:${scores.co2}%"></span></span><span class="num">${scores.co2}</span></div>
+        <div class="score-bar-row water"><span class="name">水源涵養</span><span class="bar"><span class="fill" style="width:${scores.water}%"></span></span><span class="num">${scores.water}</span></div>
+        <div class="score-bar-row bio"><span class="name">生物多様性</span><span class="bar"><span class="fill" style="width:${scores.bio}%"></span></span><span class="num">${scores.bio}</span></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h4>山の基本情報</h4>
+      <dl>
+        <dt>所在</dt><dd>${p.pref_name || '-'}</dd>
+        <dt>標高</dt><dd>${p.elevation_m || '-'} m</dd>
+        ${p.name_en ? `<dt>英語名</dt><dd>${p.name_en}</dd>` : ''}
+        ${p.in_park ? `<dt>保護区</dt><dd>${p.in_park}内</dd>` : ''}
+        ${p.nearby_park ? `<dt>近隣保護区</dt><dd>${p.nearby_park}（${p.park_distance_km}km）</dd>` : ''}
+        <dt>森林率</dt><dd>${Math.round(p.forest_pct * 100)}%</dd>
+      </dl>
+    </div>
+    <div class="detail-section">
+      <h4>含む流域へ</h4>
+      <p style="font-size:12px;color:var(--ink-700);margin:0 0 8px;">この山頂が含まれる流域を地図上でフォーカスします。</p>
+      <button onclick="focusWatershedAt(${feature.geometry.coordinates[0]},${feature.geometry.coordinates[1]})" style="padding:8px 14px;border:1px solid var(--green-700);background:var(--green-100);color:var(--green-900);border-radius:8px;font-size:12px;cursor:pointer;font-weight:600;">🌊 含む流域を表示</button>
+    </div>
+    ${p.wikipedia ? `<div class="detail-section"><a href="https://${p.wikipedia.split(':')[0]}.wikipedia.org/wiki/${encodeURIComponent(p.wikipedia.split(':').slice(1).join(':'))}" target="_blank" style="font-size:13px;">Wikipedia で見る →</a></div>` : ''}
+  `;
+  openDetail();
+  // Fly to with appropriate framing
+  map.easeTo({ center: feature.geometry.coordinates, zoom: Math.max(map.getZoom(), 10), pitch: 60, duration: 1200 });
+}
+
+function flyToPeak(lon, lat, name) {
+  map.easeTo({ center: [lon, lat], zoom: 11, pitch: 60, duration: 1500 });
+  // After fly, try to open peak detail
+  setTimeout(() => {
+    const pt = map.project([lon, lat]);
+    const feats = map.queryRenderedFeatures(pt, { layers: ['peak-symbol'] });
+    if (feats.length) showPeakDetail(feats[0]);
+  }, 1600);
+}
+
+function focusBasin(hybas_id) {
+  if (!watershedsGJ) return;
+  const target = watershedsGJ.features.find(f => f.properties.hybas_id === hybas_id);
+  if (!target) return;
+  const b = turfBbox(target);
+  map.fitBounds([[b[0], b[1]], [b[2], b[3]]], { padding: 80, pitch: 50, duration: 1500 });
+  setSelectedHybas(hybas_id);
+  showWatershedDetail({ properties: target.properties });
+}
+
+function focusWatershedAt(lon, lat) {
+  if (!watershedsGJ) return;
+  // Find a watershed containing this point (point-in-polygon)
+  for (const f of watershedsGJ.features) {
+    if (pointInGeom([lon, lat], f.geometry)) {
+      const b = turfBbox(f);
+      map.fitBounds([[b[0], b[1]], [b[2], b[3]]], { padding: 80, pitch: 50, duration: 1500 });
+      setSelectedHybas(f.properties.hybas_id);
+      setTimeout(() => showWatershedDetail({ properties: f.properties }), 200);
+      return;
+    }
+  }
+}
+
+// Light-weight ray-casting point-in-polygon (handles Polygon + MultiPolygon)
+function pointInGeom(pt, geom) {
+  if (geom.type === 'Polygon') return pointInRings(pt, geom.coordinates);
+  if (geom.type === 'MultiPolygon') return geom.coordinates.some(rings => pointInRings(pt, rings));
+  return false;
+}
+function pointInRings(pt, rings) {
+  let inside = pointInRing(pt, rings[0]);
+  for (let i = 1; i < rings.length; i++) {
+    if (pointInRing(pt, rings[i])) inside = !inside; // holes
+  }
+  return inside;
+}
+function pointInRing(pt, ring) {
+  const [x, y] = pt;
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    const cross = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi + 1e-12) + xi);
+    if (cross) inside = !inside;
+  }
+  return inside;
+}
+function turfBbox(feature) {
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  function ringBbox(ring) {
+    for (const [x, y] of ring) {
+      if (x < minX) minX = x;
+      if (y < minY) minY = y;
+      if (x > maxX) maxX = x;
+      if (y > maxY) maxY = y;
+    }
+  }
+  const g = feature.geometry;
+  if (g.type === 'Polygon') g.coordinates.forEach(ringBbox);
+  else if (g.type === 'MultiPolygon') g.coordinates.forEach(p => p.forEach(ringBbox));
+  return [minX, minY, maxX, maxY];
+}
+
+function openDetail() { document.getElementById('detail-panel').classList.add('open'); }
+function closeDetail() { document.getElementById('detail-panel').classList.remove('open'); }
+window.closeDetail = closeDetail;
+window.flyToPeak = flyToPeak;
+window.focusBasin = focusBasin;
+window.focusWatershedAt = focusWatershedAt;
+
+// ----- toggles -----
+function bindVisToggle(checkboxId, ...layerIds) {
+  document.getElementById(checkboxId).addEventListener('change', e => {
+    const vis = e.target.checked ? 'visible' : 'none';
+    for (const lid of layerIds) {
+      if (map.getLayer(lid)) map.setLayoutProperty(lid, 'visibility', vis);
+    }
+  });
+}
+map.on('load', () => {
+  bindVisToggle('ly-watersheds', 'watershed-fill', 'watershed-line');
+  bindVisToggle('ly-peaks', 'peak-symbol', 'peak-label');
+  bindVisToggle('ly-hillshade', 'gsi-hillshade');
+  bindVisToggle('ly-flood', 'haz-flood-layer');
+  bindVisToggle('ly-doseki', 'haz-doseki-layer');
+  document.getElementById('ly-terrain').addEventListener('change', e => {
+    map.setTerrain(e.target.checked ? { source: 'gsiDem', exaggeration: 1.4 } : null);
+  });
+});
+</script>
+</body>
+</html>
