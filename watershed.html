@@ -246,10 +246,9 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
   </div>
 
   <div class="layer-group">
-    <h3>地形・標高</h3>
-    <label class="layer-row"><input type="checkbox" id="ly-terrain" checked><span>3D 地形</span></label>
+    <h3>地形</h3>
     <label class="layer-row"><input type="checkbox" id="ly-hillshade" checked><span>陰影起伏</span></label>
-    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">出典：国土地理院 標高タイル</p>
+    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">出典：国土地理院 陰影起伏図</p>
   </div>
 
   <div class="layer-group">
@@ -294,9 +293,9 @@ const map = new maplibregl.Map({
   hash: true,
   center: [137.7, 36.5],
   zoom: 5.4,
-  pitch: 55,
-  bearing: -10,
-  maxPitch: 75,
+  pitch: 0,
+  bearing: 0,
+  maxPitch: 60,
   style: {
     version: 8,
     glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
@@ -315,27 +314,11 @@ const map = new maplibregl.Map({
         attribution: '© 国土地理院 陰影起伏図',
         maxzoom: 16,
       },
-      gsiDem: {
-        type: 'raster-dem',
-        // GSI dem_png: height = (R*65536 + G*256 + B) * 0.01
-        // MapLibre custom encoding maps that linearly.
-        tiles: ['https://cyberjapandata.gsi.go.jp/xyz/dem_png/{z}/{x}/{y}.png'],
-        tileSize: 256,
-        maxzoom: 14,
-        encoding: 'custom',
-        redFactor: 655.36,
-        greenFactor: 2.56,
-        blueFactor: 0.01,
-        baseShift: 0,
-        attribution: '© 国土地理院 DEM',
-      },
     },
     layers: [
       { id: 'gsi-base', type: 'raster', source: 'gsi' },
-      { id: 'gsi-hillshade', type: 'raster', source: 'gsiRelief', paint: { 'raster-opacity': 0.55 } },
+      { id: 'gsi-hillshade', type: 'raster', source: 'gsiRelief', paint: { 'raster-opacity': 0.28 } },
     ],
-    terrain: { source: 'gsiDem', exaggeration: 1.4 },
-    sky: { 'sky-color': '#cfd9e8', 'horizon-color': '#f2efe5', 'fog-color': '#e8e3d0', 'fog-ground-blend': 0.6 },
   },
 });
 map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
@@ -369,7 +352,7 @@ map.on('load', async () => {
     source: 'watersheds',
     paint: {
       'fill-color': ['get', '_fill'],
-      'fill-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 0.85, 0.55],
+      'fill-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 0.78, 0.42],
     },
   });
   map.addLayer({
@@ -377,9 +360,9 @@ map.on('load', async () => {
     type: 'line',
     source: 'watersheds',
     paint: {
-      'line-color': ['case', ['boolean', ['feature-state', 'selected'], false], '#1f3d2a', '#ffffff'],
-      'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 0.5],
-      'line-opacity': 0.85,
+      'line-color': ['case', ['boolean', ['feature-state', 'selected'], false], '#1f3d2a', 'rgba(255,255,255,0.5)'],
+      'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 0.4],
+      'line-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 1, 0.6],
     },
   });
 
@@ -394,20 +377,21 @@ map.on('load', async () => {
     paint: {
       'circle-radius': [
         'interpolate', ['linear'], ['zoom'],
-        5, 1.6,
-        9, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 0, 1.5, 3000, 5],
-        13, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 0, 2.5, 3000, 8],
+        5, 2.4,
+        9, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 0, 1.8, 3000, 5],
+        13, ['interpolate', ['linear'], ['coalesce', ['get', 'elevation_m'], 0], 0, 2.5, 3000, 7],
       ],
       'circle-color': '#c47a4a',
       'circle-stroke-color': '#fff',
-      'circle-stroke-width': 1,
+      'circle-stroke-width': 1.2,
       'circle-opacity': [
         'interpolate', ['linear'], ['zoom'],
-        5, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2000], 0.95, 0],
-        7, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1500], 0.92, 0],
-        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1000], 0.9, 0],
-        11, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 500], 0.88, 0],
-        13, 0.92,
+        5, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2500], 0.95, 0],
+        7, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 2000], 0.92, 0],
+        9, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 1400], 0.9, 0],
+        11, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 800], 0.88, 0],
+        13, ['case', ['>', ['coalesce', ['get', 'elevation_m'], 0], 400], 0.9, 0],
+        15, 0.92,
       ],
     },
   });
@@ -691,9 +675,6 @@ map.on('load', () => {
   bindVisToggle('ly-hillshade', 'gsi-hillshade');
   bindVisToggle('ly-flood', 'haz-flood-layer');
   bindVisToggle('ly-doseki', 'haz-doseki-layer');
-  document.getElementById('ly-terrain').addEventListener('change', e => {
-    map.setTerrain(e.target.checked ? { source: 'gsiDem', exaggeration: 1.4 } : null);
-  });
 });
 </script>
 </body>
