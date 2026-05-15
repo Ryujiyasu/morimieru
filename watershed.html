@@ -300,10 +300,10 @@ if (!mapboxgl.accessToken) {
 const map = new mapboxgl.Map({
   container: 'map',
   hash: true,
-  center: [137.7, 36.5],
-  zoom: 5.4,
-  pitch: 55,
-  bearing: -10,
+  center: [138.73, 35.36],     // 富士山ほぼ真上
+  zoom: 11.2,
+  pitch: 62,
+  bearing: -22,
   maxPitch: 80,
   style: 'mapbox://styles/mapbox/outdoors-v12',
   projection: 'mercator',
@@ -358,7 +358,9 @@ map.on('load', async () => {
   // ----- watersheds -----
   watershedsGJ = await fetch('data/watersheds/japan_lev10_scored.geojson').then(r => r.json());
   for (const f of watershedsGJ.features) {
-    f.properties._fill = scoreToColor(f.properties.scores.total);
+    const s = f.properties.scores.total;
+    f.properties._fill = scoreToColor(s);
+    f.properties._height = Math.max(200, s * 60);  // 0–100 → 200–6000m 浮き上がり
   }
   map.addSource('watersheds', { type: 'geojson', data: watershedsGJ, promoteId: 'hybas_id' });
   // Fill is INVISIBLE by default — only the clicked basin lights up.
@@ -383,6 +385,27 @@ map.on('load', async () => {
       'line-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 1, 0.5],
     },
   });
+
+  // 3D 押し出し — クリックされた流域だけがスコアに応じて浮き上がる。
+  map.addLayer({
+    id: 'watershed-extrusion',
+    type: 'fill-extrusion',
+    source: 'watersheds',
+    paint: {
+      'fill-extrusion-color': ['get', '_fill'],
+      'fill-extrusion-base': 0,
+      'fill-extrusion-height': [
+        'case',
+        ['boolean', ['feature-state', 'selected'], false],
+        ['get', '_height'],
+        0,
+      ],
+      'fill-extrusion-opacity': 0.78,
+      'fill-extrusion-vertical-gradient': true,
+    },
+  });
+  // ニョキッと立ち上がるアニメ用 transition
+  map.setPaintProperty('watershed-extrusion', 'fill-extrusion-height-transition', { duration: 750, delay: 0 });
 
   // ----- peaks -----
   peaksGJ = await fetch('data/mountains/japan_peaks.geojson').then(r => r.json());
