@@ -242,7 +242,7 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
     <label class="layer-row"><input type="checkbox" id="ly-peaks" checked><span>山頂（標高でフィルタ）</span></label>
     <div class="score-gradient" style="margin-top:8px;"></div>
     <div class="score-legend"><span>0</span><span>50</span><span>100</span></div>
-    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">流域の色 = 公益機能スコア（0–100）</p>
+    <p style="font-size:10.5px;color:var(--ink-500);margin:6px 0 0;">流域の<strong>線色</strong> = 公益機能スコア。クリックで塗り＋詳細。</p>
   </div>
 
   <div class="layer-group">
@@ -361,23 +361,26 @@ map.on('load', async () => {
     f.properties._fill = scoreToColor(f.properties.scores.total);
   }
   map.addSource('watersheds', { type: 'geojson', data: watershedsGJ, promoteId: 'hybas_id' });
+  // Fill is INVISIBLE by default — only the clicked basin lights up.
+  // This lets the 3D terrain breathe through and makes basin reveal feel intentional.
   map.addLayer({
     id: 'watershed-fill',
     type: 'fill',
     source: 'watersheds',
     paint: {
       'fill-color': ['get', '_fill'],
-      'fill-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 0.78, 0.42],
+      'fill-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 0.55, 0],
     },
   });
+  // Subtle colored outlines — color by score (so the "value map" is still readable).
   map.addLayer({
     id: 'watershed-line',
     type: 'line',
     source: 'watersheds',
     paint: {
-      'line-color': ['case', ['boolean', ['feature-state', 'selected'], false], '#1f3d2a', 'rgba(255,255,255,0.5)'],
-      'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 0.4],
-      'line-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 1, 0.6],
+      'line-color': ['case', ['boolean', ['feature-state', 'selected'], false], '#ffffff', ['get', '_fill']],
+      'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 2.8, 0.6],
+      'line-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 1, 0.5],
     },
   });
 
