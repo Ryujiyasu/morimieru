@@ -323,7 +323,7 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 </aside>
 
 <div class="bottom-bar">
-  © もりみえる / Map &amp; terrain: <a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a> ／ Basins: HydroBASINS ／ Peaks: <a href="https://www.openstreetmap.org/copyright" target="_blank">OSM contributors</a> ／ Hazards: 国交省ハザードマップポータル
+  © もりみえる / Map &amp; terrain: <a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OSM</a> ／ Basins: HydroBASINS ／ Peaks: OSM ／ Rivers: <a href="https://www.gsi.go.jp/" target="_blank">© 国土地理院</a> ／ Hazards: 国交省ハザードマップポータル
 </div>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
@@ -404,6 +404,31 @@ map.on('load', async () => {
       map.setPaintProperty(id, 'line-opacity', 0.9);
     }
   }
+
+  // 国土地理院 最適化ベクトルタイル（RvrCL = 河川中心線）を細密な水脈レイヤーとして追加。
+  // 国土地理院コンテンツ利用規約：出典明示で利用可。zoom 4-16 提供。
+  map.addSource('gsi-bvmap', {
+    type: 'vector',
+    tiles: ['https://cyberjapandata.gsi.go.jp/xyz/optimal_bvmap-v1/{z}/{x}/{y}.pbf'],
+    minzoom: 4,
+    maxzoom: 16,
+    attribution: '河川中心線：© 国土地理院 最適化ベクトルタイル',
+  });
+  map.addLayer({
+    id: 'gsi-rivers',
+    type: 'line',
+    source: 'gsi-bvmap',
+    'source-layer': 'RvrCL',
+    minzoom: 8,
+    paint: {
+      'line-color': '#5bc4e8',
+      'line-opacity': 0.85,
+      'line-width': [
+        'interpolate', ['linear'], ['zoom'],
+        8, 0.3, 11, 0.7, 14, 1.6, 16, 2.4,
+      ],
+    },
+  });
 
   // ----- watersheds -----
   watershedsGJ = await fetch('data/watersheds/japan_lev10_scored.geojson').then(r => r.json());
@@ -910,7 +935,7 @@ function setLayerVis(lid, on) {
 }
 function applyMode(mode) {
   // 流域・山頂は全モード ON
-  ['watershed-fill','watershed-line','watershed-line-glow','watershed-chain','peak-symbol','peak-mountain','peak-label'].forEach(l => setLayerVis(l, true));
+  ['watershed-fill','watershed-line','watershed-line-glow','watershed-chain','gsi-rivers','peak-symbol','peak-mountain','peak-label'].forEach(l => setLayerVis(l, true));
   // ハザードは ハザード／すべて で ON
   const hazOn = (mode === 'hazard' || mode === 'all');
   setLayerVis('haz-flood-layer', hazOn);
