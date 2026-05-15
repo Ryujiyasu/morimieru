@@ -68,6 +68,45 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 
 #map { position: fixed; top: 56px; left: 0; right: 0; bottom: 0; }
 
+/* 上部中央 選択中ピル — 流域を選ぶと出る軽量フィードバック */
+.selection-pill {
+  position: fixed; top: 72px; left: 50%; transform: translate(-50%, -16px);
+  z-index: 900;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(10px);
+  border-radius: 999px;
+  padding: 5px 6px 5px 5px;
+  box-shadow: 0 6px 24px rgba(31,61,42,0.18);
+  font-family: var(--font-jp);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.selection-pill.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.selection-pill .clear {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: none; background: var(--green-100); color: var(--green-900);
+  font-size: 16px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .12s;
+}
+.selection-pill .clear:hover { background: #d8e8d2; }
+.selection-pill .label {
+  font-size: 11px; color: var(--ink-500);
+  font-family: var(--font-en); letter-spacing: .12em;
+  padding-left: 6px;
+}
+.selection-pill .value {
+  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  color: var(--green-900);
+  padding-right: 14px;
+}
+.selection-pill .badge {
+  font-size: 11px; font-family: var(--font-mono);
+  color: var(--green-700); background: var(--green-100);
+  padding: 3px 9px; border-radius: 999px; margin-right: 6px;
+}
+
 /* 下部中央 モード切替ピル */
 .mode-bar {
   position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
@@ -245,6 +284,13 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
   <a href="map.html" class="nav-link">📊 データマップ</a>
   <a href="reports.html" class="nav-link">📑 レポート</a>
   <a href="/" class="nav-link">← TOP</a>
+</div>
+
+<div class="selection-pill" id="selection-pill">
+  <button class="clear" id="selection-clear" title="選択を解除">×</button>
+  <span class="badge" id="selection-badge">流域</span>
+  <span class="label">SELECTED</span>
+  <span class="value" id="selection-value">—</span>
 </div>
 
 <div class="mini-legend">
@@ -522,11 +568,27 @@ function setSelectedHybas(id) {
   selectedHybas = id;
   if (id !== null) {
     map.setFeatureState({ source: 'watersheds', id }, { selected: true });
+  } else {
+    hideSelectionPill();
   }
+}
+
+function showSelectionPill(props, kind) {
+  const pill = document.getElementById('selection-pill');
+  document.getElementById('selection-badge').textContent = kind === 'peak' ? '山頂' : '流域';
+  const value = kind === 'peak'
+    ? `${props.name}${props.elevation_m ? `（${props.elevation_m}m）` : ''}`
+    : `${props.main_pref_name || '?'} 流域 #${props.hybas_id}`;
+  document.getElementById('selection-value').textContent = value;
+  pill.classList.add('show');
+}
+function hideSelectionPill() {
+  document.getElementById('selection-pill').classList.remove('show');
 }
 
 function showWatershedDetail(feature) {
   const p = feature.properties;
+  showSelectionPill(p, 'watershed');
   // properties may be stringified by MapLibre
   const scores = typeof p.scores === 'string' ? JSON.parse(p.scores) : p.scores;
   const top_peaks = typeof p.top_peaks === 'string' ? JSON.parse(p.top_peaks) : (p.top_peaks || []);
@@ -584,6 +646,7 @@ function showWatershedDetail(feature) {
 function showPeakDetail(feature) {
   const p = feature.properties;
   const scores = typeof p.scores === 'string' ? JSON.parse(p.scores) : p.scores;
+  showSelectionPill(p, 'peak');
   document.getElementById('dp-badge').textContent = '山頂';
   document.getElementById('dp-badge').className = 'detail-badge peak';
   document.getElementById('dp-title').textContent = `${p.name}${p.elevation_m ? `（${p.elevation_m}m）` : ''}`;
@@ -695,8 +758,15 @@ function turfBbox(feature) {
 }
 
 function openDetail() { document.getElementById('detail-panel').classList.add('open'); }
-function closeDetail() { document.getElementById('detail-panel').classList.remove('open'); }
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open');
+  hideSelectionPill();
+  setSelectedHybas(null);
+}
 window.closeDetail = closeDetail;
+document.getElementById('selection-clear').addEventListener('click', () => {
+  closeDetail();
+});
 window.flyToPeak = flyToPeak;
 window.focusBasin = focusBasin;
 window.focusWatershedAt = focusWatershedAt;
