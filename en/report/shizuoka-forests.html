@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shizuoka Prefecture forest public-function report (1,102 stands) | morimieru</title>
+<meta name="description" content="A municipality-by-municipality quantification of forest public functions (water yield + CO2 absorption + bare-ground baseline) across 1,102 stands in Shizuoka Prefecture (161,182 ha), built from the Shizuoka Forest Cloud and the Forestry Agency of Japan simplified evaluation method.">
+<meta name="keywords" content="Shizuoka forest, forest public function, water yield Shizuoka, 1102 stands, municipal forest score, satellite forest, Forestry Agency simplified method">
+<link rel="canonical" href="https://mori-mieru.jp/en/report/shizuoka-forests.html">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/report/shizuoka-forests.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/report/shizuoka-forests.html">
+<meta property="og:title" content="Shizuoka 1,102-stand forest public-function report">
+<meta property="og:description" content="Water yield + CO2 + bare-ground baseline for 1,102 stands across 13 municipalities (161,182 ha).">
+<meta property="og:image" content="https://mori-mieru.jp/assets/report-co2-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/en/report/shizuoka-forests.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report.css">
+<style>
+.report-hero { --bg-image: url('../../assets/report-co2-hero.jpg'); }
+.lang-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; margin-left: 12px; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body class="theme-co2">
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">Shizuoka Prefecture Forest Public Function Report
+      <span class="lang-toggle">
+        <a href="../../report/shizuoka-forests.html" title="日本語">JP</a>
+        <a href="./shizuoka-forests.html" class="active">EN</a>
+      </span>
+    </p>
+    <h1 class="report-title">Shizuoka Prefecture<br>forest public function by municipality</h1>
+    <p class="report-subtitle">
+      Per-stand water yield + CO₂ absorption + bare-ground baseline for
+      1,102 forest stands sourced from Shizuoka's public Forest Cloud system,
+      computed with the Forestry Agency of Japan simplified evaluation method.
+    </p>
+    <dl class="report-meta">
+      <dt>Report issued</dt><dd>2026-05-14</dd>
+      <dt>Coverage</dt><dd>13 municipalities in Shizuoka Prefecture</dd>
+      <dt>Stand count</dt><dd id="hd-stands">1,102</dd>
+      <dt>Total forest area</dt><dd id="hd-area">161,182 ha</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<div class="hero-stat">
+  <p class="label">Forest Effect on Water Yield</p>
+  <p class="number" id="hero-effect">+14<span class="unit">hundred million t/yr</span></p>
+  <p class="compare" id="hero-compare">
+    Bare baseline 390 M t → Current forest 1,800 M t<br>
+    Forest delivers <strong style="color:#fff;">3.7×</strong> the water of bare ground.
+  </p>
+</div>
+
+<h2>1. Prefecture-wide summary</h2>
+
+<div class="kpi-grid">
+  <div class="kpi">
+    <p class="kpi-label">Stands processed</p>
+    <p class="kpi-value" id="kpi-stands">1,102<span class="unit">stands</span></p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">Forest area</p>
+    <p class="kpi-value" id="kpi-area">161,182<span class="unit">ha</span></p>
+  </div>
+  <div class="kpi alt-water">
+    <p class="kpi-label">Water yield</p>
+    <p class="kpi-value" id="kpi-water">1.8<span class="unit">B m³/yr</span></p>
+  </div>
+  <div class="kpi alt-bare">
+    <p class="kpi-label">Bare-ground baseline</p>
+    <p class="kpi-value" id="kpi-bare">0.39<span class="unit">B m³/yr</span></p>
+  </div>
+  <div class="kpi alt-effect">
+    <p class="kpi-label">Forest effect</p>
+    <p class="kpi-value positive" id="kpi-effect">+1.41<span class="unit">B m³/yr</span></p>
+    <p class="kpi-note" id="kpi-effect-note">+366% (≈19.4 M household-equivalents)</p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">CO₂ absorption</p>
+    <p class="kpi-value positive" id="kpi-co2">1.55<span class="unit">M t-CO₂/yr</span></p>
+  </div>
+</div>
+
+<div class="callout success">
+  <strong>What this means:</strong>
+  If the <span id="cl-area">161,182</span> ha of Shizuoka forest in this report were converted
+  to bare ground (clear-cut and unreplanted), annual water yield would drop from
+  <strong><span id="cl-forest">1.8</span> B m³</strong> to <strong><span id="cl-bare">0.39</span> B m³</strong> —
+  a <strong>loss of about <span id="cl-effect">1.41</span> B m³ (≈<span id="cl-households">19.4</span> million
+  household-equivalents)</strong>. The public-good function of keeping these forests intact is
+  exactly this delta, quantified.
+</div>
+
+<h2>2. Per-municipality breakdown</h2>
+
+<p>
+Sorted by forest area. This dataset covers the <strong>Hamamatsu / Kosai forest planning
+zone</strong> (internal codes in Shizuoka's Forest Cloud). We resolve municipality names
+via the GSI Japan reverse-geocoding API.
+</p>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Municipality</th>
+      <th>Stands</th>
+      <th>Forest area (ha)</th>
+      <th>Water yield (m³/yr)</th>
+      <th>Bare baseline (m³/yr)</th>
+      <th>Forest effect</th>
+      <th>CO₂ (t/yr)</th>
+    </tr>
+  </thead>
+  <tbody id="muni-rows"></tbody>
+</table>
+
+<h2>3. Calculation method</h2>
+
+<p>Per stand:</p>
+
+<ul>
+  <li>Stand polygon area (SHAPE_AREA) pulled from Shizuoka Forest Cloud vector tiles</li>
+  <li>Climate (NASA POWER), elevation (GSI Japan), and geology (AIST Seamless Geological Map) sampled at the stand centroid</li>
+  <li>Forestry Agency Simplified Evaluation Method Ver.1.0 applied for water yield (evergreen conifer assumed)</li>
+  <li>Bare-ground baseline: water yield = precipitation × 10% (per the official manual)</li>
+  <li>CO₂ absorption: IPCC AFOLU Tier 2 (9.62 t-CO₂/ha/yr) × stand area</li>
+</ul>
+
+<h2>4. Structural error compression</h2>
+
+<div class="callout warn">
+  <strong>The Forestry Agency simplified method is originally targeted at stands under 100 ha.</strong>
+  We apply it at the stand level (median ≈ 100 ha), which is already a significant accuracy
+  improvement over AOI-wide aggregation. To compress error structurally further:
+  <ul>
+    <li><strong>20 m mesh subdivision</strong> for stands >100 ha (Forestry Agency LiDAR integration: Tochigi, Hyogo, Kochi already public)</li>
+    <li><strong>Replace defaults with measured values</strong> for species, age, and density (cross-reference local forest ledgers)</li>
+    <li><strong>Multi-temporal NDVI consensus</strong> to stabilize the forest mask</li>
+    <li><strong>Integrate AMeDAS</strong> for finer climate resolution (50 km → 17 km, monthly → 10-minute)</li>
+    <li><strong>Move to Tier 3</strong> to compress uncertainty from ±30% to ±10-15%</li>
+  </ul>
+  Each of these is on the implementation roadmap rather than just a disclaimer.
+</div>
+
+<h2>5. Data sources</h2>
+
+<div class="sources">
+  <ul>
+    <li><strong>Stand polygons</strong>: Shizuoka Forest Cloud public system (MAGIS.RINPAN vector tiles)</li>
+    <li><strong>Climate</strong>: NASA POWER monthly API (2020-2024 mean)</li>
+    <li><strong>Elevation</strong>: GSI Japan 5 m DEM API</li>
+    <li><strong>Geology</strong>: AIST Seamless Geological Map v2 API</li>
+    <li><strong>Water-yield formula</strong>: Forestry Agency of Japan "Simplified Evaluation Method for Forest Water Yield" Ver.1.0 (March 2026)</li>
+    <li><strong>CO₂ conversion</strong>: IPCC AFOLU 2006 Tier 2 + Forestry Agency yield-prediction tables</li>
+  </ul>
+</div>
+
+<p class="disclaimer">
+※ This report is a third-party estimate aligned with the Forestry Agency of Japan's official
+formula. It is not an official certification. All numerical values are estimates and do not
+constitute commercial guarantees.
+</p>
+
+<div class="report-footer">
+  <p>© 2026 morimieru | <a href="https://mori-mieru.jp/en/">mori-mieru.jp/en</a></p>
+  <div class="footer-actions">
+    <a href="../" class="btn-back">← Home (EN)</a>
+    <button class="btn-print" onclick="window.print()">🖨️ Save as PDF</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+fetch('../../data/rinpan/shizuoka_rinpan_water.geojson')
+  .then(r => r.json())
+  .then(fc => {
+    const stands = fc.stands;
+    const area = fc.total_area_ha;
+    const water = fc.total_water_yield_m3_per_yr;
+    const bare = fc.total_bare_yield_m3_per_yr;
+    const effect = water - bare;
+    const co2 = fc.total_co2_t_per_yr;
+    const effectPct = bare ? (effect / bare * 100) : 0;
+    const households = Math.round(effect / 73);
+
+    document.getElementById('hd-stands').textContent = stands.toLocaleString();
+    document.getElementById('hd-area').textContent = `${area.toLocaleString()} ha`;
+    document.getElementById('hero-effect').innerHTML = `+${(effect/1e8).toFixed(1)}<span class="unit">hundred million t/yr</span>`;
+    document.getElementById('hero-compare').innerHTML =
+      `Bare baseline ${(bare/1e8).toFixed(1)} hundred-million t → Current forest ${(water/1e8).toFixed(1)} hundred-million t<br>` +
+      `Forest delivers <strong style="color:#fff;">${(water/bare).toFixed(1)}×</strong> the water of bare ground.`;
+
+    document.getElementById('kpi-stands').innerHTML = `${stands.toLocaleString()}<span class="unit">stands</span>`;
+    document.getElementById('kpi-area').innerHTML = `${area.toLocaleString()}<span class="unit">ha</span>`;
+    document.getElementById('kpi-water').innerHTML = `${(water/1e9).toFixed(2)}<span class="unit">B m³/yr</span>`;
+    document.getElementById('kpi-bare').innerHTML = `${(bare/1e9).toFixed(2)}<span class="unit">B m³/yr</span>`;
+    document.getElementById('kpi-effect').innerHTML = `+${(effect/1e9).toFixed(2)}<span class="unit">B m³/yr</span>`;
+    document.getElementById('kpi-effect-note').textContent = `+${effectPct.toFixed(0)}% (≈${(households/1e6).toFixed(1)} M household-equivalents)`;
+    document.getElementById('kpi-co2').innerHTML = `${(co2/1e6).toFixed(2)}<span class="unit">M t-CO₂/yr</span>`;
+
+    document.getElementById('cl-area').textContent = area.toLocaleString();
+    document.getElementById('cl-forest').textContent = (water/1e9).toFixed(2) + ' billion';
+    document.getElementById('cl-bare').textContent = (bare/1e9).toFixed(2) + ' billion';
+    document.getElementById('cl-effect').textContent = (effect/1e9).toFixed(2) + ' billion';
+    document.getElementById('cl-households').textContent = (households/1e6).toFixed(1) + ' M';
+
+    const byMuni = {};
+    for (const f of fc.features) {
+      const p = f.properties;
+      const m = p['市町村CD'] || '?';
+      if (!byMuni[m]) byMuni[m] = { stands: 0, area_ha: 0, water: 0, bare: 0, co2: 0 };
+      byMuni[m].stands += 1;
+      byMuni[m].area_ha += p.area_ha || 0;
+      byMuni[m].water += p.water_yield_m3 || 0;
+      byMuni[m].bare += p.bare_yield_m3 || 0;
+      byMuni[m].co2 += p.co2_estimate_t_per_yr || 0;
+    }
+
+    return fetch('../../data/rinpan/shizuoka_muni_names.json').then(r => r.json()).then(nameData => {
+      const muniNames = nameData.mapping;
+      const sorted = Object.entries(byMuni).sort((a, b) => b[1].area_ha - a[1].area_ha);
+      const rows = sorted.map(([mc, d]) => {
+        const nm = muniNames[mc] || { muni_name: 'unknown', area: '' };
+        const eff = d.water - d.bare;
+        const effPct = d.bare ? (eff / d.bare * 100) : 0;
+        return `
+        <tr>
+          <td><strong>${nm.muni_name}</strong> ${nm.area}<br><small>Forest Cloud code ${mc}</small></td>
+          <td class="num">${d.stands.toLocaleString()}</td>
+          <td class="num">${Math.round(d.area_ha).toLocaleString()}</td>
+          <td class="num">${d.water.toLocaleString()}</td>
+          <td class="num neg">${d.bare.toLocaleString()}</td>
+          <td class="num effect">+${eff.toLocaleString()}<br><small>+${Math.round(effPct)}%</small></td>
+          <td class="num">${d.co2.toLocaleString()}</td>
+        </tr>`;
+      }).join('');
+      document.getElementById('muni-rows').innerHTML = rows;
+    });
+  })
+  .catch(e => console.error('data load failed', e));
+</script>
+</body>
+</html>

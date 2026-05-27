@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>衛星×森林CO2吸収量：IPCC AFOLU Tier 2 と Sentinel-2 の実装解説｜もりみえる</title>
+<meta name="description" content="森林のCO2吸収量を衛星から推定する方法。IPCC AFOLU Tier 1/2/3 の違い、Tier 2 標準計算式、Sentinel-2 NDVI から森林面積を判定する手順、誤差±30%を±10-15%に圧縮する林班単位アプローチまでを実装ベースで解説。">
+<meta name="keywords" content="森林 CO2吸収量,IPCC AFOLU,Tier 2,Sentinel-2,NDVI,森林面積 衛星,林班 CO2,森林DX,衛星リモートセンシング,森林モニタリング">
+<meta name="author" content="もりみえる｜株式会社エムスクエア・ラボ">
+<link rel="canonical" href="https://mori-mieru.jp/article/satellite-co2-tier2.html">
+
+<meta property="og:title" content="衛星×森林CO2吸収量｜IPCC AFOLU Tier 2 と Sentinel-2 の実装解説">
+<meta property="og:description" content="Tier 2 標準計算式、NDVI からの森林面積判定、誤差圧縮を実装ベースで解説。">
+<meta property="og:image" content="https://mori-mieru.jp/article/img/satellite-co2-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/article/satellite-co2-tier2.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="もりみえる">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="衛星×森林CO2吸収量｜IPCC Tier 2 実装解説">
+<meta name="twitter:description" content="Tier 2 標準計算式と Sentinel-2 NDVI 統合を実装ベースで解説。">
+<meta name="twitter:image" content="https://mori-mieru.jp/article/img/satellite-co2-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "衛星×森林CO2吸収量：IPCC AFOLU Tier 2 と Sentinel-2 の実装解説",
+  "description": "森林のCO2吸収量を衛星から推定する Tier 2 手法の完全実装ガイド。",
+  "image": "https://mori-mieru.jp/article/img/satellite-co2-hero.jpg",
+  "datePublished": "2026-05-17",
+  "dateModified": "2026-05-17",
+  "author": {"@type": "Organization", "name": "もりみえる", "url": "https://mori-mieru.jp/"},
+  "publisher": {"@type": "Organization", "name": "株式会社エムスクエア・ラボ", "url": "https://m2-labo.jp/"},
+  "mainEntityOfPage": "https://mori-mieru.jp/article/satellite-co2-tier2.html"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../report/report.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+
+<style>
+.report-hero { --bg-image: url('img/satellite-co2-hero.jpg'); }
+.article-figure { margin: 28px 0; }
+.article-figure img { width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block; }
+.article-figure figcaption { font-size: 13px; color: var(--ink-500); margin-top: 8px; text-align: center; }
+.breadcrumb { font-size: 12px; color: var(--ink-500); padding: 16px 0 0; max-width: 960px; margin: 0 auto; }
+.breadcrumb a { color: var(--ink-500); }
+.faq dt { font-weight: 700; margin-top: 14px; color: var(--theme-dark); }
+.faq dd { margin: 4px 0 0 0; }
+.related { background: var(--green-100); padding: 24px 28px; border-radius: var(--radius-md); margin: 36px 0; }
+.related h3 { margin-top: 0; }
+.related ul { margin: 0; padding-left: 20px; }
+.formula { background: var(--green-100); padding: 16px 20px; border-radius: var(--radius-sm); font-family: var(--font-mono); margin: 12px 0; line-height: 1.8; }
+.tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 20px 0; }
+.tier-card { background: var(--cream); padding: 18px; border-radius: var(--radius-sm); border-top: 4px solid var(--theme); }
+.tier-card h4 { margin: 0 0 6px; color: var(--theme-dark); }
+.tier-card .acc { font-family: var(--font-en); font-size: 18px; color: var(--theme); }
+.tier-card p { margin: 6px 0 0; font-size: 13px; line-height: 1.7; color: var(--ink-700); }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body class="theme-co2">
+
+<nav class="breadcrumb" aria-label="パンくず">
+  <a href="/">もりみえる</a> ／ <a href="/article/">解説記事</a> ／ 衛星×CO2吸収量 IPCC Tier 2 実装解説
+</nav>
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">Satellite × Forest · IPCC AFOLU Tier 2</p>
+    <h1 class="report-title">衛星×森林CO2吸収量<br>IPCC AFOLU Tier 2 と Sentinel-2 の実装解説</h1>
+    <p class="report-subtitle">
+      林野庁標準値だけでは精度不足、自社LiDARを買うほどの予算もない。
+      その間を埋める <strong>Tier 2 × 衛星NDVI</strong> という現実解を、
+      数式・処理フロー・実装スタックレベルで解説します。
+    </p>
+    <dl class="report-meta">
+      <dt>公開</dt><dd>2026年5月17日</dd>
+      <dt>準拠</dt><dd>IPCC 2006 ガイドライン（2019 改訂）AFOLU 章</dd>
+      <dt>対象読者</dt><dd>サステナビリティ実務者・GISエンジニア・林業DX担当・研究者</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<h2>1. 森林CO₂吸収量の標準計算式</h2>
+
+<p>
+森林のCO₂吸収量は、林野庁通知（令和3年12月）でも採用されている以下の式で算定します。
+</p>
+
+<div class="formula">
+吸収量[t-CO₂/年/ha] = 幹成長量 × 拡大係数 × (1 + 地下部比率) × 容積密度 × 炭素含有率 × (44/12)
+</div>
+
+<p>
+各項の意味と一般値は以下のとおりです。
+</p>
+
+<table>
+  <thead>
+    <tr><th>項</th><th>意味</th><th>スギ標準値</th><th>ヒノキ標準値</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>幹成長量</td><td>1ha・1年あたりの幹体積増加（m³）</td><td>5〜8</td><td>3〜5</td></tr>
+    <tr><td>拡大係数</td><td>幹以外（枝・葉）を加える倍率</td><td>1.23</td><td>1.24</td></tr>
+    <tr><td>地下部比率</td><td>根のバイオマス比率</td><td>0.25</td><td>0.26</td></tr>
+    <tr><td>容積密度</td><td>木材の密度（t/m³）</td><td>0.314</td><td>0.407</td></tr>
+    <tr><td>炭素含有率</td><td>乾物中の炭素割合</td><td>0.51</td><td>0.51</td></tr>
+    <tr><td>44/12</td><td>炭素→CO₂ への質量換算</td><td>3.667</td><td>3.667</td></tr>
+  </tbody>
+</table>
+
+<p>
+スギ40年生・1haで概ね <strong>年間 8〜10 t-CO₂</strong> の吸収が標準値となります。
+</p>
+
+<h2>2. IPCC AFOLU の Tier 1 / 2 / 3 とは</h2>
+
+<p>
+IPCC（気候変動に関する政府間パネル）が定めるAFOLU（Agriculture, Forestry and Other Land Use）部門の
+温室効果ガス算定ガイドラインには、3段階の精度レベルがあります。
+</p>
+
+<div class="tier-grid">
+  <div class="tier-card">
+    <h4>Tier 1</h4>
+    <div class="acc">精度 ±30〜50%</div>
+    <p>IPCC が提供するデフォルト値を使う方法。世界平均値ベース。各国の現実とは乖離が大きい</p>
+  </div>
+  <div class="tier-card">
+    <h4>Tier 2</h4>
+    <div class="acc">精度 ±10〜30%</div>
+    <p>国・地域固有の係数（樹種別・林齢別）を使う方法。日本は林野庁が標準値を整備済み。<strong>本記事のメインターゲット</strong></p>
+  </div>
+  <div class="tier-card">
+    <h4>Tier 3</h4>
+    <div class="acc">精度 ±5〜10%</div>
+    <p>個別森林の実測値（LiDAR・現地調査）に基づくモデル。研究機関・大手SI向け</p>
+  </div>
+</div>
+
+<p>
+日本の<strong>森林簿</strong>（自治体が管理する林班単位の樹種・林齢台帳）と
+IPCC ガイドラインを組み合わせると、自然に Tier 2 になります。
+</p>
+
+<figure class="article-figure">
+  <img src="img/co2-tier-pyramid.jpg" alt="Tier 1 / 2 / 3 のピラミッド図：精度と必要データ量のトレードオフ">
+  <figcaption>図1：IPCC Tier の階層と精度・必要データのトレードオフ</figcaption>
+</figure>
+
+<h2>3. Sentinel-2 NDVI から森林面積を判定する</h2>
+
+<p>
+Tier 2 の式を使うには、まず<strong>「どこに森林があるか」</strong>を確定する必要があります。
+従来は森林簿に頼っていましたが、森林簿は更新が10年に1度程度と古く、
+近年の伐採・劣化が反映されていません。
+</p>
+
+<p>
+そこで近年スタンダードになりつつあるのが、欧州 Copernicus 計画の<strong>Sentinel-2 衛星</strong>から
+NDVI（正規化植生指数）を計算し、最新の森林状態を取得する方法です。
+</p>
+
+<div class="formula">
+NDVI = (近赤外バンド − 赤バンド) / (近赤外バンド + 赤バンド)
+</div>
+
+<p>
+NDVI は -1〜+1 の範囲をとり、植物が活発な森林では概ね <strong>0.6〜0.9</strong> の値を示します。
+もりみえるでは閾値 <strong>NDVI ≥ 0.5</strong> を森林マスクの判定条件とし、
+10mピクセルごとに森林か非森林かを判定しています。
+</p>
+
+<figure class="article-figure">
+  <img src="img/sentinel-ndvi-pipeline.jpg" alt="Sentinel-2 取得 → NDVI 計算 → 森林マスク → 林班集計のパイプライン">
+  <figcaption>図2：Sentinel-2 から Tier 2 算定までの処理パイプライン</figcaption>
+</figure>
+
+<h2>4. 林班単位での精度向上</h2>
+
+<p>
+広い AOI（例：市町村全域）に Tier 2 を一律適用すると、樹種・林齢のばらつきが
+平均化されて誤差が拡大します。長野麻子さん（株式会社モリアゲ代表・元林野庁木材利用課長）からも
+「100ha 超の集計は誤差が大きい」という指摘がありました。
+</p>
+
+<p>
+そこで、もりみえるでは<strong>林班単位（中央値 約100ha）</strong>での集計に切り替えています。
+林班ごとに森林簿で樹種・林齢を取得し、対応する Tier 2 係数を適用したうえで、
+Sentinel-2 で「実際に植生があるピクセル」だけを集計します。
+</p>
+
+<table>
+  <thead>
+    <tr><th>集計単位</th><th>誤差目安</th><th>必要データ</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>市町村全域（数万ha）</td><td>±30〜40%</td><td>森林簿総量 + NDVI</td></tr>
+    <tr><td>林班単位（約100ha）</td><td><strong>±20〜30%</strong></td><td>森林簿（林班別）+ NDVI</td></tr>
+    <tr><td>20mメッシュ細分</td><td><strong>±10〜15%</strong></td><td>+ 航空レーザ（LiDAR）</td></tr>
+  </tbody>
+</table>
+
+<p>
+LiDAR データはオープンデータ化が進んでおり、栃木・兵庫・高知の3県では
+「らしんばん」（MIERUNE × 日本森林技術協会）として商用利用可で公開されています。
+これらの地域では、20mメッシュ単位での Tier 2 → Tier 3 への移行が可能です。
+</p>
+
+<h2>5. 静岡県での実装事例</h2>
+
+<p>
+もりみえるでは、静岡県森林クラウドから取得した<strong>1,102林班・合計161,182ha</strong>に
+本手法を適用し、林班ごとの CO₂ 吸収量を算定しています。
+</p>
+
+<table>
+  <thead>
+    <tr><th>項目</th><th>値</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>対象林班数</td><td>1,102 林班</td></tr>
+    <tr><td>合計森林面積</td><td>161,182 ha</td></tr>
+    <tr><td>主な樹種</td><td>スギ（約45%）、ヒノキ（約30%）、広葉樹（約25%）</td></tr>
+    <tr><td>推定年間吸収量</td><td>約 130 万 t-CO₂/年</td></tr>
+    <tr><td>林班あたり吸収量（中央値）</td><td>約 1,180 t-CO₂/年</td></tr>
+  </tbody>
+</table>
+
+<p>
+詳細は <a href="/report/shizuoka-forests.html">静岡県森林レポート</a> をご覧ください。
+</p>
+
+<h2>6. 時系列差分による施業効果モニタリング</h2>
+
+<p>
+Sentinel-2 は5日に1回観測されるため、過去5年分の NDVI 時系列が手に入ります。
+これを使うと、伐採・間伐・植林などの<strong>施業効果</strong>を量的にモニタリングできます。
+</p>
+
+<p>
+たとえば「2023年→2026年で この林班の NDVI が +0.12 → 推定吸収量 +250 t-CO₂/年」
+といった算出が可能です。これは従来、現地調査やドローン撮影で
+数十万〜数百万円かかっていた MRV を、衛星データで<strong>年間1万円規模</strong>に
+圧縮できる可能性を意味します。
+</p>
+
+<figure class="article-figure">
+  <img src="img/ndvi-timeseries-diff.jpg" alt="2023年と2026年のNDVI比較画像と差分マップ：施業効果が明確に見える">
+  <figcaption>図3：時系列差分による施業効果モニタリング（氷見市実証）</figcaption>
+</figure>
+
+<h2>7. 実装スタック</h2>
+
+<p>
+もりみえるが採用している技術スタックは以下のとおりです。すべてオープンソース・無料サービスで構成されています。
+</p>
+
+<table>
+  <thead>
+    <tr><th>レイヤ</th><th>採用技術</th><th>ライセンス</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>衛星データ取得</td><td>Copernicus CDSE（pystac-client）</td><td>無料・商用OK</td></tr>
+    <tr><td>NDVI 計算</td><td>Python（rasterio + numpy）</td><td>OSS</td></tr>
+    <tr><td>林班ポリゴン</td><td>静岡県森林クラウド ベクトルタイル</td><td>オープンデータ</td></tr>
+    <tr><td>森林簿係数</td><td>林野庁標準値（樹種・林齢別）</td><td>公開</td></tr>
+    <tr><td>地図表示</td><td>Leaflet + Esri World Imagery</td><td>無料利用範囲</td></tr>
+    <tr><td>暗号検証</td><td>TPM 2.0 attestation + Merkle hash</td><td>オープン仕様</td></tr>
+  </tbody>
+</table>
+
+<h2>8. 限界と今後</h2>
+
+<ul>
+  <li><strong>雲の影響</strong>：Sentinel-2 は光学センサのため、梅雨時期は欠測が発生。多時期コンセンサスで緩和</li>
+  <li><strong>樹種分類が困難</strong>：NDVI 単独ではスギ/ヒノキ/広葉樹を区別できない。森林簿との統合で補完</li>
+  <li><strong>蓄積モデルの限界</strong>：年成長量は林齢に強く依存するが、地域差は標準値で十分とは限らない</li>
+  <li><strong>今後</strong>：Sentinel-1（SAR）との統合で雲を貫通、Sentinel-2 → 林相分類の機械学習モデル開発</li>
+</ul>
+
+<div class="related">
+  <h3>関連記事・レポート</h3>
+  <ul>
+    <li><a href="/article/water-yield-guide.html">水源涵養量とは？林野庁簡易評価法 Ver.1.0 ガイド</a></li>
+    <li><a href="/article/tnfd-forest-disclosure.html">TNFD森林開示の実務ガイド</a></li>
+    <li><a href="/article/jcredit-forest-map-2026.html">森林由来J-クレジット 全264件マップ 2026年版</a></li>
+    <li><a href="/article/gx-ets-forest-credit-2026.html">GX-ETS 本格運用と森林由来J-クレジット 2026年版</a></li>
+    <li><a href="/report/shizuoka-forests.html">静岡県森林レポート（1,102林班）</a></li>
+    <li><a href="/report/himi-monitoring.html">氷見市時系列モニタリングレポート</a></li>
+  </ul>
+</div>
+
+<h2>9. よくある質問（FAQ）</h2>
+
+<dl class="faq">
+  <dt>Q1. 衛星から樹種を判別できる？</dt>
+  <dd>Sentinel-2 単独では確度の高い樹種判別は困難です。スギ/ヒノキ/広葉樹の大分類は分光特性で可能ですが、ヒノキ/カラマツ等の細分は機械学習＋森林簿の参照が必要です。</dd>
+
+  <dt>Q2. Tier 1 と Tier 2 でどれくらい結果が変わる？</dt>
+  <dd>同じ100ha スギ林に Tier 1（IPCC デフォルト値）と Tier 2（日本標準値）を適用すると、Tier 1 では年間 6 t-CO₂/ha、Tier 2 では年間 8〜10 t-CO₂/ha 程度の差が出ます。日本は人工林の生産性が高い分、Tier 1 では過小評価になりがちです。</dd>
+
+  <dt>Q3. 国際クレジット（VCS、Gold Standard）でも使える手法か？</dt>
+  <dd>はい、Tier 2 は VCS・Gold Standard でも標準的な手法です。ただし、各クレジット標準ごとに追加要件（ベースライン設定、Additionality 証明など）があるため、目的に応じた MRV 設計が必要です。</dd>
+
+  <dt>Q4. もりみえるの算出結果はそのまま J-クレジット申請に使える？</dt>
+  <dd>J-クレジット制度は「方法論」と「モニタリング計画」の事前承認を必要とするため、もりみえるの値をそのまま申請に使うことはできません。ただし、参考データ・補強資料として有効です。</dd>
+
+  <dt>Q5. 計算スクリプトは公開されているか？</dt>
+  <dd>順次オープンソースで公開予定です。リポジトリ・コードのURLは公開時にお知らせします。</dd>
+</dl>
+
+<h2>10. 参考文献・出典</h2>
+
+<ul>
+  <li>IPCC「2006 IPCC Guidelines for National Greenhouse Gas Inventories」AFOLU Volume 4（2019 Refinement）</li>
+  <li>林野庁「森林による二酸化炭素吸収量の算定方法について」（令和3年12月通知）</li>
+  <li>Copernicus Sentinel-2 L2A プロダクト仕様書</li>
+  <li>静岡県森林クラウド（林班ベクトルタイル）</li>
+  <li>MIERUNE × 日本森林技術協会「らしんばん」（栃木・兵庫・高知 LiDAR データ）</li>
+</ul>
+
+<p style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--ink-300); font-size: 13px; color: var(--ink-500);">
+最終更新：2026年5月17日。本記事は IPCC ガイドラインおよび林野庁公開資料に基づき、もりみえるが独自に整理したものです。
+</p>
+
+</div><!-- /report-body -->
+
+</body>
+</html>

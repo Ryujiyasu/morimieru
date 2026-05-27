@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karnataka coffee: satellite watershed monitoring meets EUDR, CCTS, and TNFD in 2026 | morimieru</title>
+<meta name="description" content="India's 2025-26 coffee crop is on track for ~403,000 tonnes — Karnataka alone supplying 70%+. With EUDR enforcement live, CCTS open for forestry, and TNFD reshaping ESG, every exporter and roaster needs traceable, watershed-level evidence. We walk through how a free satellite-based stack measures the upstream forest, water, and deforestation risk for the Kodagu / Chikmagalur belt.">
+<meta name="keywords" content="Karnataka coffee, Kodagu coffee, Chikmagalur, EUDR coffee, India coffee 2026, coffee water stress, coffee supply chain ESG, deforestation regulation, satellite coffee monitoring, Robusta Arabica, India coffee exporter, TNFD coffee">
+<meta name="author" content="morimieru | M-square Lab Inc.">
+<link rel="canonical" href="https://mori-mieru.jp/en/article/karnataka-coffee-supply-chain.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/karnataka-coffee-supply-chain.html">
+
+<meta property="og:title" content="Karnataka coffee × EUDR / CCTS / TNFD — a satellite watershed playbook">
+<meta property="og:description" content="A satellite-based traceability and water-risk stack for India's coffee belt — Kodagu, Chikmagalur, Hassan, Sakleshpur — built on free open data.">
+<meta property="og:image" content="https://mori-mieru.jp/article/img/water-yield-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/en/article/karnataka-coffee-supply-chain.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="morimieru">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Karnataka coffee × EUDR / CCTS / TNFD playbook">
+<meta name="twitter:description" content="Watershed-level satellite stack for India's coffee belt.">
+<meta name="twitter:image" content="https://mori-mieru.jp/article/img/water-yield-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Karnataka coffee: how satellite watershed monitoring meets EUDR, CCTS, and TNFD in 2026",
+  "description": "A satellite-based traceability and water-risk stack for India's coffee belt, designed for exporters, roasters, and forest-department partners.",
+  "image": "https://mori-mieru.jp/article/img/water-yield-hero.jpg",
+  "datePublished": "2026-05-26",
+  "dateModified": "2026-05-26",
+  "inLanguage": "en",
+  "author": {"@type": "Organization", "name": "morimieru", "url": "https://mori-mieru.jp/en/"},
+  "publisher": {"@type": "Organization", "name": "M-square Lab Inc.", "url": "https://m2-labo.jp/"},
+  "mainEntityOfPage": "https://mori-mieru.jp/en/article/karnataka-coffee-supply-chain.html"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../report/report.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+
+<style>
+.report-hero { --bg-image: url('../../article/img/water-yield-hero.jpg'); }
+.article-figure { margin: 28px 0; }
+.article-figure img { width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block; }
+.article-figure figcaption { font-size: 13px; color: var(--ink-500); margin-top: 8px; text-align: center; }
+.breadcrumb { font-size: 12px; color: var(--ink-500); padding: 16px 0 0; max-width: 960px; margin: 0 auto; }
+.breadcrumb a { color: var(--ink-500); }
+.faq dt { font-weight: 700; margin-top: 14px; color: var(--theme-dark); }
+.faq dd { margin: 4px 0 0 0; }
+.related { background: var(--blue-100); padding: 24px 28px; border-radius: var(--radius-md); margin: 36px 0; }
+.related h3 { margin-top: 0; }
+.related ul { margin: 0; padding-left: 20px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 20px 0; }
+.kpi { background: var(--paper); padding: 16px 18px; border-radius: var(--radius-sm); border-top: 3px solid var(--theme); box-shadow: var(--shadow-sm); }
+.kpi .label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-500); margin: 0 0 4px; }
+.kpi .value { font-family: var(--font-en); font-size: 22px; font-weight: 700; color: var(--theme-dark); margin: 0; line-height: 1.2; }
+.kpi .note { font-size: 11px; color: var(--ink-500); margin: 4px 0 0; }
+.risk-card { background: var(--cream); padding: 20px 24px; border-radius: var(--radius-sm); border-left: 4px solid var(--earth-500); margin: 14px 0; }
+.risk-card h4 { margin: 0 0 6px; color: var(--earth-600); font-size: 16px; }
+.risk-card p { margin: 4px 0; font-size: 14px; line-height: 1.75; color: var(--ink-700); }
+.risk-card .tag { font-family: var(--font-en); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--earth-500); }
+.lang-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body class="theme-water">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/en/">morimieru</a> / <a href="/en/article/">Articles</a> / Karnataka coffee × ESG playbook
+  <span class="lang-toggle" style="margin-left: 16px;">
+    <a href="./karnataka-coffee-supply-chain.html" class="active">EN</a>
+  </span>
+</nav>
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">India · Coffee · EUDR · CCTS · TNFD</p>
+    <h1 class="report-title">Karnataka coffee, watershed evidence,<br>and three regulatory pressures stacking in 2026</h1>
+    <p class="report-subtitle">
+      India is on course for a record ~403,000-tonne coffee crop in 2025-26, with Karnataka
+      supplying more than 70%. At the same time EUDR enforcement is live, CCTS has opened
+      to forestry projects, and TNFD has shifted nature disclosure from optional to default
+      for global buyers. Every Karnataka exporter, roaster, and trading house now needs
+      <strong>watershed-level evidence</strong> — and the satellite stack to deliver it is
+      already free.
+    </p>
+    <dl class="report-meta">
+      <dt>Published</dt><dd>2026-05-26</dd>
+      <dt>Focus area</dt><dd>Kodagu · Chikmagalur · Hassan · Sakleshpur (Karnataka, Western Ghats)</dd>
+      <dt>Target reader</dt><dd>Coffee exporters · roasters · F&amp;B sustainability · trading houses · forest departments</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<h2>1. The 2026 setup, in numbers</h2>
+
+<div class="kpi-grid">
+  <div class="kpi">
+    <p class="label">India 2025-26 crop</p>
+    <p class="value">~403,000 t</p>
+    <p class="note">Coffee Board forecast, +11% YoY</p>
+  </div>
+  <div class="kpi">
+    <p class="label">Karnataka share</p>
+    <p class="value">70%+</p>
+    <p class="note">Most of the Robusta, ~63% of the Arabica</p>
+  </div>
+  <div class="kpi">
+    <p class="label">Kodagu rainfall</p>
+    <p class="value">+13%</p>
+    <p class="note">2025 vs long-term average (variable by valley)</p>
+  </div>
+  <div class="kpi">
+    <p class="label">Chikmagalur rainfall</p>
+    <p class="value">+28%</p>
+    <p class="note">Above long-term average in 2025</p>
+  </div>
+</div>
+
+<p>
+The headline rainfall numbers hide a sharper local story: Coorg has cycled through
+acute scarcity even in surplus-rainfall years because of micro-watershed timing and
+soil-moisture loss. Hassan recorded below-average rainfall in the same year.
+For a buyer reading an aggregate origin claim, "Karnataka 2025" tells you very little
+about which specific valleys are stable. That gap is exactly what watershed-level
+evidence closes.
+</p>
+
+<h2>2. Why coffee × Western Ghats is uniquely exposed</h2>
+
+<p>
+The Western Ghats coffee belt sits at the intersection of three sensitivities that
+no other commodity origin in India combines so densely:
+</p>
+
+<ul>
+  <li><strong>Hydrologically tightly coupled.</strong> Coffee — Arabica especially — needs
+  reliable post-monsoon soil moisture. Failures don't just cut yield; they shift
+  flavour profile and crop quality, which directly hits export grade.</li>
+  <li><strong>Forest-canopy dependent.</strong> Most Karnataka coffee is grown under shade
+  with native or planted overstorey. The plantation <em>is</em> the forest as far as
+  remote sensing is concerned — and as far as EUDR is concerned.</li>
+  <li><strong>UNESCO World Heritage adjacency.</strong> 39 Western Ghats sites are protected;
+  buyer reputational risk attaches to any clearance signal, real or perceived.</li>
+  <li><strong>Smallholder structural fragility.</strong> The overwhelming majority of Indian
+  coffee farms are smallholders. Compliance cost passed downstream lands disproportionately hard.</li>
+</ul>
+
+<h2>3. Three regulatory pressures stacking</h2>
+
+<div class="risk-card">
+  <p class="tag">EUDR · Live</p>
+  <h4>EU Deforestation Regulation</h4>
+  <p>
+    Coffee is one of the seven EUDR commodities. Every shipment into the EU requires a
+    due-diligence statement with <strong>geo-located plot coordinates</strong> and proof
+    that no deforestation occurred on those plots after the 2020 cutoff. Sanctions can
+    reach 4% of EU-wide turnover. India sends a meaningful share of its Arabica into
+    Italy, Belgium, and Germany — meaning Karnataka exporters need EUDR evidence whether
+    they target the EU directly or sell through a trader that does.
+  </p>
+</div>
+
+<div class="risk-card">
+  <p class="tag">CCTS · Open</p>
+  <h4>India's Carbon Credit Trading Scheme</h4>
+  <p>
+    CCTS went operational in 2026 with afforestation as an approved methodology. For a
+    coffee estate, this is an upside, not a cost: shade-tree planting and forest-edge
+    restoration can be registered as projects. The constraint is the same as EUDR —
+    you need credible spatial evidence of additionality and ongoing canopy. The same
+    satellite mask serves both.
+  </p>
+</div>
+
+<div class="risk-card">
+  <p class="tag">TNFD · De-facto</p>
+  <h4>Nature-related financial disclosure</h4>
+  <p>
+    Global buyers publish TNFD-aligned reports that name origin watersheds and water-yield
+    exposure. Indian suppliers without a matching narrative get squeezed out of premium
+    contracts. BRSR Principle 6 (in India) and SEBI's ESG ratings are converging in the
+    same direction.
+  </p>
+</div>
+
+<h2>4. What watershed-level evidence actually looks like</h2>
+
+<p>
+A defensible answer to all three pressures is the same dataset, organized three ways:
+</p>
+
+<table>
+  <thead>
+    <tr><th>Question the buyer / regulator asks</th><th>What we put on the table</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><em>"Is this plot deforestation-free post-2020?"</em> (EUDR)</td>
+      <td>Sentinel-2 NDVI history of the plot, 2020 → present, with cryptographic timestamps on each acquisition</td>
+    </tr>
+    <tr>
+      <td><em>"What is the water-yield profile of the watershed that supplies this plot?"</em> (TNFD)</td>
+      <td>HydroBASINS Lvl 10 catchment + upstream forest mask + simplified water-balance estimate</td>
+    </tr>
+    <tr>
+      <td><em>"Has your shade canopy actually grown over the last 5 years?"</em> (CCTS)</td>
+      <td>Year-over-year NDVI differencing + Sentinel-1 SAR backscatter for canopy structure</td>
+    </tr>
+    <tr>
+      <td><em>"How does the climate trend in this micro-watershed look?"</em> (Investor / buyer risk)</td>
+      <td>IMD gridded rainfall + temperature trend, by basin</td>
+    </tr>
+    <tr>
+      <td><em>"Where is the verifiable audit trail?"</em> (All three)</td>
+      <td>TPM 2.0 attestation + Merkle hash chain + RFC 3161 timestamps on every report</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+None of these inputs are proprietary. All come from free public sources we already
+integrate for the Japan pilot. The mapping for Karnataka is in our
+<a href="/en/article/india-pilot.html">India pilot article</a>.
+</p>
+
+<h2>5. A worked example: a hypothetical Kodagu exporter</h2>
+
+<p>
+Consider a mid-size Karnataka exporter shipping ~5,000 tonnes/year of washed Arabica into
+the EU, sourced from ~1,200 smallholders across Kodagu and South Chikmagalur. Their
+EUDR readiness work, today, typically looks like spreadsheets of GPS pins plus a
+verbal assurance that none of the plots was forest in December 2020. That is not
+enough to defend during a customs audit.
+</p>
+
+<p>
+With the morimieru stack the same exporter produces, for each plot:
+</p>
+
+<ol>
+  <li><strong>A 6-year NDVI track</strong> (2020 baseline through 2026 latest) showing
+  no clearance event. Threshold-crossing alerts auto-generated.</li>
+  <li><strong>A watershed signature</strong> — the upstream basin and its forest mask, with
+  the water-yield estimate that feeds the plot.</li>
+  <li><strong>A signed report bundle</strong> per plot, indexed by farmer ID, cryptographically
+  chained, exportable as PDF for EUDR submission and as JSON for buyer ESG systems.</li>
+</ol>
+
+<p>
+A realistic incremental cost per plot, using only free satellite data and our pipeline,
+is in the <strong>₹50–₹200 / plot / year</strong> range for compute and storage. Compared
+to the consultant-driven alternative (₹2,000–₹10,000 / plot / year for less defensible
+evidence), the gap is structural.
+</p>
+
+<h2>6. Stack: what stays, what swaps</h2>
+
+<table>
+  <thead>
+    <tr><th>Layer</th><th>Source (already global)</th><th>India substitution</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Optical satellite</td><td>Sentinel-2 L2A (Copernicus, 10 m, weekly)</td><td>—</td></tr>
+    <tr><td>Cloud-penetrating</td><td>Sentinel-1 SAR (Copernicus, 6-12 day)</td><td>Critical for southwest monsoon months</td></tr>
+    <tr><td>Climate</td><td>NASA POWER global</td><td>IMD gridded products for finer resolution</td></tr>
+    <tr><td>DEM</td><td>SRTM / Copernicus DEM</td><td>ISRO CartoSat where available</td></tr>
+    <tr><td>Watershed boundaries</td><td>HydroBASINS Lvl 10 (WWF, CC-BY)</td><td>India-WRIS for finer sub-basins</td></tr>
+    <tr><td>Forest inventory</td><td>—</td><td>Forest Survey of India (FSI) regional volume tables</td></tr>
+    <tr><td>Land-use baseline</td><td>—</td><td>ISRO Bhuvan LULC, FSI ISFR</td></tr>
+    <tr><td>Carbon methodology</td><td>IPCC AFOLU Tier 2</td><td>—</td></tr>
+    <tr><td>Credit registry</td><td>—</td><td>CCTS afforestation methodology · CAMPA projects</td></tr>
+  </tbody>
+</table>
+
+<p>
+The architecture is the same one we run for the Himi (Japan) pilot. Only the regional
+reference layers swap. See the
+<a href="/en/article/satellite-co2-tier2.html">Tier 2 walkthrough</a> for the CO₂ pipeline
+and the <a href="/en/article/water-yield-guide.html">water-yield guide</a> for the
+hydrology pipeline.
+</p>
+
+<h2>7. A 90-day pilot scope for a coffee exporter</h2>
+
+<table>
+  <thead>
+    <tr><th>Phase</th><th>Days</th><th>Output</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1. Plot ingest</td><td>1–10</td><td>1,000–5,000 plot GPS coordinates loaded; buffer geometry standardized</td></tr>
+    <tr><td>2. Baseline build</td><td>11–25</td><td>2020 NDVI baseline computed for each plot</td></tr>
+    <tr><td>3. Time-series &amp; alerts</td><td>26–45</td><td>2020 → 2026 NDVI tracks; clearance threshold alerts</td></tr>
+    <tr><td>4. Watershed signatures</td><td>46–60</td><td>Upstream catchment + water-yield estimate per plot cluster</td></tr>
+    <tr><td>5. Cryptographic chain</td><td>61–75</td><td>Per-plot signed reports (PDF + JSON), Merkle-rooted</td></tr>
+    <tr><td>6. EUDR export bundle</td><td>76–90</td><td>One-click export aligned with EUDR submission schema</td></tr>
+  </tbody>
+</table>
+
+<p>
+We have not run this in India yet. We have run every piece of it for Japan, and we have
+documented the substitutions for India in the
+<a href="/en/article/india-pilot.html">pilot article</a>. The 90-day plan above is what
+we propose to a partner who can bring the plot list and a stake in the watershed.
+</p>
+
+<h2>8. Honest constraints</h2>
+
+<ul>
+  <li><strong>Monsoon optical gaps.</strong> Sentinel-2 cannot see through clouds; the
+  southwest monsoon period needs Sentinel-1 SAR composites to maintain continuity. The
+  pipeline supports it, but cadence is coarser during those months.</li>
+  <li><strong>Smallholder plots are small.</strong> Sentinel-2 pixels are 10 m; a 0.5 ha
+  plot is ~50 pixels. Fine boundary precision needs either airborne LiDAR or higher-res
+  commercial imagery as a complement.</li>
+  <li><strong>Plot GPS quality varies.</strong> Smartphone-collected GPS can drift several
+  metres. We document the input precision in every report so downstream auditors see
+  the same uncertainty we did.</li>
+  <li><strong>EUDR scope is still moving.</strong> Implementing regulations have been
+  refined repeatedly. Our export schema tracks the published version and is parametric.</li>
+</ul>
+
+<h2>9. Who this is for</h2>
+
+<ul>
+  <li><strong>Karnataka coffee exporters / roasters</strong> who need to show a clean
+  EUDR audit trail without paying consultancy rates per plot.</li>
+  <li><strong>F&amp;B buyers</strong> sourcing Indian Arabica who want their own independent
+  evidence layer instead of relying solely on supplier-supplied data.</li>
+  <li><strong>Coffee Board of India</strong> and the Karnataka Forest Department — for
+  CAMPA / state-level monitoring of restoration credibility.</li>
+  <li><strong>CCTS project developers</strong> registering shade-tree restoration as
+  afforestation methodology, needing baseline and MRV.</li>
+  <li><strong>Climate finance / impact investors</strong> evaluating Indian coffee-region
+  exposure.</li>
+</ul>
+
+<div class="related">
+  <h3>Related</h3>
+  <ul>
+    <li><a href="/en/article/india-pilot.html">India forest valuation pilot: CCTS, Western Ghats &amp; FSI</a></li>
+    <li><a href="/en/article/tnfd-forest-disclosure.html">TNFD forest disclosure: practical LEAP playbook</a></li>
+    <li><a href="/en/article/water-yield-guide.html">Forest water yield: simplified evaluation method guide</a></li>
+    <li><a href="/en/article/satellite-co2-tier2.html">Satellite × forest CO₂: IPCC AFOLU Tier 2 walkthrough</a></li>
+    <li><a href="/en/watershed.html">3D watershed map</a></li>
+  </ul>
+</div>
+
+<h2>10. Frequently asked questions</h2>
+
+<dl class="faq">
+  <dt>Q1. Is morimieru EUDR-certified?</dt>
+  <dd>EUDR does not have a third-party certification scheme for monitoring providers. What
+  matters is that the due-diligence statement is defensible — i.e. the spatial evidence,
+  the dates, and the chain of custody. The cryptographic chain we layer on every report
+  is designed exactly for that audit context.</dd>
+
+  <dt>Q2. Can satellites really distinguish a coffee plantation from primary forest?</dt>
+  <dd>Sentinel-2 NDVI alone cannot — both look dark green. But Sentinel-2 time series
+  combined with Sentinel-1 SAR backscatter does. Coffee under shade has a distinct
+  seasonal NDVI signature (harvest cycles) and a more structured SAR scattering than
+  closed canopy forest. With FSI / Coffee Board plot polygons as labels, a state-level
+  classifier reaches usable accuracy.</dd>
+
+  <dt>Q3. How does this connect to the EUDR's deforestation cutoff date?</dt>
+  <dd>The 2020-12-31 cutoff means we need NDVI evidence from a 2020 baseline through the
+  shipment date. Sentinel-2 was already operational in 2020, so the baseline is real
+  data, not modelled. The challenge is data assembly, not data existence.</dd>
+
+  <dt>Q4. We are a small exporter — is this only for big players?</dt>
+  <dd>No. The pipeline cost scales linearly with plot count. A 50-plot exporter pays
+  roughly ₹2,500–₹10,000 / year for compute and storage, plus a one-time setup. The
+  cost model deliberately favours smaller operators that consultancy-priced solutions
+  exclude.</dd>
+
+  <dt>Q5. Will the same pipeline help us claim CCTS credits?</dt>
+  <dd>The same baseline NDVI and the same time-series differencing feed into a CCTS
+  afforestation MRV report. CCTS registration itself goes through the Bureau of Energy
+  Efficiency process; our role is the evidence layer.</dd>
+</dl>
+
+<h2>11. References &amp; sources</h2>
+
+<ul>
+  <li>Coffee Board of India — 2025-26 production forecast</li>
+  <li>USDA FAS New Delhi — Coffee Semi-annual Report (2025)</li>
+  <li>European Commission — Regulation (EU) 2023/1115 on deforestation-free products (EUDR)</li>
+  <li>Bureau of Energy Efficiency — Carbon Credit Trading Scheme (CCTS), 2024-2026</li>
+  <li>Forest Survey of India — India State of Forest Report</li>
+  <li>India Meteorological Department — gridded rainfall and temperature</li>
+  <li>ISRO Bhuvan / CartoSat — DEM and land-use baselines</li>
+  <li>India-WRIS — Water Resources Information System portal</li>
+  <li>Copernicus Sentinel-2 / Sentinel-1 — open satellite data via AWS Open Data</li>
+  <li>WWF HydroSHEDS / HydroBASINS — global watershed boundaries (CC-BY)</li>
+  <li>TNFD — Recommendations of the Taskforce on Nature-related Financial Disclosures (Sept 2023)</li>
+</ul>
+
+<p style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--ink-300); font-size: 13px; color: var(--ink-500);">
+Last updated 2026-05-26. EUDR implementing details continue to evolve and our export
+schema tracks the published version. Production numbers cited reflect Coffee Board of
+India forecasts at the time of writing.
+</p>
+
+</div><!-- /report-body -->
+
+</body>
+</html>

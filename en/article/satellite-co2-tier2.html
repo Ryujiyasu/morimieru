@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Satellite × forest CO₂: implementing IPCC AFOLU Tier 2 with Sentinel-2 | morimieru</title>
+<meta name="description" content="A technical walkthrough of estimating forest CO2 absorption from satellite imagery. Covers IPCC AFOLU Tier 1/2/3 distinctions, the Tier 2 formula, Sentinel-2 NDVI for forest masking, stand-level aggregation, and how to compress uncertainty from 30% to 10-15% with LiDAR.">
+<meta name="keywords" content="forest CO2 absorption, IPCC AFOLU, Tier 2, Sentinel-2, NDVI, satellite forest mask, stand-level CO2, forest DX, satellite remote sensing, forest monitoring, MRV">
+<meta name="author" content="morimieru | M-square Lab Inc.">
+<link rel="canonical" href="https://mori-mieru.jp/en/article/satellite-co2-tier2.html">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/article/satellite-co2-tier2.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/satellite-co2-tier2.html">
+
+<meta property="og:title" content="Satellite × forest CO₂: IPCC AFOLU Tier 2 with Sentinel-2">
+<meta property="og:description" content="A technical walkthrough of forest CO2 estimation: Tier 2 formulas, Sentinel-2 NDVI, stand aggregation.">
+<meta property="og:image" content="https://mori-mieru.jp/article/img/satellite-co2-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/en/article/satellite-co2-tier2.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="morimieru">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Satellite × forest CO₂: IPCC Tier 2 walkthrough">
+<meta name="twitter:description" content="Tier 2 formulas + Sentinel-2 NDVI + stand-level aggregation.">
+<meta name="twitter:image" content="https://mori-mieru.jp/article/img/satellite-co2-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Satellite × forest CO₂: implementing IPCC AFOLU Tier 2 with Sentinel-2",
+  "description": "A complete technical implementation guide for estimating forest CO2 absorption from satellite imagery using Tier 2.",
+  "image": "https://mori-mieru.jp/article/img/satellite-co2-hero.jpg",
+  "datePublished": "2026-05-26",
+  "dateModified": "2026-05-26",
+  "inLanguage": "en",
+  "author": {"@type": "Organization", "name": "morimieru", "url": "https://mori-mieru.jp/en/"},
+  "publisher": {"@type": "Organization", "name": "M-square Lab Inc.", "url": "https://m2-labo.jp/"},
+  "mainEntityOfPage": "https://mori-mieru.jp/en/article/satellite-co2-tier2.html"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../report/report.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+
+<style>
+.report-hero { --bg-image: url('../../article/img/satellite-co2-hero.jpg'); }
+.article-figure { margin: 28px 0; }
+.article-figure img { width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block; }
+.article-figure figcaption { font-size: 13px; color: var(--ink-500); margin-top: 8px; text-align: center; }
+.breadcrumb { font-size: 12px; color: var(--ink-500); padding: 16px 0 0; max-width: 960px; margin: 0 auto; }
+.breadcrumb a { color: var(--ink-500); }
+.faq dt { font-weight: 700; margin-top: 14px; color: var(--theme-dark); }
+.faq dd { margin: 4px 0 0 0; }
+.related { background: var(--green-100); padding: 24px 28px; border-radius: var(--radius-md); margin: 36px 0; }
+.related h3 { margin-top: 0; }
+.related ul { margin: 0; padding-left: 20px; }
+.formula { background: var(--green-100); padding: 16px 20px; border-radius: var(--radius-sm); font-family: var(--font-mono); margin: 12px 0; line-height: 1.8; }
+.tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 20px 0; }
+.tier-card { background: var(--cream); padding: 18px; border-radius: var(--radius-sm); border-top: 4px solid var(--theme); }
+.tier-card h4 { margin: 0 0 6px; color: var(--theme-dark); }
+.tier-card .acc { font-family: var(--font-en); font-size: 18px; color: var(--theme); }
+.tier-card p { margin: 6px 0 0; font-size: 13px; line-height: 1.7; color: var(--ink-700); }
+.lang-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body class="theme-co2">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/en/">morimieru</a> / <a href="/en/article/">Articles</a> / Satellite × CO₂ Tier 2
+  <span class="lang-toggle" style="margin-left: 16px;">
+    <a href="../../article/satellite-co2-tier2.html" title="日本語">JP</a>
+    <a href="./satellite-co2-tier2.html" class="active">EN</a>
+  </span>
+</nav>
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">Satellite × Forest · IPCC AFOLU Tier 2</p>
+    <h1 class="report-title">Satellite × forest CO₂<br>Implementing IPCC AFOLU Tier 2 with Sentinel-2</h1>
+    <p class="report-subtitle">
+      Between national-default Tier 1 precision and proprietary LiDAR Tier 3 sits
+      <strong>Tier 2 × satellite NDVI</strong> — the practical sweet spot.
+      We walk through the formulas, the processing flow, and the implementation stack.
+    </p>
+    <dl class="report-meta">
+      <dt>Published</dt><dd>2026-05-26</dd>
+      <dt>Aligned with</dt><dd>IPCC 2006 Guidelines (2019 Refinement), AFOLU Volume 4</dd>
+      <dt>Target reader</dt><dd>Sustainability practitioners, GIS engineers, forest-DX teams, researchers</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<h2>1. The standard forest CO₂ formula</h2>
+
+<p>
+Forest CO₂ absorption is computed by the formula adopted in Japan's Forestry Agency notification
+(December 2021) and in IPCC AFOLU Volume 4:
+</p>
+
+<div class="formula">
+Absorption [t-CO₂/ha/yr] = stem growth × BEF × (1 + root:shoot) × wood density × carbon fraction × (44/12)
+</div>
+
+<p>
+Each term and a typical Japanese coefficient set:
+</p>
+
+<table>
+  <thead>
+    <tr><th>Term</th><th>Meaning</th><th>Sugi default</th><th>Hinoki default</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Stem growth</td><td>MAI of stem volume (m³/ha/yr)</td><td>5–8</td><td>3–5</td></tr>
+    <tr><td>BEF</td><td>Biomass expansion factor (whole tree / stem)</td><td>1.23</td><td>1.24</td></tr>
+    <tr><td>Root:shoot</td><td>Belowground biomass ratio</td><td>0.25</td><td>0.26</td></tr>
+    <tr><td>Wood density</td><td>Dry density (t/m³)</td><td>0.314</td><td>0.407</td></tr>
+    <tr><td>Carbon fraction</td><td>Carbon in dry biomass</td><td>0.51</td><td>0.51</td></tr>
+    <tr><td>44/12</td><td>Mass conversion C → CO₂</td><td>3.667</td><td>3.667</td></tr>
+  </tbody>
+</table>
+
+<p>
+A 40-year-old sugi stand of 1 ha typically yields <strong>8–10 t-CO₂/yr</strong> as the
+standard reference value. India's Forest Survey of India publishes equivalent species
+coefficients (teak, sal, eucalyptus, mixed evergreen) that slot into the same formula.
+</p>
+
+<h2>2. IPCC AFOLU Tier 1 / 2 / 3</h2>
+
+<p>
+The IPCC guidelines for the AFOLU (Agriculture, Forestry, and Other Land Use) sector define
+three precision levels for greenhouse-gas inventories.
+</p>
+
+<div class="tier-grid">
+  <div class="tier-card">
+    <h4>Tier 1</h4>
+    <div class="acc">Accuracy ±30–50%</div>
+    <p>IPCC default global values. World-average coefficients, often poorly matched to country conditions</p>
+  </div>
+  <div class="tier-card">
+    <h4>Tier 2</h4>
+    <div class="acc">Accuracy ±10–30%</div>
+    <p>Country- and region-specific coefficients by species and stand age. Japan's Forestry Agency
+    has integrated values; FSI India is comparable. <strong>The main target of this article.</strong></p>
+  </div>
+  <div class="tier-card">
+    <h4>Tier 3</h4>
+    <div class="acc">Accuracy ±5–10%</div>
+    <p>Stand-level measurements (LiDAR + field plots). Research labs and large SI typically</p>
+  </div>
+</div>
+
+<p>
+Combining Japan's <strong>forest ledger</strong> (per-stand species and age, maintained by
+local authorities) with the IPCC guidelines naturally lands at Tier 2.
+</p>
+
+<figure class="article-figure">
+  <img src="../../article/img/co2-tier-pyramid.jpg" alt="Tier 1/2/3 pyramid: accuracy vs. required data">
+  <figcaption>Figure 1 · The IPCC Tier hierarchy and the precision-vs-data trade-off.</figcaption>
+</figure>
+
+<h2>3. Identifying forest area from Sentinel-2 NDVI</h2>
+
+<p>
+Applying the Tier 2 formula requires knowing <strong>where the forest actually is</strong>.
+Forest ledgers update only every decade or so and miss recent disturbance. Sentinel-2 from
+the European Copernicus programme is the current standard for the live answer.
+</p>
+
+<div class="formula">
+NDVI = (Near-IR band − Red band) / (Near-IR band + Red band)
+</div>
+
+<p>
+NDVI ranges from −1 to +1. Healthy forest typically sits at <strong>0.6–0.9</strong> in
+the growing season. morimieru classifies pixels at <strong>NDVI ≥ 0.5</strong> as forest,
+giving a per-10 m-pixel forest mask updated weekly.
+</p>
+
+<figure class="article-figure">
+  <img src="../../article/img/sentinel-ndvi-pipeline.jpg" alt="Sentinel-2 acquisition → NDVI → forest mask → stand aggregation">
+  <figcaption>Figure 2 · Pipeline from Sentinel-2 acquisition to Tier 2 stand-level estimate.</figcaption>
+</figure>
+
+<h2>4. Stand-level aggregation improves precision</h2>
+
+<p>
+Applying Tier 2 uniformly across a large AOI (say a full municipality) averages out the
+heterogeneity of species mix and stand age, inflating the error bar. Asako Nagano
+(Moriage Inc. CEO, ex-Forestry Agency of Japan Wood Utilization Division chief) flagged
+exactly this in our project review: <em>"Aggregations above 100 ha get noisy."</em>
+</p>
+
+<p>
+The fix: aggregate at the <strong>forest stand</strong> (≈100 ha median in Japan).
+Pull species and age from the forest ledger per stand, choose Tier 2 coefficients matching
+that mix, then sum across the pixels Sentinel-2 actually identified as forest in that stand.
+</p>
+
+<table>
+  <thead>
+    <tr><th>Aggregation unit</th><th>Error target</th><th>Inputs needed</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Municipality (~10⁴ ha)</td><td>±30–40%</td><td>Aggregate ledger + NDVI</td></tr>
+    <tr><td>Stand (~100 ha)</td><td><strong>±20–30%</strong></td><td>Per-stand ledger + NDVI</td></tr>
+    <tr><td>20 m mesh</td><td><strong>±10–15%</strong></td><td>+ airborne LiDAR</td></tr>
+  </tbody>
+</table>
+
+<p>
+LiDAR datasets are opening up in many countries: Japan's Forestry Agency has 80%+ coverage
+of public forests, with three prefectures (Tochigi, Hyogo, Kochi) released to the public via
+the MIERUNE × Japan Forest Technology Association "Rashinban" service (CC-BY, commercial OK).
+India has selective coverage (Karnataka, parts of Uttarakhand). Where it exists, Tier 2 can
+shift toward Tier 3.
+</p>
+
+<h2>5. Worked example: Shizuoka Prefecture</h2>
+
+<p>
+morimieru has applied this pipeline to <strong>1,102 forest stands / 161,182 ha</strong>
+sourced from Shizuoka Prefecture's forest cloud, computing per-stand CO₂ absorption.
+</p>
+
+<table>
+  <thead>
+    <tr><th>Metric</th><th>Value</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Stands processed</td><td>1,102</td></tr>
+    <tr><td>Total forest area</td><td>161,182 ha</td></tr>
+    <tr><td>Species mix</td><td>Sugi ≈45% · Hinoki ≈30% · Broadleaf ≈25%</td></tr>
+    <tr><td>Estimated annual absorption</td><td>~1.3 M t-CO₂/yr</td></tr>
+    <tr><td>Median per-stand absorption</td><td>~1,180 t-CO₂/yr</td></tr>
+  </tbody>
+</table>
+
+<p>
+Full report: <a href="../../report/shizuoka-forests.html">Shizuoka forests report (JP)</a>.
+</p>
+
+<h2>6. Time-series differencing as cheap MRV</h2>
+
+<p>
+Sentinel-2 acquires every 5 days, so 5 years of NDVI history are available. The differencing
+of two epochs measures <strong>management effect</strong> quantitatively.
+</p>
+
+<p>
+Example: <em>"Stand X NDVI improved by 0.12 from 2023 to 2026 → an estimated +250 t-CO₂/yr
+absorbed."</em> Conventional MRV via field plots or drone surveys runs hundreds of
+thousands to millions of yen per project. Satellite differencing brings the same MRV signal
+down to roughly <strong>10,000 yen/yr</strong> per project — a 100× cost compression.
+</p>
+
+<figure class="article-figure">
+  <img src="../../article/img/ndvi-timeseries-diff.jpg" alt="NDVI difference between 2023 and 2026: management effect visible">
+  <figcaption>Figure 3 · NDVI time-series differencing reveals management effect (Himi pilot).</figcaption>
+</figure>
+
+<h2>7. Implementation stack</h2>
+
+<p>
+morimieru's complete stack is open-source and free-tier:
+</p>
+
+<table>
+  <thead>
+    <tr><th>Layer</th><th>Technology</th><th>License</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Satellite acquisition</td><td>Copernicus CDSE (pystac-client)</td><td>Free, commercial OK</td></tr>
+    <tr><td>NDVI calculation</td><td>Python (rasterio + numpy)</td><td>OSS</td></tr>
+    <tr><td>Stand polygons</td><td>Shizuoka forest cloud vector tiles</td><td>Open data</td></tr>
+    <tr><td>Species coefficients</td><td>Forestry Agency of Japan standard values</td><td>Public</td></tr>
+    <tr><td>Map rendering</td><td>Leaflet + Esri World Imagery</td><td>Free tier</td></tr>
+    <tr><td>Cryptographic verification</td><td>TPM 2.0 attestation + Merkle hash</td><td>Open spec</td></tr>
+  </tbody>
+</table>
+
+<h2>8. Limitations and roadmap</h2>
+
+<ul>
+  <li><strong>Cloud cover.</strong> Sentinel-2 is optical, so the monsoon and rainy seasons
+  produce gaps. Multi-temporal compositing reduces but does not eliminate them.</li>
+  <li><strong>Species discrimination.</strong> NDVI alone cannot reliably tell sugi from
+  hinoki from broadleaf. Integration with the forest ledger compensates.</li>
+  <li><strong>Stand-volume model limits.</strong> The mean annual increment strongly depends
+  on age and site quality; standard values capture only national averages.</li>
+  <li><strong>Roadmap.</strong> Sentinel-1 SAR for cloud penetration; machine-learning forest
+  classification trained on Sentinel-2 + forest ledger.</li>
+</ul>
+
+<h2>9. India-specific notes</h2>
+
+<p>
+For Indian deployments, three substitutions:
+</p>
+
+<ul>
+  <li><strong>FSI inventory</strong> replaces the Forestry Agency of Japan dataset as the
+  species- and age-coefficient source.</li>
+  <li><strong>Bhuvan / CartoSat</strong> (ISRO) replaces GSI elevation API for DEM.</li>
+  <li><strong>CCTS afforestation methodology</strong> replaces J-Credit FO-001/002/003 for
+  credit issuance. See the <a href="/en/article/india-pilot.html">India pilot article</a>.</li>
+</ul>
+
+<p>
+Western Ghats evergreen and semi-evergreen stands typically deliver <strong>15–22 t-CO₂/ha/yr</strong>
+under Tier 2 — higher than Japan's sugi defaults thanks to year-round photosynthesis and
+faster turnover.
+</p>
+
+<div class="related">
+  <h3>Related</h3>
+  <ul>
+    <li><a href="/en/article/india-pilot.html">India forest valuation pilot: CCTS, Western Ghats &amp; FSI</a></li>
+    <li><a href="/en/article/tnfd-forest-disclosure.html">TNFD forest disclosure: practical LEAP playbook</a></li>
+    <li><a href="../../article/water-yield-guide.html">Forest water yield: simplified evaluation method guide (JP)</a></li>
+    <li><a href="../../article/jcredit-forest-map-2026.html">Forest J-Credit 264 projects mapped, 2026 (JP)</a></li>
+    <li><a href="../../report/shizuoka-forests.html">Shizuoka 1,102 stands report (JP)</a></li>
+    <li><a href="../../report/himi-monitoring.html">Himi time-series monitoring report (JP)</a></li>
+  </ul>
+</div>
+
+<h2>10. Frequently asked questions</h2>
+
+<dl class="faq">
+  <dt>Q1. Can satellites discriminate tree species?</dt>
+  <dd>Sentinel-2 alone cannot reliably do fine species discrimination. Broad classes
+  (conifer / broadleaf, evergreen / deciduous) are tractable from spectral signature, but
+  sugi vs. hinoki vs. larch needs machine learning trained on the forest ledger as a label
+  source.</dd>
+
+  <dt>Q2. How different are Tier 1 and Tier 2 results?</dt>
+  <dd>For a 100 ha sugi stand, Tier 1 (IPCC defaults) gives roughly 6 t-CO₂/ha/yr, Tier 2
+  (Japan-specific values) 8–10 t-CO₂/ha/yr. Japan's plantation forests are unusually
+  productive, so Tier 1 systematically underestimates.</dd>
+
+  <dt>Q3. Does the method work with international standards (VCS, Gold Standard)?</dt>
+  <dd>Yes — Tier 2 is the standard backbone of both VCS and Gold Standard methodologies.
+  Each standard adds requirements (baseline definition, additionality, leakage), so MRV
+  design must be tailored per standard.</dd>
+
+  <dt>Q4. Can morimieru numbers be used directly for J-Credit / CCTS applications?</dt>
+  <dd>Not directly — each programme requires pre-approved methodologies and monitoring plans
+  registered through their official process. morimieru numbers are useful as supporting
+  evidence and as ongoing MRV alongside the registered methodology.</dd>
+
+  <dt>Q5. Is the computation code public?</dt>
+  <dd>An open-source release is on the roadmap. The Python pipeline (rasterio + pystac-client +
+  numpy) is small enough that we will publish it in stages once we lock the API.</dd>
+</dl>
+
+<h2>11. References &amp; sources</h2>
+
+<ul>
+  <li>IPCC, <em>2006 IPCC Guidelines for National Greenhouse Gas Inventories, AFOLU Volume 4</em> (2019 Refinement)</li>
+  <li>Forestry Agency of Japan, <em>Method for estimating forest CO₂ absorption</em> (December 2021 notification)</li>
+  <li>Copernicus Sentinel-2 L2A product specification</li>
+  <li>Shizuoka Prefecture forest cloud (stand vector tiles)</li>
+  <li>MIERUNE × Japan Forest Technology Association, <em>Rashinban</em> (Tochigi / Hyogo / Kochi LiDAR data)</li>
+  <li>Forest Survey of India, <em>India State of Forest Report</em></li>
+</ul>
+
+<p style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--ink-300); font-size: 13px; color: var(--ink-500);">
+Last updated 2026-05-26. Based on IPCC guidelines and public materials, organized by morimieru.
+</p>
+
+</div><!-- /report-body -->
+
+</body>
+</html>

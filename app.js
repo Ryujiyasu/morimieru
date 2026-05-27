@@ -1,4 +1,273 @@
 // もりみえる - interaction logic
+// ====== i18n bootstrap (added 2026-05-26) ======
+const __MM_LANG = (typeof window !== 'undefined' && window.location && window.location.pathname.startsWith('/en/')) ? 'en' : 'ja';
+
+const __MM_PREF = {
+  '北海道':'Hokkaido','青森県':'Aomori','岩手県':'Iwate','宮城県':'Miyagi','秋田県':'Akita',
+  '山形県':'Yamagata','福島県':'Fukushima','茨城県':'Ibaraki','栃木県':'Tochigi','群馬県':'Gunma',
+  '埼玉県':'Saitama','千葉県':'Chiba','東京都':'Tokyo','神奈川県':'Kanagawa','新潟県':'Niigata',
+  '富山県':'Toyama','石川県':'Ishikawa','福井県':'Fukui','山梨県':'Yamanashi','長野県':'Nagano',
+  '岐阜県':'Gifu','静岡県':'Shizuoka','愛知県':'Aichi','三重県':'Mie','滋賀県':'Shiga',
+  '京都府':'Kyoto','大阪府':'Osaka','兵庫県':'Hyogo','奈良県':'Nara','和歌山県':'Wakayama',
+  '鳥取県':'Tottori','島根県':'Shimane','岡山県':'Okayama','広島県':'Hiroshima','山口県':'Yamaguchi',
+  '徳島県':'Tokushima','香川県':'Kagawa','愛媛県':'Ehime','高知県':'Kochi','福岡県':'Fukuoka',
+  '佐賀県':'Saga','長崎県':'Nagasaki','熊本県':'Kumamoto','大分県':'Oita','宮崎県':'Miyazaki',
+  '鹿児島県':'Kagoshima','沖縄県':'Okinawa',
+};
+const prefJaToEn = (p) => __MM_PREF[p] || p;
+
+const __MM_T = {
+  ja: {
+    you: 'あなた',
+    budget_unit: '万円',
+    loading: '取得中…',
+    locate_unsupported: 'お使いのブラウザは位置情報に対応していません。',
+    locate_fail: '位置情報の取得に失敗しました：',
+    address_fail: '住所の取得に失敗しました。手入力してください。',
+    candidate: '候補地',
+    searching_prefix: '🛰️  ',
+    searching_suffix: ' を探しています…',
+    please_wait: '少々お待ちください。',
+    finding_basin: '取水域を特定中…',
+    sample_runs_at: ' で実行中…',
+    in_basin_tagline: '🌊 あなたの取水域内の森（深掘り対応）',
+    in_basin_short: '🌊 あなたの取水域内の森',
+    tip_upstream: 'あなたの取水域・上流側',
+    tip_user_basin: 'あなたの会社の取水域',
+    tt_upstream_html: '<span style="color:#3b6da1;">🌊 あなたの取水域・上流</span><br>',
+    basin_title_suffix: ' の取水域の森、',
+    basins_word: ' つ',
+    basin_intro_lead: '工場や本社で使う水は、流域の森が育んでいます。あなたの取水域内・上流側にある森を優先的に並べています。',
+    basin_id_label: '流域ID ',
+    basin_id_suffix: '（HydroBASINS Lvl 10）',
+    region_candidates_suffix_1: ' 向けの候補、',
+    region_candidates_suffix_2: ' つ',
+    region_lead: '住所から取水域を特定できなかったため（離島・河口の可能性）、希望地域の中から候補を提示しています。',
+    default_title_pre: 'の会社にあう森、',
+    default_title_post: ' つ見つかりました。',
+    default_lead: 'クリックで、その森を衛星で「いま」見ることができます。',
+    species_default: 'スギ・ヒノキ 70% / 広葉樹 30%（推定）',
+    jcredit_tagline_pre: 'J-クレジット登録番号 ',
+    park_inside: '内',
+    park_nearby_suffix: 'km）',
+    park_inside_prefix: '🏞 ',
+    park_nearby_prefix: '🏔 ',
+    methodology_default: '森林経営活動プロジェクト',
+    card_area: '面積',
+    card_species: '樹種',
+    card_age: '林齢',
+    card_owner: '所有',
+    card_age_suffix: '年生',
+    co2_unit: 't-CO₂/年',
+    credit_estimate_prefix: 'クレジット試算：約 ',
+    credit_estimate_suffix: ' 万円/年',
+    cta_deepdive: '衛星画像で森を見る →',
+    cta_mapview: '地図で見る →',
+    no_owner: '—',
+    co2_tip_suffix: ' t-CO₂/年',
+    dd_lead_himi_pre: '林野庁令和7年度委託事業の対象地。',
+    dd_lead_himi_mid: ' の Sentinel-2 衛星画像（雲量',
+    dd_lead_himi_post: '%）から実際に NDVI を計算し、森林面積を推定しました。地図上の緑が濃い領域ほど植生が活発です。',
+    dd_lead_jcredit_suffix: '。実際のJ-クレジット登録プロジェクトです。',
+    dd_lead_default: 'Sentinel-1/2 衛星の週次観測と、林野庁オープンデータを統合して可視化しています。',
+    co2_ci_prefix: '95% 信頼区間：',
+    co2_ci_dash: ' – ',
+    co2_ci_suffix: ' t-CO₂',
+    water_detail_mid_1: ' mm/年 (降水量の ',
+    water_detail_mid_2: '%) × ',
+    water_detail_mid_3: ' ha ≈ ',
+    water_detail_suffix: ' 百万トン／年',
+    ndvi_layer_name: 'NDVI 解析結果',
+    method_h1: '1. 森林面積の特定（衛星実測）',
+    method_p_pre: 'Sentinel-2 L2A の ',
+    method_p_mid: ' 期間の最低雲量シーンから NDVI を計算。',
+    method_p_post: ' の画素を森林と判定（Hansen et al. 2013, Tier 2 既定値）。',
+    method_aoi_area: 'AOI 総面積：',
+    method_aoi_name_pre: '（',
+    method_aoi_name_post: '）',
+    method_pixels: '解析画素数：',
+    method_pixels_each: ' (1 画素 ≈ ',
+    method_pixels_unit: ' ha)',
+    method_valid_pct: '有効画素率（非雲）：',
+    method_forest_pct: '森林画素率：',
+    method_forest_area: '森林面積：',
+    method_h2: '2. 森林1 ha あたりの CO₂ 吸収量',
+    method_formula_intro_pre: ' による既定式：',
+    method_mai: 'MAI：',
+    method_mai_unit: ' m³/ha/年（',
+    method_density: '木材密度：',
+    method_density_unit: ' t/m³（',
+    method_bef: 'BEF（バイオマス拡大係数）：',
+    method_root: '根/地上比：',
+    method_carbon: '炭素割合：',
+    method_h3: '3. AOI 全体の年間 CO₂ 吸収量',
+    method_uncertainty: '${T.method_uncertainty}',
+    method_uncertainty_2: '${T.method_uncertainty_2}',
+    method_h4: '4. 水資源涵養量（林野庁簡易評価法 Ver.1.0 準拠）',
+    method_w_link_text: '林野庁が令和8年3月に公開した算定式',
+    method_w_intro: '${T.method_w_intro}',
+    method_w_climate: '気象（月別気温・降水量）：',
+    method_w_climate_src_pre: '（',
+    method_w_elev: '標高：国土地理院 標高API（観測点 ',
+    method_w_elev_mid: ' m → 林地 ',
+    method_w_elev_post: ' m）',
+    method_w_geo: '地質区分：産総研 シームレス地質図 API → ',
+    method_w_geo_post: '）',
+    method_w_forest: '林分情報：林野庁 標準値（',
+    method_w_forest_density: '・密度 ',
+    method_w_forest_density_unit: ' 本/ha・DBH ',
+    method_w_forest_dbh_unit: ' cm・樹高 ',
+    method_w_forest_h_unit: ' m）',
+    method_w_formula_l1: '水資源涵養量 = 年降水量 − 直接流出量 − 蒸発散量',
+    method_w_formula_precip: '年降水量（標高補正後）：',
+    method_w_formula_runoff: '直接流出量：           ',
+    method_w_formula_evapo: '蒸発散量：             ',
+    method_w_formula_yield_prefix: '水資源涵養量：',
+    method_w_formula_aoi: 'AOI 全体：',
+    method_w_formula_aoi_unit_1: ' m³/年 ≈ ',
+    method_w_formula_aoi_unit_2: ' 百万トン/年',
+    method_w_note_1: '林野庁の本式は 100 ha 未満の小規模林分向けですが、本サイトでは衛星で抽出した森林ピクセルごとに同じ式を当てはめ、AOI 全体に拡張しています。',
+    method_w_note_2: '${T.method_w_note_2}',
+    ndvi_obs_points: 'NDVI 観測点',
+    ndvi_label_pre: '過去 ',
+    ndvi_label_mid: ' 年の NDVI 推移（',
+    ndvi_label_post: ' 観測点・Sentinel-2 実測）',
+    cert_company_sample: 'サンプル株式会社',
+    cert_period_suffix: '（5年間）',
+    cert_budget_unit: ' 万円',
+    sample_food: 'サンプル食品株式会社',
+    sample_mfg: 'サンプル製造株式会社',
+    sample_beverage: 'サンプル飲料株式会社',
+    yearly_format: (y, m, d) => `${y}年${m}月${d}日`,
+  },
+  en: {
+    you: 'You',
+    budget_unit: 'M JPY',
+    loading: 'Loading…',
+    locate_unsupported: 'Your browser does not support geolocation.',
+    locate_fail: 'Could not get your location: ',
+    address_fail: 'Could not resolve address. Please enter it manually.',
+    candidate: 'this site',
+    searching_prefix: '🛰️  Searching for ',
+    searching_suffix: '…',
+    please_wait: 'One moment.',
+    finding_basin: 'Locating your watershed…',
+    sample_runs_at: ' running with ',
+    in_basin_tagline: '🌊 Forest in your watershed (deep-dive ready)',
+    in_basin_short: '🌊 Forest in your watershed',
+    tip_upstream: 'Your watershed · upstream',
+    tip_user_basin: 'Your company watershed',
+    tt_upstream_html: '<span style="color:#3b6da1;">🌊 Your watershed · upstream</span><br>',
+    basin_title_suffix: ' — forests in your watershed, ',
+    basins_word: ' found',
+    basin_intro_lead: 'The water your factory or HQ uses is nurtured by upstream forests. Forests inside or upstream of your watershed appear first.',
+    basin_id_label: 'Basin ID ',
+    basin_id_suffix: ' (HydroBASINS Lvl 10)',
+    region_candidates_suffix_1: ' — proposed candidates, ',
+    region_candidates_suffix_2: ' found',
+    region_lead: 'We could not pin your watershed (likely island / estuary). Showing candidates from your preferred region instead.',
+    default_title_pre: ' — forests that match you, ',
+    default_title_post: ' found.',
+    default_lead: 'Click any forest to view its real-time satellite imagery.',
+    species_default: 'Cedar / Cypress 70% · Broadleaf 30% (estimated)',
+    jcredit_tagline_pre: 'J-Credit registration #',
+    park_inside: '',
+    park_nearby_suffix: ' km)',
+    park_inside_prefix: '🏞 inside ',
+    park_nearby_prefix: '🏔 near ',
+    methodology_default: 'Forest management project',
+    card_area: 'Area',
+    card_species: 'Species',
+    card_age: 'Stand age',
+    card_owner: 'Tenure',
+    card_age_suffix: ' yrs',
+    co2_unit: 't-CO₂/yr',
+    credit_estimate_prefix: 'Credit value ≈ ¥',
+    credit_estimate_suffix: 'M/yr',
+    cta_deepdive: 'See on satellite →',
+    cta_mapview: 'Open on map →',
+    no_owner: '—',
+    co2_tip_suffix: ' t-CO₂/yr',
+    dd_lead_himi_pre: 'A Forestry Agency of Japan FY2025 pilot site. ',
+    dd_lead_himi_mid: ' Sentinel-2 imagery (cloud cover ',
+    dd_lead_himi_post: '%): we compute real NDVI to estimate forest area. Darker green = denser vegetation.',
+    dd_lead_jcredit_suffix: '. A real J-Credit registered project.',
+    dd_lead_default: 'Weekly Sentinel-1/2 observations integrated with public open data.',
+    co2_ci_prefix: '95% CI: ',
+    co2_ci_dash: ' – ',
+    co2_ci_suffix: ' t-CO₂',
+    water_detail_mid_1: ' mm/yr (',
+    water_detail_mid_2: '% of precipitation) × ',
+    water_detail_mid_3: ' ha ≈ ',
+    water_detail_suffix: ' million t/yr',
+    ndvi_layer_name: 'NDVI analysis',
+    method_h1: '1. Forest area (satellite measurement)',
+    method_p_pre: 'NDVI computed from the lowest-cloud Sentinel-2 L2A scene during ',
+    method_p_mid: '. Pixels with NDVI > ',
+    method_p_post: ' classified as forest (Hansen et al. 2013, Tier 2 default).',
+    method_aoi_area: 'AOI total area: ',
+    method_aoi_name_pre: ' (',
+    method_aoi_name_post: ')',
+    method_pixels: 'Analyzed pixels: ',
+    method_pixels_each: ' (1 pixel ≈ ',
+    method_pixels_unit: ' ha)',
+    method_valid_pct: 'Valid (non-cloud) pixel rate: ',
+    method_forest_pct: 'Forest pixel rate: ',
+    method_forest_area: 'Forest area: ',
+    method_h2: '2. CO₂ absorption per hectare',
+    method_formula_intro_pre: ' default formula:',
+    method_mai: 'MAI: ',
+    method_mai_unit: ' m³/ha/yr (',
+    method_density: 'Wood density: ',
+    method_density_unit: ' t/m³ (',
+    method_bef: 'BEF (biomass expansion factor): ',
+    method_root: 'Root/shoot ratio: ',
+    method_carbon: 'Carbon fraction: ',
+    method_h3: '3. AOI-wide annual CO₂ absorption',
+    method_uncertainty: 'Uncertainty for Tier 2 is typically ±30% — composed of regional MAI variation, species mixture, and satellite classification error.',
+    method_uncertainty_2: 'Integrating site-specific forest data and management records yields tighter confidence intervals.',
+    method_h4: '4. Water yield (per Forestry Agency simplified method Ver.1.0)',
+    method_w_link_text: 'Forestry Agency formula published in March 2026',
+    method_w_intro: ' fed with inputs assembled entirely from satellite and public data:',
+    method_w_climate: 'Climate (monthly T & P): ',
+    method_w_climate_src_pre: ' (',
+    method_w_elev: 'Elevation: GSI Elevation API (station ',
+    method_w_elev_mid: ' m → forest point ',
+    method_w_elev_post: ' m)',
+    method_w_geo: 'Geology class: AIST Seamless Geological Map API → ',
+    method_w_geo_post: ')',
+    method_w_forest: 'Stand info: Forestry Agency defaults (',
+    method_w_forest_density: ' · density ',
+    method_w_forest_density_unit: ' stems/ha · DBH ',
+    method_w_forest_dbh_unit: ' cm · height ',
+    method_w_forest_h_unit: ' m)',
+    method_w_formula_l1: 'Water yield = Annual precipitation − Direct runoff − Evapotranspiration',
+    method_w_formula_precip: 'Annual precip (elev-corrected): ',
+    method_w_formula_runoff: 'Direct runoff:                 ',
+    method_w_formula_evapo: 'Evapotranspiration:            ',
+    method_w_formula_yield_prefix: 'Water yield: ',
+    method_w_formula_aoi: 'AOI total: ',
+    method_w_formula_aoi_unit_1: ' m³/yr ≈ ',
+    method_w_formula_aoi_unit_2: ' million t/yr',
+    method_w_note_1: 'The official formula targets stands under 100 ha; we apply it per satellite-derived forest pixel and extend to the full AOI.',
+    method_w_note_2: 'Stand parameters (DBH, height, density) will be replaced with site-specific values as Forestry Agency LiDAR (80% national coverage) is integrated.',
+    ndvi_obs_points: 'NDVI obs. points',
+    ndvi_label_pre: 'Past ',
+    ndvi_label_mid: '-year NDVI history (',
+    ndvi_label_post: ' obs. points · Sentinel-2 measured)',
+    cert_company_sample: 'Sample Corp.',
+    cert_period_suffix: ' (5 years)',
+    cert_budget_unit: '',
+    sample_food: 'Sample Foods Ltd.',
+    sample_mfg: 'Sample Manufacturing Ltd.',
+    sample_beverage: 'Sample Beverage Ltd.',
+    yearly_format: (y, m, d) => `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`,
+  },
+};
+const T = __MM_T[__MM_LANG];
+
+// ====== end i18n bootstrap ======
+
 // Four-step flow:
 //  1) company form  →  2) candidates list/map  →  3) satellite view (Himi feature)  →  4) commitment certificate
 //
@@ -200,7 +469,7 @@
     const budgetDisplay = $('#budget-display');
     budgetInput.addEventListener('input', () => {
       const v = budgetInput.value;
-      budgetDisplay.textContent = `${fmtMan(v)}万円`;
+      budgetDisplay.textContent = `${fmtMan(v)}${T.budget_unit}`;
     });
 
     // "Locate" button — get current location via browser Geolocation API + reverse geocode
@@ -208,12 +477,12 @@
     if (locateBtn) {
       locateBtn.addEventListener('click', () => {
         if (!navigator.geolocation) {
-          alert('お使いのブラウザは位置情報に対応していません。');
+          alert(T.locate_unsupported);
           return;
         }
         locateBtn.disabled = true;
         const origLabel = locateBtn.textContent;
-        locateBtn.textContent = '取得中…';
+        locateBtn.textContent = T.loading;
         navigator.geolocation.getCurrentPosition(
           async (pos) => {
             try {
@@ -238,14 +507,14 @@
               } catch (e) { /* keep lv01 only */ }
               document.getElementById('address-input').value = address || `${lat.toFixed(4)},${lon.toFixed(4)}`;
             } catch (e) {
-              alert('住所の取得に失敗しました。手入力してください。');
+              alert(T.address_fail);
             } finally {
               locateBtn.disabled = false;
               locateBtn.textContent = origLabel;
             }
           },
           (err) => {
-            alert('位置情報の取得に失敗しました：' + err.message);
+            alert(T.locate_fail + err.message);
             locateBtn.disabled = false;
             locateBtn.textContent = origLabel;
           },
@@ -259,15 +528,15 @@
     if (sampleBtn) {
       sampleBtn.addEventListener('click', async () => {
         const samples = [
-          { company: 'サンプル食品株式会社', address: '静岡県焼津市利右衛門', region: 'chubu' },
-          { company: 'サンプル製造株式会社', address: '富山県氷見市丸の内', region: 'chubu' },
-          { company: 'サンプル飲料株式会社', address: '熊本県小国町宮原', region: 'kyushu' },
+          { company: T.sample_food, address: '静岡県焼津市利右衛門', region: 'chubu' },
+          { company: T.sample_mfg, address: '富山県氷見市丸の内', region: 'chubu' },
+          { company: T.sample_beverage, address: '熊本県小国町宮原', region: 'kyushu' },
         ];
         const s = samples[Math.floor(Math.random() * samples.length)];
 
         // Visible feedback: change the button text + scroll the form into view
         const origLabel = sampleBtn.textContent;
-        sampleBtn.textContent = `${s.address} で実行中…`;
+        sampleBtn.textContent = `${T.sample_runs_at}${s.address}…`;
         sampleBtn.disabled = true;
         const form = document.getElementById('company-form');
         form.querySelector('input[name="company"]').value = s.company;
@@ -290,7 +559,7 @@
     if (quickBtn) {
       quickBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        state.company = 'あなた';
+        state.company = T.you;
         state.address = '';
         state.addressLatLon = null;
         state.userBasin = null;
@@ -305,7 +574,7 @@
     $('#company-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(e.target);
-      state.company = fd.get('company') || 'あなた';
+      state.company = fd.get('company') || T.you;
       state.industry = fd.get('industry');
       state.budget = +fd.get('budget');
       state.region = fd.get('region');
@@ -322,12 +591,12 @@
       const leadEl = document.querySelector('#candidates .section-lead');
       const origTitle = titleEl.innerHTML;
       const origLead = leadEl.textContent;
-      titleEl.textContent = `🛰️  ${state.address || '候補地'} を探しています…`;
-      leadEl.textContent = '少々お待ちください。';
+      titleEl.textContent = `${T.searching_prefix}${state.address || T.candidate}${T.searching_suffix}`;
+      leadEl.textContent = T.please_wait;
       $('#candidates').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
       if (state.address) {
-        btn.textContent = '取水域を特定中…';
+        btn.textContent = T.finding_basin;
         btn.disabled = true;
         const [geo, _] = await Promise.all([
           geocodeAddress(state.address),
@@ -371,7 +640,7 @@
       if (state.candidateBasinFilter && state.watershedBasins.length) {
         const inside = state.watershedBasins.some(b => pointInGeometry([c.lon, c.lat], b.geometry));
         if (inside) {
-          return { ...c, in_watershed: true, tagline: '🌊 あなたの取水域内の森（深掘り対応）' };
+          return { ...c, in_watershed: true, tagline: T.in_basin_tagline };
         }
       }
       return c;
@@ -392,21 +661,21 @@
       const basinArea = Math.round(state.userBasin.properties.area_sqkm || 0);
       const upArea = Math.round(state.userBasin.properties.up_area_sqkm || basinArea);
 
-      title.innerHTML = `<span id="company-name-display">${state.company}</span> の取水域の森、<span id="candidate-count">${inWsCount || state.candidates.length}</span> つ`;
-      lead.textContent = '工場や本社で使う水は、流域の森が育んでいます。あなたの取水域内・上流側にある森を優先的に並べています。';
+      title.innerHTML = `<span id="company-name-display">${state.company}</span>${T.basin_title_suffix}<span id="candidate-count">${inWsCount || state.candidates.length}</span>${T.basins_word}`;
+      lead.textContent = T.basin_intro_lead;
 
-      $('#ws-name').textContent = `流域ID ${state.userBasin.properties.hybas_id}（HydroBASINS Lvl 10）`;
+      $('#ws-name').textContent = `${T.basin_id_label}${state.userBasin.properties.hybas_id}${T.basin_id_suffix}`;
       $('#ws-area').textContent = upArea.toLocaleString();
       $('#ws-jc-count').textContent = inWsCount;
       $('#ws-upstream-count').textContent = upstreamCount;
       summary.hidden = false;
     } else if (state.address) {
-      title.innerHTML = `<span id="company-name-display">${state.company}</span> 向けの候補、${state.candidates.length} つ`;
-      lead.textContent = '住所から取水域を特定できなかったため（離島・河口の可能性）、希望地域の中から候補を提示しています。';
+      title.innerHTML = `<span id="company-name-display">${state.company}</span>${T.region_candidates_suffix_1}${state.candidates.length}${T.region_candidates_suffix_2}`;
+      lead.textContent = T.region_lead;
       summary.hidden = true;
     } else {
-      title.innerHTML = `<span id="company-name-display">${state.company || 'あなた'}</span>の会社にあう森、<span id="candidate-count">${state.candidates.length}</span> つ見つかりました。`;
-      lead.textContent = 'クリックで、その森を衛星で「いま」見ることができます。';
+      title.innerHTML = `<span id="company-name-display">${state.company || T.you}</span>${T.default_title_pre}<span id="candidate-count">${state.candidates.length}</span>${T.default_title_post}`;
+      lead.textContent = T.default_lead;
       summary.hidden = true;
     }
 
@@ -480,9 +749,9 @@
       let park_badge = null;
       if (p.park) {
         if (p.park.nearby_km != null) {
-          park_badge = `🏔 ${p.park.park_type}隣接（${p.park.nearby_km}km）`;
+          park_badge = `${T.park_nearby_prefix}${p.park.park_type}（${p.park.nearby_km}${T.park_nearby_suffix}`;
         } else {
-          park_badge = `🏞 ${p.park.park_type}内`;
+          park_badge = `${T.park_inside_prefix}${p.park.park_type}${T.park_inside}`;
         }
       }
 
@@ -494,7 +763,7 @@
         lat: p.lat,
         lon: p.lon,
         area_ha: ha,
-        species: 'スギ・ヒノキ 70% / 広葉樹 30%（推定）',
+        species: T.species_default,
         mean_height: '— m',
         stand_age: '—',
         co2_estimate: co2_estimate,
@@ -503,7 +772,7 @@
         credit_man_yen: Math.round(co2_estimate * 1.2),
         owner: p.operator,
         deepdive: false,
-        tagline: inWatershed ? '🌊 あなたの取水域内の森' : `J-クレジット登録番号 ${p.no}・${p.methodology.split(' ')[0]}`,
+        tagline: inWatershed ? T.in_basin_short : `${T.jcredit_tagline_pre}${p.no} · ${p.methodology.split(' ')[0]}`,
         in_watershed: inWatershed,
         park_badge: park_badge,
         _jcredit: p
@@ -512,7 +781,7 @@
   }
 
   function shortenSummary(s) {
-    if (!s) return '森林経営活動プロジェクト';
+    if (!s) return T.methodology_default;
     return s.length > 24 ? s.slice(0, 24) + '…' : s;
   }
 
@@ -531,20 +800,20 @@
         ${c.tagline ? `<p style="margin:6px 0 4px;font-size:12px;color:var(--earth-600);font-weight:500;">✦ ${c.tagline}</p>` : ''}
         ${c.park_badge ? `<p style="margin:0 0 10px;font-size:11px;color:#3b6da1;font-weight:500;">${c.park_badge}</p>` : ''}
         <dl class="candidate-meta">
-          <dt>面積</dt><dd>${c.area_ha} ha</dd>
-          <dt>樹種</dt><dd>${c.species.replace(/ /g, '')}</dd>
-          <dt>林齢</dt><dd>${c.stand_age}</dd>
-          <dt>所有</dt><dd>${c.owner || '—'}</dd>
+          <dt>${T.card_area}</dt><dd>${c.area_ha} ha</dd>
+          <dt>${T.card_species}</dt><dd>${c.species.replace(/ /g, '')}</dd>
+          <dt>${T.card_age}</dt><dd>${c.stand_age}</dd>
+          <dt>${T.card_owner}</dt><dd>${c.owner || T.no_owner}</dd>
         </dl>
         <div class="candidate-co2">
           <span class="co2-num">${fmtMan(c.co2_estimate)}</span>
-          <span class="co2-unit">t-CO₂/年</span>
+          <span class="co2-unit">${T.co2_unit}</span>
           <span style="margin-left:auto;font-size:11px;color:var(--ink-500);">
             ±${fmtMan((c.co2_high - c.co2_low) / 2)}
           </span>
         </div>
-        <div class="candidate-credit">クレジット試算：約 ${fmtMan(c.credit_man_yen)} 万円/年</div>
-        <p class="candidate-cta">${c.deepdive ? '衛星画像で森を見る →' : '地図で見る →'}</p>
+        <div class="candidate-credit">${T.credit_estimate_prefix}${fmtMan(c.credit_man_yen)}${T.credit_estimate_suffix}</div>
+        <p class="candidate-cta">${c.deepdive ? T.cta_deepdive : T.cta_mapview}</p>
       `;
       card.addEventListener('click', () => selectCandidate(c.id));
       list.appendChild(card);
@@ -584,7 +853,7 @@
           fillColor: '#7fadda',
           fillOpacity: 0.18,
         },
-      }).addTo(map).bindTooltip('あなたの取水域・上流側', { sticky: true });
+      }).addTo(map).bindTooltip(T.tip_upstream, { sticky: true });
 
       // The user's local basin
       L.geoJSON(userBasinFC, {
@@ -594,7 +863,7 @@
           fillColor: '#3b6da1',
           fillOpacity: 0.25,
         },
-      }).addTo(map).bindTooltip('あなたの会社の取水域', { sticky: true });
+      }).addTo(map).bindTooltip(T.tip_user_basin, { sticky: true });
     }
 
     // ---- User's company location ----
@@ -623,9 +892,9 @@
         fillOpacity: 0.9,
       }).addTo(map);
 
-      const tipLine2 = inWs ? '<span style="color:#3b6da1;">🌊 あなたの取水域・上流</span><br>' : '';
+      const tipLine2 = inWs ? T.tt_upstream_html : '';
       marker.bindTooltip(
-        `<b>${c.name}</b><br>${tipLine2}${c.pref}<br>${fmtMan(c.co2_estimate)} t-CO₂/年`,
+        `<b>${c.name}</b><br>${tipLine2}${(__MM_LANG==='en'?prefJaToEn(c.pref):c.pref)}<br>${fmtMan(c.co2_estimate)}${T.co2_tip_suffix}`,
         { direction: 'top', offset: [0, -8] }
       );
 
@@ -684,16 +953,16 @@
       const scene = state.sentinelMeta.scene;
       const d = (scene.datetime || '').slice(0, 10);
       const cc = (scene.cloud_cover ?? 0).toFixed(1);
-      $('#dd-lead').innerHTML = `林野庁令和7年度委託事業の対象地。<b>${d}</b> の Sentinel-2 衛星画像（雲量${cc}%）から実際に NDVI を計算し、森林面積を推定しました。地図上の緑が濃い領域ほど植生が活発です。`;
+      $('#dd-lead').innerHTML = `${T.dd_lead_himi_pre}<b>${d}</b>${T.dd_lead_himi_mid}${cc}${T.dd_lead_himi_post}`;
     } else if (c.tagline) {
-      $('#dd-lead').textContent = `${c.tagline}。実際のJ-クレジット登録プロジェクトです。`;
+      $('#dd-lead').textContent = `${c.tagline}${T.dd_lead_jcredit_suffix}`;
     } else {
-      $('#dd-lead').textContent = 'Sentinel-1/2 衛星の週次観測と、林野庁オープンデータを統合して可視化しています。';
+      $('#dd-lead').textContent = T.dd_lead_default;
     }
 
     $('#dd-co2').textContent = fmtMan(c.co2_estimate);
     document.querySelector('#deepdive .metric-card.highlight .metric-error').textContent =
-      `95% 信頼区間：${fmtMan(c.co2_low)} – ${fmtMan(c.co2_high)} t-CO₂`;
+      `${T.co2_ci_prefix}${fmtMan(c.co2_low)}${T.co2_ci_dash}${fmtMan(c.co2_high)}${T.co2_ci_suffix}`;
 
     // Water yield card — Himi only for now
     const waterCard = $('#dd-water-card');
@@ -703,7 +972,7 @@
         waterCard.hidden = false;
         $('#dd-water-m3').textContent = fmtMan(w.aoi_total.water_yield_m3_per_yr);
         $('#dd-water-detail').textContent =
-          `${w.results_mm_per_yr.water_yield} mm/年 (降水量の ${w.results_pct.water_yield_pct}%) × ${w.aoi.forest_area_ha.toLocaleString()} ha ≈ ${w.aoi_total.water_yield_million_tons_per_yr} 百万トン／年`;
+          `${w.results_mm_per_yr.water_yield}${T.water_detail_mid_1}${w.results_pct.water_yield_pct}${T.water_detail_mid_2}${w.aoi.forest_area_ha.toLocaleString()}${T.water_detail_mid_3}${w.aoi_total.water_yield_million_tons_per_yr}${T.water_detail_suffix}`;
       } else {
         waterCard.hidden = true;
       }
@@ -744,7 +1013,7 @@
       map.fitBounds(state.sentinelMeta.leaflet_bounds, { padding: [20, 20] });
 
       // Layer control: NDVI vs Hide
-      const overlays = { 'NDVI 解析結果': state.ddNdviLayer };
+      const overlays = { [T.ndvi_layer_name]: state.ddNdviLayer };
       L.control.layers(null, overlays, { position: 'topright', collapsed: false }).addTo(map);
 
       // Update stamp metadata with real scene info
@@ -785,69 +1054,68 @@
     body.innerHTML = `
       <ol class="method-steps">
         <li>
-          <h4>1. 森林面積の特定（衛星実測）</h4>
+          <h4>${T.method_h1}</h4>
           <p>
-            Sentinel-2 L2A の <code>${fm.scene_window}</code> 期間の最低雲量シーンから NDVI を計算。
-            NDVI > <code>${fm.forest_threshold_ndvi}</code> の画素を森林と判定（Hansen et al. 2013, Tier 2 既定値）。
+            ${T.method_p_pre}<code>${fm.scene_window}</code>${T.method_p_mid}<code>${fm.forest_threshold_ndvi}</code>${T.method_p_post}
+            
           </p>
           <ul class="method-list">
-            <li>AOI 総面積：<strong>${co2.aoi.total_area_ha.toLocaleString()} ha</strong>（${co2.aoi.name}）</li>
-            <li>解析画素数：${fm.total_pixels.toLocaleString()} (1 画素 ≈ ${fm.pixel_area_ha} ha)</li>
-            <li>有効画素率（非雲）：<strong>${fm.valid_coverage_pct}%</strong></li>
-            <li>森林画素率：<strong>${fm.forest_ratio_pct}%</strong></li>
-            <li>森林面積：<strong>${co2.forest_area_ha.toLocaleString()} ha</strong></li>
+            <li>${T.method_aoi_area}<strong>${co2.aoi.total_area_ha.toLocaleString()} ha</strong>${T.method_aoi_name_pre}${co2.aoi.name}${T.method_aoi_name_post}</li>
+            <li>${T.method_pixels}${fm.total_pixels.toLocaleString()}${T.method_pixels_each}${fm.pixel_area_ha}${T.method_pixels_unit}</li>
+            <li>${T.method_valid_pct}<strong>${fm.valid_coverage_pct}%</strong></li>
+            <li>${T.method_forest_pct}<strong>${fm.forest_ratio_pct}%</strong></li>
+            <li>${T.method_forest_area}<strong>${co2.forest_area_ha.toLocaleString()} ha</strong></li>
           </ul>
         </li>
         <li>
-          <h4>2. 森林1 ha あたりの CO₂ 吸収量</h4>
-          <p><code>${co2.method}</code> による既定式：</p>
-          <pre class="method-formula">CO₂/ha/年 = MAI × wood_density × BEF × (1 + R) × CF × (44/12)
+          <h4>${T.method_h2}</h4>
+          <p><code>${co2.method}</code>${T.method_formula_intro_pre}</p>
+          <pre class="method-formula">CO₂/ha/yr = MAI × wood_density × BEF × (1 + R) × CF × (44/12)
         = ${p.MAI_m3_per_ha_yr} × ${p.wood_density_t_per_m3} × ${p.BEF}
           × (1 + ${p.root_shoot_ratio}) × ${p.carbon_fraction} × ${p.co2_per_c.toFixed(3)}
         ≈ ${co2.co2_per_ha_per_year} t-CO₂</pre>
           <ul class="method-list small-list">
-            <li>MAI：${p.MAI_m3_per_ha_yr} m³/ha/年（${co2.parameter_sources.MAI}）</li>
-            <li>木材密度：${p.wood_density_t_per_m3} t/m³（${co2.parameter_sources.wood_density}）</li>
-            <li>BEF（バイオマス拡大係数）：${p.BEF}（${co2.parameter_sources.BEF}）</li>
-            <li>根/地上比：${p.root_shoot_ratio}（${co2.parameter_sources.root_shoot_ratio}）</li>
-            <li>炭素割合：${p.carbon_fraction}（${co2.parameter_sources.carbon_fraction}）</li>
+            <li>${T.method_mai}${p.MAI_m3_per_ha_yr}${T.method_mai_unit}${co2.parameter_sources.MAI})</li>
+            <li>${T.method_density}${p.wood_density_t_per_m3}${T.method_density_unit}${co2.parameter_sources.wood_density})</li>
+            <li>${T.method_bef}${p.BEF} (${co2.parameter_sources.BEF})</li>
+            <li>${T.method_root}${p.root_shoot_ratio} (${co2.parameter_sources.root_shoot_ratio})</li>
+            <li>${T.method_carbon}${p.carbon_fraction} (${co2.parameter_sources.carbon_fraction})</li>
           </ul>
         </li>
         <li>
-          <h4>3. AOI 全体の年間 CO₂ 吸収量</h4>
-          <pre class="method-formula">${co2.forest_area_ha.toLocaleString()} ha × ${co2.co2_per_ha_per_year} t-CO₂/ha/年
-  ≈ <strong>${co2.annual_co2_t.toLocaleString()} t-CO₂/年</strong>
-  ( ±${(co2.uncertainty_pct * 100).toFixed(0)}% 信頼幅：${co2.annual_co2_low_t.toLocaleString()} – ${co2.annual_co2_high_t.toLocaleString()} )</pre>
+          <h4>${T.method_h3}</h4>
+          <pre class="method-formula">${co2.forest_area_ha.toLocaleString()} ha × ${co2.co2_per_ha_per_year} t-CO₂/ha/yr
+  ≈ <strong>${co2.annual_co2_t.toLocaleString()} ${T.co2_unit}</strong>
+  ( ±${(co2.uncertainty_pct * 100).toFixed(0)}% CI: ${co2.annual_co2_low_t.toLocaleString()} – ${co2.annual_co2_high_t.toLocaleString()} )</pre>
           <p class="method-note">
-            不確実性は Tier 2 で典型的に ±30%。MAI の地域差、樹種混交、衛星分類誤差を合算した経験値です。
-            個別森林・施業実態を組み込むことで、より狭い信頼幅と高精度な推定が可能になります。
+            ${T.method_uncertainty}
+            ${T.method_uncertainty_2}
           </p>
         </li>
         ${w ? `
         <li>
-          <h4>4. 水資源涵養量（林野庁簡易評価法 Ver.1.0 準拠）</h4>
+          <h4>${T.method_h4}</h4>
           <p>
-            <a href="${w.method_source_url}" target="_blank" rel="noopener">林野庁が令和8年3月に公開した算定式</a>
-            に、衛星・公開データだけで揃えたインプットを投入：
+            <a href="${w.method_source_url}" target="_blank" rel="noopener">${T.method_w_link_text}</a>
+            ${T.method_w_intro}
           </p>
           <ul class="method-list">
-            <li>気象（月別気温・降水量）：<strong>NASA POWER API</strong>（${w.inputs.climate.source}）</li>
-            <li>標高：国土地理院 標高API（観測点 ${w.inputs.elevation.weather_station_m} m → 林地 ${w.inputs.elevation.forest_point_m} m）</li>
-            <li>地質区分：産総研 シームレス地質図 API → <strong>${w.inputs.geology.rinya_class}</strong>（${w.inputs.geology.lithology}）</li>
-            <li>林分情報：林野庁 標準値（${w.inputs.forest.type}・密度 ${w.inputs.forest.density_per_ha} 本/ha・DBH ${w.inputs.forest.dbh_cm} cm・樹高 ${w.inputs.forest.height_m} m）</li>
+            <li>${T.method_w_climate}<strong>NASA POWER API</strong>${T.method_w_climate_src_pre}${w.inputs.climate.source})</li>
+            <li>${T.method_w_elev}${w.inputs.elevation.weather_station_m}${T.method_w_elev_mid}${w.inputs.elevation.forest_point_m}${T.method_w_elev_post}</li>
+            <li>${T.method_w_geo}<strong>${w.inputs.geology.rinya_class}</strong> (${w.inputs.geology.lithology}${T.method_w_geo_post}</li>
+            <li>${T.method_w_forest}${w.inputs.forest.type}${T.method_w_forest_density}${w.inputs.forest.density_per_ha}${T.method_w_forest_density_unit}${w.inputs.forest.dbh_cm}${T.method_w_forest_dbh_unit}${w.inputs.forest.height_m}${T.method_w_forest_h_unit}</li>
           </ul>
-          <pre class="method-formula">水資源涵養量 = 年降水量 − 直接流出量 − 蒸発散量
+          <pre class="method-formula">${T.method_w_formula_l1}
 
-  年降水量（標高補正後）：${w.results_mm_per_yr.precipitation} mm/年 (100%)
-  直接流出量：           ${w.results_mm_per_yr.direct_runoff} mm/年 (${w.results_pct.direct_runoff_pct}%)
-  蒸発散量：             ${w.results_mm_per_yr.evapotranspiration} mm/年 (${w.results_pct.evapotranspiration_pct}%)
+  ${T.method_w_formula_precip}${w.results_mm_per_yr.precipitation} mm/yr (100%)
+  ${T.method_w_formula_runoff}${w.results_mm_per_yr.direct_runoff} mm/yr (${w.results_pct.direct_runoff_pct}%)
+  ${T.method_w_formula_evapo}${w.results_mm_per_yr.evapotranspiration} mm/yr (${w.results_pct.evapotranspiration_pct}%)
   ────────────────
-  <strong>水資源涵養量：${w.results_mm_per_yr.water_yield} mm/年 (${w.results_pct.water_yield_pct}%)</strong>
-  AOI 全体：${w.aoi_total.water_yield_m3_per_yr.toLocaleString()} m³/年 ≈ ${w.aoi_total.water_yield_million_tons_per_yr} 百万トン/年</pre>
+  <strong>${T.method_w_formula_yield_prefix}${w.results_mm_per_yr.water_yield} mm/yr (${w.results_pct.water_yield_pct}%)</strong>
+  ${T.method_w_formula_aoi}${w.aoi_total.water_yield_m3_per_yr.toLocaleString()}${T.method_w_formula_aoi_unit_1}${w.aoi_total.water_yield_million_tons_per_yr}${T.method_w_formula_aoi_unit_2}</pre>
           <p class="method-note">
-            林野庁の本式は 100 ha 未満の小規模林分向けですが、本サイトでは衛星で抽出した
-            森林ピクセルごとに同じ式を当てはめ、AOI 全体に拡張しています。
-            林分情報（DBH・樹高・密度）は将来、林野庁 LiDAR 80%整備済データの取り込みで個別森林ごとに置き換える計画です。
+            ${T.method_w_note_1}
+            ${T.method_w_note_2}
           </p>
         </li>` : ''}
       </ol>
@@ -870,7 +1138,7 @@
       <div class="stamp-row"><span class="stamp-label">Cloud</span><span>${(scene.cloud_cover ?? 0).toFixed(1)}%</span></div>
       <div class="stamp-row"><span class="stamp-label">Valid pixels</span><span>${fmask.valid_coverage_pct ?? '?'}%</span></div>
       <div class="stamp-row"><span class="stamp-label">Forest pixels</span><span>${fmask.forest_ratio_pct ?? '?'}%</span></div>
-      <div class="stamp-row"><span class="stamp-label">NDVI 観測点</span><span>${state.sentinelSeries?.points?.length ?? '?'} (5yr)</span></div>
+      <div class="stamp-row"><span class="stamp-label">${T.ndvi_obs_points}</span><span>${state.sentinelSeries?.points?.length ?? '?'} (5yr)</span></div>
     `;
   }
 
@@ -923,7 +1191,7 @@
     axis.innerHTML = years.map(y => `<span>${y}</span>`).join('');
     const label = document.querySelector('.timeline-label');
     if (label) {
-      label.textContent = `過去 ${endYear - startYear} 年の NDVI 推移（${series.length} 観測点・Sentinel-2 実測）`;
+      label.textContent = `${T.ndvi_label_pre}${endYear - startYear}${T.ndvi_label_mid}${series.length}${T.ndvi_label_post}`;
     }
   }
 
@@ -939,15 +1207,15 @@
     const certNo = `MM-${issueDate}-${Math.floor(Math.random() * 900 + 100)}`;
 
     $('#cert-no').textContent = certNo;
-    $('#cert-company').textContent = state.company || 'サンプル株式会社';
+    $('#cert-company').textContent = state.company || T.cert_company_sample;
     $('#cert-forest').textContent = `${c.pref}・${c.name}`;
     $('#cert-area').textContent = `${c.area_ha} ha`;
     $('#cert-co2').innerHTML = `${fmtMan(c.co2_estimate)} t-CO₂ <span class="cert-sub">（95% CI: ${fmtMan(c.co2_low)} – ${fmtMan(c.co2_high)}）</span>`;
 
     const end = new Date(now);
     end.setFullYear(end.getFullYear() + 5);
-    $('#cert-period').textContent = `${formatJpDate(now)} 〜 ${formatJpDate(end)}（5年間）`;
-    $('#cert-budget').textContent = `${fmtMan(state.budget)} 万円`;
+    $('#cert-period').textContent = `${formatJpDate(now)} – ${formatJpDate(end)}${T.cert_period_suffix}`;
+    $('#cert-budget').textContent = (__MM_LANG==='en' ? `¥${(state.budget*1e4).toLocaleString()}` : `${fmtMan(state.budget)} 万円`);
 
     $('#cert-timestamp').textContent = now.toISOString().replace('Z', '+00:00');
 
@@ -968,7 +1236,7 @@
   };
 
   function formatJpDate(d) {
-    return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+    return T.yearly_format(d.getFullYear(), d.getMonth() + 1, d.getDate());
   }
 
   // ---- Reset ----

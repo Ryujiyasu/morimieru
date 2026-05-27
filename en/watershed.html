@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>もりみえる 流域マップ — 山・森・水のつながりを見える化</title>
-<meta name="description" content="日本全国 7,941 の流域と 13,611 の山頂を 3D で可視化。それぞれの「公益機能スコア」（CO₂ 吸収・水源涵養・生物多様性）を量化し、ハザードマップと重ねて見られる、もりみえるの流域マップ。">
-<meta property="og:title" content="もりみえる 流域マップ">
-<meta property="og:description" content="日本全国の流域と山頂を 3D で可視化。森の公益機能スコア × ハザードマップ。">
+<title>Watershed Map · morimieru — Mountains, forests, and water visualized in 3D</title>
+<meta name="description" content="Japan-wide 3D visualization of 7,941 watersheds and 13,611 mountain peaks. Each basin scored on CO₂ absorption, water yield, and biodiversity, overlaid with hazard maps.">
+<meta property="og:title" content="morimieru Watershed Map">
+<meta property="og:description" content="3D watersheds and peaks of Japan. Public-good scores × hazard maps.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mori-mieru.jp/watershed.html">
 <link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/watershed.html">
 <link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/watershed.html">
 <link rel="alternate" hreflang="x-default" href="https://mori-mieru.jp/watershed.html">
-<link rel="canonical" href="https://mori-mieru.jp/watershed.html">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
-<link rel="apple-touch-icon" sizes="192x192" href="assets/favicon-192.png">
-<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="canonical" href="https://mori-mieru.jp/en/watershed.html">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/watershed.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/watershed.html">
+<link rel="alternate" hreflang="x-default" href="https://mori-mieru.jp/watershed.html">
+<link rel="canonical" href="https://mori-mieru.jp/en/watershed.html">
+<link rel="icon" type="image/png" sizes="192x192" href="../assets/favicon-192.png">
+<link rel="apple-touch-icon" sizes="192x192" href="../assets/favicon-192.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -287,41 +291,41 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 
 <div id="topbar">
   <a href="/" class="brand">
-    <img class="logo-mark" src="assets/logo-mark.png" alt="もりみえる ロゴ" width="30" height="30">
-    <span class="logo-text">もりみえる</span>
+    <img class="logo-mark" src="../assets/logo-mark.png" alt="morimieru logo" width="30" height="30">
+    <span class="logo-text">morimieru</span>
     <span class="logo-divider">/</span>
-    <span class="page-label">流域マップ</span>
+    <span class="page-label">Watershed Map</span>
   </a>
-  <a href="map.html" class="nav-link">📊 データマップ</a>
-  <a href="reports.html" class="nav-link">📑 レポート</a>
-  <a href="article/" class="nav-link">📖 解説記事</a>
-  <a href="/" class="nav-link">← TOP</a>
+  <a href="../map.html" class="nav-link">📊 Data Map</a>
+  <a href="../reports.html" class="nav-link">📑 Reports</a>
+  <a href="../article/" class="nav-link">📖 Articles</a>
+  <a href="/" class="nav-link">← Home</a>
   <span class="lang-toggle">
-    <a href="./watershed.html" class="active" title="日本語">JP</a>
-    <a href="/en/watershed.html" title="English">EN</a>
+    <a href="../watershed.html" title="日本語">JP</a>
+    <a href="./watershed.html" class="active" title="English">EN</a>
   </span>
 </div>
 
 <div class="selection-pill" id="selection-pill">
-  <button class="clear" id="selection-clear" title="選択を解除">×</button>
-  <span class="badge" id="selection-badge">流域</span>
+  <button class="clear" id="selection-clear" title="Clear selection">×</button>
+  <span class="badge" id="selection-badge">Basin</span>
   <span class="value" id="selection-value">—</span>
 </div>
 
 <div class="mini-legend">
-  <h4>凡例</h4>
-  <div class="row"><span class="line-acc"></span>選択中の流域</div>
-  <div class="row"><span style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#5bc4e8;"></span>下流チェーン</div>
-  <div class="row"><span style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#c47a4a;"></span>上流チェーン</div>
-  <div class="row"><span style="font-size:14px;line-height:1;color:#3a2616;text-shadow:0 0 2px #fff;">▲</span>1500m 以上の山頂</div>
-  <div class="row"><span class="dot"></span>1500m 未満の山頂</div>
-  <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);line-height:1.5;">流域や山頂をクリックで詳細</p>
+  <h4>Legend</h4>
+  <div class="row"><span class="line-acc"></span>Selected basin</div>
+  <div class="row"><span style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#5bc4e8;"></span>Downstream chain</div>
+  <div class="row"><span style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#c47a4a;"></span>Upstream chain</div>
+  <div class="row"><span style="font-size:14px;line-height:1;color:#3a2616;text-shadow:0 0 2px #fff;">▲</span>Peaks ≥1500 m</div>
+  <div class="row"><span class="dot"></span>Peaks <1500 m</div>
+  <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);line-height:1.5;">Click a basin or peak for details</p>
 </div>
 
 <div class="mode-bar" role="tablist">
-  <button id="mode-standard" class="active" type="button">標準</button>
-  <button id="mode-hazard" type="button">ハザード</button>
-  <button id="mode-all" type="button">すべて</button>
+  <button id="mode-standard" class="active" type="button">Standard</button>
+  <button id="mode-hazard" type="button">Hazard</button>
+  <button id="mode-all" type="button">All</button>
 </div>
 
 <div id="map"></div>
@@ -329,8 +333,8 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 <aside class="detail-panel" id="detail-panel">
   <div class="detail-head">
     <div>
-      <span class="detail-badge" id="dp-badge">情報</span>
-      <h3 class="detail-title" id="dp-title">地図上の要素をクリック</h3>
+      <span class="detail-badge" id="dp-badge">Info</span>
+      <h3 class="detail-title" id="dp-title">Click any feature on the map</h3>
     </div>
     <button class="detail-close" onclick="closeDetail()">×</button>
   </div>
@@ -338,25 +342,25 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-jp); c
 </aside>
 
 <div class="bottom-bar">
-  © もりみえる / Map &amp; terrain: <a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OSM</a> ／ Basins: HydroBASINS ／ Peaks: OSM ／ Rivers: <a href="https://www.gsi.go.jp/" target="_blank">© 国土地理院</a> ／ Hazards: 国交省ハザードマップポータル
+  © morimieru / Map &amp; terrain: <a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OSM</a> ／ Basins: HydroBASINS ／ Peaks: OSM ／ Rivers: <a href="https://www.gsi.go.jp/" target="_blank">© GSI Japan</a> ／ Hazards: MLIT Hazard Map Portal
 </div>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
-<script src="config.js"></script>
+<script src="../config.js"></script>
 <script>
-// ====== Mapbox GL JS — 3D 流域マップ ======
+// ====== Mapbox GL JS — 3D Watershed Map ======
 // Token は config.js (gitignore) または config.example.js (placeholder) から読む
 mapboxgl.accessToken = window.MAPBOX_TOKEN || '';
 if (!mapboxgl.accessToken) {
   document.body.insertAdjacentHTML('beforeend',
     '<div style="position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#fef0e3;border:1px solid #c47a4a;padding:14px 22px;border-radius:10px;z-index:9999;max-width:500px;font-size:13px;">' +
-    '⚠️ Mapbox token が設定されていません。<code>config.js</code> を作成して <code>window.MAPBOX_TOKEN</code> を設定してください。' +
+    '⚠️ Mapbox token is not set. Create <code>config.js</code> and set <code>window.MAPBOX_TOKEN</code>.' +
     '</div>');
 }
 const map = new mapboxgl.Map({
   container: 'map',
   hash: true,
-  center: [138.73, 35.36],     // 富士山真上
+  center: [138.73, 35.36],     // directly above Mt. Fuji
   zoom: 12,
   pitch: 55,
   bearing: -18,
@@ -437,7 +441,7 @@ map.on('load', async () => {
     tiles: ['https://cyberjapandata.gsi.go.jp/xyz/optimal_bvmap-v1/{z}/{x}/{y}.pbf'],
     minzoom: 4,
     maxzoom: 16,
-    attribution: '河川中心線：© 国土地理院 最適化ベクトルタイル',
+    attribution: 'River centerlines: © GSI Japan optimized vector tiles',
   });
   map.addLayer({
     id: 'gsi-rivers',
@@ -456,7 +460,7 @@ map.on('load', async () => {
   });
 
   // ----- watersheds -----
-  watershedsGJ = await fetch('data/watersheds/japan_lev10_scored.geojson').then(r => r.json());
+  watershedsGJ = await fetch('../data/watersheds/japan_lev10_scored.geojson').then(r => r.json());
   for (const f of watershedsGJ.features) {
     const s = f.properties.scores.total;
     f.properties._fill = scoreToColor(s);
@@ -496,7 +500,7 @@ map.on('load', async () => {
       ],
     },
   });
-  // 選択中の流域 内側にもう一本ぼかし線（グロー風） — 衛星上で蛍光感を出す
+  // Selected basin 内側にもう一本ぼかし線（グロー風） — 衛星上で蛍光感を出す
   map.addLayer({
     id: 'watershed-line-glow',
     type: 'line',
@@ -509,7 +513,7 @@ map.on('load', async () => {
     },
   });
 
-  // 上流／下流チェーン — feature-state.chain で色分けし、アニメで順次点灯
+  // 上流／Downstream chain — feature-state.chain で色分けし、アニメで順次点灯
   map.addLayer({
     id: 'watershed-chain',
     type: 'line',
@@ -532,7 +536,7 @@ map.on('load', async () => {
   map.setPaintProperty('watershed-chain', 'line-width-transition', { duration: 350, delay: 0 });
 
   // ----- peaks -----
-  peaksGJ = await fetch('data/mountains/japan_peaks.geojson').then(r => r.json());
+  peaksGJ = await fetch('../data/mountains/japan_peaks.geojson').then(r => r.json());
   // Filter peaks for client perf — keep all but rely on zoom expression for visibility
   map.addSource('peaks', { type: 'geojson', data: peaksGJ });
   // 山頂 - 低標高（< 1500m）：小さな白丸＋土色アウトライン
@@ -628,7 +632,7 @@ map.on('load', async () => {
     tiles: ['https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png'],
     tileSize: 256,
     maxzoom: 17,
-    attribution: '洪水浸水想定区域：© 国交省 ハザードマップポータル',
+    attribution: 'Flood inundation zones: © MLIT Hazard Map Portal',
   });
   map.addLayer({
     id: 'haz-flood-layer', type: 'raster', source: 'haz-flood',
@@ -640,7 +644,7 @@ map.on('load', async () => {
     tiles: ['https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png'],
     tileSize: 256,
     maxzoom: 17,
-    attribution: '土砂災害警戒区域：© 国交省 ハザードマップポータル',
+    attribution: 'Landslide hazard zones: © MLIT Hazard Map Portal',
   });
   map.addLayer({
     id: 'haz-doseki-layer', type: 'raster', source: 'haz-doseki',
@@ -689,7 +693,7 @@ function setSelectedHybas(id) {
   }
 }
 
-// ----- 上下流チェーン アニメ -----
+// ----- 上Downstream chain アニメ -----
 function clearChain() {
   for (const id of chainState) {
     map.setFeatureState({ source: 'watersheds', id }, { chain: null });
@@ -755,7 +759,7 @@ function animateChain(rootId) {
 
 function showSelectionPill(props, kind) {
   const pill = document.getElementById('selection-pill');
-  document.getElementById('selection-badge').textContent = kind === 'peak' ? '山頂' : '流域';
+  document.getElementById('selection-badge').textContent = kind === 'peak' ? 'Peak' : 'Basin';
   const value = kind === 'peak'
     ? `${props.name}${props.elevation_m ? `（${props.elevation_m}m）` : ''}`
     : `${props.main_pref_name || '?'} 流域 #${props.hybas_id}`;
@@ -781,44 +785,44 @@ function showWatershedDetail(feature) {
       <span class="ps">★${pk.score}</span>
     </li>
   `).join('');
-  document.getElementById('dp-badge').textContent = '流域';
+  document.getElementById('dp-badge').textContent = 'Basin';
   document.getElementById('dp-badge').className = 'detail-badge';
   document.getElementById('dp-title').textContent = `${p.main_pref_name || '?'} 流域（${p.hybas_id}）`;
   document.getElementById('dp-body').innerHTML = `
     <div class="score-card">
-      <p class="label">公益機能スコア</p>
+      <p class="label">Public-function score</p>
       <p class="total">${scores.total}<span class="unit">/100</span></p>
       <div class="score-bars">
-        <div class="score-bar-row co2"><span class="name">CO₂ 吸収</span><span class="bar"><span class="fill" style="width:${scores.co2}%"></span></span><span class="num">${scores.co2}</span></div>
-        <div class="score-bar-row water"><span class="name">水源涵養</span><span class="bar"><span class="fill" style="width:${scores.water}%"></span></span><span class="num">${scores.water}</span></div>
-        <div class="score-bar-row bio"><span class="name">生物多様性</span><span class="bar"><span class="fill" style="width:${scores.bio}%"></span></span><span class="num">${scores.bio}</span></div>
+        <div class="score-bar-row co2"><span class="name">CO₂</span><span class="bar"><span class="fill" style="width:${scores.co2}%"></span></span><span class="num">${scores.co2}</span></div>
+        <div class="score-bar-row water"><span class="name">Water</span><span class="bar"><span class="fill" style="width:${scores.water}%"></span></span><span class="num">${scores.water}</span></div>
+        <div class="score-bar-row bio"><span class="name">Biodiversity</span><span class="bar"><span class="fill" style="width:${scores.bio}%"></span></span><span class="num">${scores.bio}</span></div>
       </div>
     </div>
     <div class="detail-section">
-      <h4>流域の基本情報</h4>
+      <h4>Basin info</h4>
       <dl>
-        <dt>主要県</dt><dd>${p.main_pref_name || '-'}</dd>
-        <dt>面積</dt><dd>${p.area_sqkm} km²</dd>
-        <dt>上流面積</dt><dd>${p.up_area_sqkm?.toLocaleString() || '-'} km²</dd>
-        <dt>森林率</dt><dd>${Math.round(p.forest_pct * 100)}%</dd>
-        <dt>CO₂/ha/年</dt><dd>${p.co2_per_ha_yr} t</dd>
-        <dt>自然公園 重複</dt><dd>${p.park_overlap_pct}%</dd>
-        <dt>山頂数</dt><dd>${p.peak_count} 座</dd>
-        <dt>最高点</dt><dd>${p.max_elev_m ? p.max_elev_m + ' m' : '-'}</dd>
+        <dt>Main pref.</dt><dd>${p.main_pref_name || '-'}</dd>
+        <dt>Area</dt><dd>${p.area_sqkm} km²</dd>
+        <dt>Upstream area</dt><dd>${p.up_area_sqkm?.toLocaleString() || '-'} km²</dd>
+        <dt>Forest cover</dt><dd>${Math.round(p.forest_pct * 100)}%</dd>
+        <dt>CO₂/ha/yr</dt><dd>${p.co2_per_ha_yr} t</dd>
+        <dt>Park overlap</dt><dd>${p.park_overlap_pct}%</dd>
+        <dt>Peak count</dt><dd>${p.peak_count} </dd>
+        <dt>Highest point</dt><dd>${p.max_elev_m ? p.max_elev_m + ' m' : '-'}</dd>
       </dl>
     </div>
     ${peakRows ? `<div class="detail-section">
-      <h4>含む山頂（スコア上位）</h4>
+      <h4>Top peaks in basin</h4>
       <ul class="peak-list">${peakRows}</ul>
     </div>` : ''}
     <div class="detail-section">
-      <h4>下流・上流</h4>
+      <h4>Downstream / Upstream</h4>
       <dl>
-        <dt>下流流域 ID</dt><dd>${p.next_down || '海/沈降地'}</dd>
-        <dt>最終排出</dt><dd>${p.next_sink || '-'}</dd>
+        <dt>Downstream basin ID</dt><dd>${p.next_down || 'sea / sink'}</dd>
+        <dt>Final outlet</dt><dd>${p.next_sink || '-'}</dd>
         <dt>Pfafstetter</dt><dd>${p.pfaf_id}</dd>
       </dl>
-      ${p.next_down ? `<button onclick="focusBasin(${p.next_down})" style="margin-top:8px;padding:6px 12px;border:1px solid var(--ink-300);background:var(--cream);border-radius:8px;font-size:12px;cursor:pointer;">↓ 下流流域へ</button>` : ''}
+      ${p.next_down ? `<button onclick="focusBasin(${p.next_down})" style="margin-top:8px;padding:6px 12px;border:1px solid var(--ink-300);background:var(--cream);border-radius:8px;font-size:12px;cursor:pointer;">↓ Go to downstream basin</button>` : ''}
     </div>
   `;
   openDetail();
@@ -828,36 +832,36 @@ function showPeakDetail(feature) {
   const p = feature.properties;
   const scores = typeof p.scores === 'string' ? JSON.parse(p.scores) : p.scores;
   showSelectionPill(p, 'peak');
-  document.getElementById('dp-badge').textContent = '山頂';
+  document.getElementById('dp-badge').textContent = 'Peak';
   document.getElementById('dp-badge').className = 'detail-badge peak';
   document.getElementById('dp-title').textContent = `${p.name}${p.elevation_m ? `（${p.elevation_m}m）` : ''}`;
   document.getElementById('dp-body').innerHTML = `
     <div class="score-card">
-      <p class="label">公益機能スコア</p>
+      <p class="label">Public-function score</p>
       <p class="total">${scores.total}<span class="unit">/100</span></p>
       <div class="score-bars">
-        <div class="score-bar-row co2"><span class="name">CO₂ 吸収</span><span class="bar"><span class="fill" style="width:${scores.co2}%"></span></span><span class="num">${scores.co2}</span></div>
-        <div class="score-bar-row water"><span class="name">水源涵養</span><span class="bar"><span class="fill" style="width:${scores.water}%"></span></span><span class="num">${scores.water}</span></div>
-        <div class="score-bar-row bio"><span class="name">生物多様性</span><span class="bar"><span class="fill" style="width:${scores.bio}%"></span></span><span class="num">${scores.bio}</span></div>
+        <div class="score-bar-row co2"><span class="name">CO₂</span><span class="bar"><span class="fill" style="width:${scores.co2}%"></span></span><span class="num">${scores.co2}</span></div>
+        <div class="score-bar-row water"><span class="name">Water</span><span class="bar"><span class="fill" style="width:${scores.water}%"></span></span><span class="num">${scores.water}</span></div>
+        <div class="score-bar-row bio"><span class="name">Biodiversity</span><span class="bar"><span class="fill" style="width:${scores.bio}%"></span></span><span class="num">${scores.bio}</span></div>
       </div>
     </div>
     <div class="detail-section">
-      <h4>山の基本情報</h4>
+      <h4>Peak info</h4>
       <dl>
-        <dt>所在</dt><dd>${p.pref_name || '-'}</dd>
-        <dt>標高</dt><dd>${p.elevation_m || '-'} m</dd>
-        ${p.name_en ? `<dt>英語名</dt><dd>${p.name_en}</dd>` : ''}
-        ${p.in_park ? `<dt>保護区</dt><dd>${p.in_park}内</dd>` : ''}
-        ${p.nearby_park ? `<dt>近隣保護区</dt><dd>${p.nearby_park}（${p.park_distance_km}km）</dd>` : ''}
-        <dt>森林率</dt><dd>${Math.round(p.forest_pct * 100)}%</dd>
+        <dt>Location</dt><dd>${p.pref_name || '-'}</dd>
+        <dt>Elevation</dt><dd>${p.elevation_m || '-'} m</dd>
+        ${p.name_en ? `<dt>English name</dt><dd>${p.name_en}</dd>` : ''}
+        ${p.in_park ? `<dt>Protected area</dt><dd>${p.in_park}</dd>` : ''}
+        ${p.nearby_park ? `<dt>Nearby protected area</dt><dd>${p.nearby_park}（${p.park_distance_km}km）</dd>` : ''}
+        <dt>Forest cover</dt><dd>${Math.round(p.forest_pct * 100)}%</dd>
       </dl>
     </div>
     <div class="detail-section">
-      <h4>含む流域へ</h4>
-      <p style="font-size:12px;color:var(--ink-700);margin:0 0 8px;">この山頂が含まれる流域を地図上でフォーカスします。</p>
-      <button onclick="focusWatershedAt(${feature.geometry.coordinates[0]},${feature.geometry.coordinates[1]})" style="padding:8px 14px;border:1px solid var(--green-700);background:var(--green-100);color:var(--green-900);border-radius:8px;font-size:12px;cursor:pointer;font-weight:600;">🌊 含む流域を表示</button>
+      <h4>Containing basin</h4>
+      <p style="font-size:12px;color:var(--ink-700);margin:0 0 8px;">Focus the map on the watershed containing this peak.</p>
+      <button onclick="focusWatershedAt(${feature.geometry.coordinates[0]},${feature.geometry.coordinates[1]})" style="padding:8px 14px;border:1px solid var(--green-700);background:var(--green-100);color:var(--green-900);border-radius:8px;font-size:12px;cursor:pointer;font-weight:600;">🌊 Show containing basin</button>
     </div>
-    ${p.wikipedia ? `<div class="detail-section"><a href="https://${p.wikipedia.split(':')[0]}.wikipedia.org/wiki/${encodeURIComponent(p.wikipedia.split(':').slice(1).join(':'))}" target="_blank" style="font-size:13px;">Wikipedia で見る →</a></div>` : ''}
+    ${p.wikipedia ? `<div class="detail-section"><a href="https://${p.wikipedia.split(':')[0]}.wikipedia.org/wiki/${encodeURIComponent(p.wikipedia.split(':').slice(1).join(':'))}" target="_blank" style="font-size:13px;">View on Wikipedia →</a></div>` : ''}
   `;
   openDetail();
   // Fly to with appropriate framing

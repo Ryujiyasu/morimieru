@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TNFD forest disclosure: a practical playbook for the LEAP approach | morimieru</title>
+<meta name="description" content="A step-by-step guide to disclosing forest dependencies and impacts under TNFD. Built around the LEAP framework (Locate, Evaluate, Assess, Prepare), with concrete data sources for global and India deployments and a 3-year implementation roadmap.">
+<meta name="keywords" content="TNFD, nature-related financial disclosure, LEAP approach, forest disclosure, BRSR India, IFSCA, watershed, biodiversity, ESG, sustainability reporting, water dependency">
+<meta name="author" content="morimieru | M-square Lab Inc.">
+<link rel="canonical" href="https://mori-mieru.jp/en/article/tnfd-forest-disclosure.html">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/article/tnfd-forest-disclosure.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/tnfd-forest-disclosure.html">
+
+<meta property="og:title" content="TNFD forest disclosure: a practical playbook (LEAP approach)">
+<meta property="og:description" content="Step-by-step LEAP playbook for forest disclosure, with global data sources and India context.">
+<meta property="og:image" content="https://mori-mieru.jp/article/img/tnfd-forest-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/en/article/tnfd-forest-disclosure.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="morimieru">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TNFD forest disclosure: practical LEAP playbook">
+<meta name="twitter:description" content="Step-by-step LEAP guide with global data sources.">
+<meta name="twitter:image" content="https://mori-mieru.jp/article/img/tnfd-forest-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "TNFD forest disclosure: a practical playbook for the LEAP approach",
+  "description": "Step-by-step guide to TNFD disclosure of forest dependencies and impacts, built around LEAP.",
+  "image": "https://mori-mieru.jp/article/img/tnfd-forest-hero.jpg",
+  "datePublished": "2026-05-26",
+  "dateModified": "2026-05-26",
+  "inLanguage": "en",
+  "author": {"@type": "Organization", "name": "morimieru", "url": "https://mori-mieru.jp/en/"},
+  "publisher": {"@type": "Organization", "name": "M-square Lab Inc.", "url": "https://m2-labo.jp/"},
+  "mainEntityOfPage": "https://mori-mieru.jp/en/article/tnfd-forest-disclosure.html"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../report/report.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+
+<style>
+.report-hero { --bg-image: url('../../article/img/tnfd-forest-hero.jpg'); }
+.article-figure { margin: 28px 0; }
+.article-figure img { width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block; }
+.article-figure figcaption { font-size: 13px; color: var(--ink-500); margin-top: 8px; text-align: center; }
+.breadcrumb { font-size: 12px; color: var(--ink-500); padding: 16px 0 0; max-width: 960px; margin: 0 auto; }
+.breadcrumb a { color: var(--ink-500); }
+.faq dt { font-weight: 700; margin-top: 14px; color: var(--theme-dark); }
+.faq dd { margin: 4px 0 0 0; }
+.related { background: var(--green-100); padding: 24px 28px; border-radius: var(--radius-md); margin: 36px 0; }
+.related h3 { margin-top: 0; }
+.related ul { margin: 0; padding-left: 20px; }
+.leap-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 20px 0; }
+.leap-card { background: var(--cream); padding: 16px; border-radius: var(--radius-sm); border-left: 4px solid var(--theme); }
+.leap-card .letter { font-family: var(--font-en); font-size: 24px; font-weight: 700; color: var(--theme); }
+.leap-card .name { font-weight: 700; margin: 2px 0 4px; }
+.leap-card .desc { font-size: 13px; color: var(--ink-700); line-height: 1.6; }
+.lang-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/en/">morimieru</a> / <a href="/en/article/">Articles</a> / TNFD forest disclosure
+  <span class="lang-toggle" style="margin-left: 16px;">
+    <a href="../../article/tnfd-forest-disclosure.html" title="日本語">JP</a>
+    <a href="./tnfd-forest-disclosure.html" class="active">EN</a>
+  </span>
+</nav>
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">TNFD · Forest · Practical Guide</p>
+    <h1 class="report-title">TNFD forest disclosure:<br>a practical playbook for the LEAP approach</h1>
+    <p class="report-subtitle">
+      Forest dependency and impact reach every water-intensive sector — manufacturing, food &amp; beverage,
+      semiconductors, housing, finance. We walk through how to measure and disclose them
+      step-by-step against the TNFD LEAP framework, with concrete data sources for global and India deployments.
+    </p>
+    <dl class="report-meta">
+      <dt>Published</dt><dd>2026-05-26</dd>
+      <dt>Aligned with</dt><dd>TNFD v1.0 (Sept 2023); Forestry Agency of Japan forest guidance (Apr 2025)</dd>
+      <dt>Target reader</dt><dd>Sustainability / IR / corporate planning teams</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<h2>1. Why "forest × TNFD" is the heaviest part of nature disclosure</h2>
+
+<p>
+TNFD (Taskforce on Nature-related Financial Disclosures) released its v1.0 recommendations in
+September 2023. Since 2024, it has been adopted by hundreds of multinationals, regulated funds,
+and ESG investors as the de facto standard for the "nature" counterpart to TCFD.
+</p>
+
+<p>
+TNFD covers five realms (land, freshwater, ocean, atmosphere, biosphere),
+but for most companies, <strong>forest is the single heaviest realm</strong>. Three reasons:
+</p>
+
+<ul>
+  <li><strong>Water dependency.</strong> Beverage, food, semiconductor, paper, and pharma operations
+  all depend on water, and that water depends on upstream forest water-yield. The supply chain runs
+  through forests whether you own them or not.</li>
+  <li><strong>Climate dependency.</strong> Forests are the principal terrestrial CO₂ sink, so
+  forest decline directly affects your Scope-3 offset narrative.</li>
+  <li><strong>Supply chain.</strong> Timber, paper, palm oil, coffee, cacao, and rubber are all
+  forest-derived. Forest impact attaches directly to procurement.</li>
+</ul>
+
+<p>
+In Japan, the Forestry Agency of Japan published <em>Guidelines for forest-related nature
+disclosure</em> in April 2025, explicitly mapping the country's forest dataset to TNFD's
+14 disclosure items. This article is structured around that mapping, with global data sources
+substituted where readers are operating outside Japan.
+</p>
+
+<h2>2. Overview of the official guidance</h2>
+
+<p>
+The Japan guidance is helpful because it converts TNFD's 14 abstract disclosure items into
+specific, measurable forest functions. The same conversion table works internationally with
+local data swaps:
+</p>
+
+<table>
+  <thead>
+    <tr><th>Function category</th><th>Concrete indicator</th><th>Primary data source</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Water yield</td><td>Annual recharge volume (mm/yr · t/yr)</td><td>Simplified water balance · satellite</td></tr>
+    <tr><td>Climate mitigation (CO₂ absorption)</td><td>Annual sequestration (t-CO₂/yr)</td><td>IPCC AFOLU Tier 2, national inventory, Sentinel-2</td></tr>
+    <tr><td>Landslide / erosion control</td><td>Erosion-prevented volume, slope risk</td><td>DEM, precipitation</td></tr>
+    <tr><td>Biodiversity</td><td>Vegetation type, IUCN-listed species, protected-area overlap</td><td>National vegetation surveys, IUCN, KBA</td></tr>
+    <tr><td>Timber supply</td><td>Standing volume, mean annual increment (MAI)</td><td>National forest inventory, airborne LiDAR</td></tr>
+  </tbody>
+</table>
+
+<h2>3. The LEAP approach: 4 steps for forest disclosure</h2>
+
+<p>
+TNFD recommends the <strong>LEAP</strong> approach as the implementation pattern.
+For forests, the same four steps apply.
+</p>
+
+<div class="leap-box">
+  <div class="leap-card">
+    <div class="letter">L</div>
+    <div class="name">Locate</div>
+    <div class="desc">Identify the forests your business depends on and impacts</div>
+  </div>
+  <div class="leap-card">
+    <div class="letter">E</div>
+    <div class="name">Evaluate</div>
+    <div class="desc">Quantify the magnitude of dependency and impact</div>
+  </div>
+  <div class="leap-card">
+    <div class="letter">A</div>
+    <div class="name">Assess</div>
+    <div class="desc">Translate findings into risks and opportunities</div>
+  </div>
+  <div class="leap-card">
+    <div class="letter">P</div>
+    <div class="name">Prepare</div>
+    <div class="desc">Build disclosure language and internal response</div>
+  </div>
+</div>
+
+<figure class="article-figure">
+  <img src="../../article/img/tnfd-leap-flow.jpg" alt="LEAP approach flow: Locate → Evaluate → Assess → Prepare">
+  <figcaption>Figure 1 · The LEAP 4 steps and concrete forest-disclosure outputs at each stage.</figcaption>
+</figure>
+
+<h2>4. Locate: identify your dependency forests</h2>
+
+<p>
+LEAP's first step requires geographically pinning the touchpoints between your business and
+nature. For forests, three categories matter most:
+</p>
+
+<ol>
+  <li><strong>Upstream forests of your water-intake points</strong> — the watershed feeding your factories, HQ, data centres</li>
+  <li><strong>Forests sourcing your raw materials</strong> — timber, paper, palm oil, soy, coffee, cacao production landscapes</li>
+  <li><strong>Owned / contracted forests</strong> — CSR forests, employee education sites, corporate plantations</li>
+</ol>
+
+<p>
+Category 1 is the largest by volume and the hardest for companies to identify on their own.
+Tracing from "factory address" → "which river basin?" → "which upstream forests?" requires
+<strong>watershed matching</strong>: a geospatial join between an address and its catchment.
+</p>
+
+<p>
+morimieru offers free watershed matching at <a href="/en/watershed.html">HydroBASINS Lvl 10</a>
+resolution (global coverage, ~100 km² average basin). Enter an address and you get the catchment
+and upstream stands in one click — completing the Locate step for water-related forest exposure.
+</p>
+
+<figure class="article-figure">
+  <img src="../../article/img/tnfd-watershed-matching.jpg" alt="Watershed matching: factory address → catchment → upstream forests">
+  <figcaption>Figure 2 · Watershed matching as the Locate primitive: factory address → catchment → upstream forests.</figcaption>
+</figure>
+
+<h2>5. Evaluate: quantify dependency and impact</h2>
+
+<p>
+With Locate done, you quantify the magnitude. The three indicators below cover the bulk of
+forest-related TNFD disclosure.
+</p>
+
+<h3>5.1 Water yield</h3>
+<p>
+Compute annual water yield for the upstream forests of each water-intake point. Methods range
+from the Forestry Agency of Japan's <strong>simplified evaluation method Ver.1.0</strong> (March 2026)
+to academic water-balance models. The simplified method needs only precipitation, temperature,
+elevation, geology, and forest area — all available globally from free sources. See our
+<a href="../../article/water-yield-guide.html">water-yield guide (JP)</a> or the
+forthcoming English version for the full walkthrough.
+</p>
+
+<p>
+A typical disclosure sentence: <em>"X% of our annual water withdrawal originates from forest
+Y in basin Z."</em>
+</p>
+
+<h3>5.2 CO₂ absorption</h3>
+<p>
+Apply IPCC AFOLU <strong>Tier 2</strong> with national species-level coefficients. In Japan,
+the Forestry Agency publishes Tier 2 values per major species (sugi, hinoki, broadleaf). In
+India, the Forest Survey of India's regional volume tables play the same role. See the
+<a href="../../article/satellite-co2-tier2.html">satellite × CO₂ Tier 2 article (JP)</a> for
+the implementation. Sentinel-2 NDVI determines forest area; IPCC formula does the rest.
+</p>
+
+<h3>5.3 Biodiversity</h3>
+<p>
+Overlay national vegetation maps and IUCN Red List / Key Biodiversity Area (KBA) polygons on
+your located forests. In Japan, the Ministry of Environment Natural Environment Survey maps
+provide the vegetation layer; in India, the FSI India State of Forest Report does the same.
+TNFD asks you to report not only your dependency but also your <em>impact</em> on
+biodiversity — your contribution to land-use change and species risk.
+</p>
+
+<h2>6. Assess: turn quantities into risks and opportunities</h2>
+
+<p>
+Translate the magnitudes from Evaluate into financial / strategic implications.
+</p>
+
+<table>
+  <thead>
+    <tr><th>Category</th><th>Example forest risks and opportunities</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Physical risk</td><td>Upstream forest degradation → reduced or contaminated water supply, flooding</td></tr>
+    <tr><td>Transition risk</td><td>Tightening forest-conservation regulations, investor downgrade for non-disclosure</td></tr>
+    <tr><td>Opportunity</td><td>Brand-grade forest investment, ESG-bond eligibility, supply-chain resilience</td></tr>
+    <tr><td>Systemic</td><td>Climate-driven shifts in regional hydrology that threaten the entire sector</td></tr>
+  </tbody>
+</table>
+
+<h2>7. Prepare: disclosure and internal response</h2>
+
+<p>
+TNFD outputs land in your annual report, integrated report, or sustainability report.
+For the forest section, the guidance specifically recommends:
+</p>
+
+<ul>
+  <li><strong>Geospatial detail</strong> — the location of dependency and impact forests (at basin or stand granularity, not just country)</li>
+  <li><strong>Quantitative indicators</strong> — water yield, CO₂ absorption, area, vegetation type, etc.</li>
+  <li><strong>Change tracking</strong> — year-over-year evolution (satellite time-series differencing is ideal)</li>
+</ul>
+
+<p>
+"Change tracking" is the part that TNFD will increasingly tighten as MRV (Monitoring, Reporting,
+Verification) standards mature. Starting the time-series record early — even before disclosure
+is mandatory — pays compounding returns.
+</p>
+
+<h2>8. Implementation roadmap: a 3-year plan</h2>
+
+<table>
+  <thead>
+    <tr><th>Year</th><th>Milestone</th><th>How morimieru helps</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Year 1</td><td>Locate complete: dependency-forest registry</td><td>Watershed matching auto-generates the registry</td></tr>
+    <tr><td>Year 2</td><td>Evaluate: first quantitative disclosure of water &amp; CO₂</td><td>Simplified water-balance + Tier 2 CO₂ computed end-to-end</td></tr>
+    <tr><td>Year 3</td><td>Assess + Prepare: risk/opportunity, financial translation, annual-report disclosure</td><td>Year-over-year time-series differencing tracks change</td></tr>
+  </tbody>
+</table>
+
+<h2>9. India-specific notes</h2>
+
+<p>
+For Indian companies and Indian operations of multinationals, three additional considerations:
+</p>
+
+<ul>
+  <li><strong>BRSR.</strong> SEBI's Business Responsibility and Sustainability Report already
+  asks for water and biodiversity disclosures. TNFD-aligned forest data feeds BRSR Principle 6
+  directly.</li>
+  <li><strong>IFSCA.</strong> The International Financial Services Centres Authority is moving
+  toward TNFD-aligned sustainability disclosure for entities in GIFT City.</li>
+  <li><strong>National datasets.</strong> Swap FSI for the inventory layer, IMD for the climate
+  layer, ISRO Bhuvan / CartoSat for DEM, and India-WRIS for watershed metadata. See the
+  <a href="/en/article/india-pilot.html">India pilot article</a> for the full mapping.</li>
+</ul>
+
+<div class="related">
+  <h3>Related</h3>
+  <ul>
+    <li><a href="/en/article/india-pilot.html">India forest valuation pilot: CCTS, Western Ghats &amp; FSI</a></li>
+    <li><a href="../../article/water-yield-guide.html">Forest water yield: complete guide to the simplified method (JP)</a></li>
+    <li><a href="../../article/satellite-co2-tier2.html">Satellite × forest CO₂: IPCC AFOLU Tier 2 walkthrough (JP)</a></li>
+    <li><a href="../../article/jcredit-forest-map-2026.html">Forest J-Credit 264 projects mapped, 2026 (JP)</a></li>
+    <li><a href="/en/watershed.html">3D watershed map</a></li>
+  </ul>
+</div>
+
+<h2>10. Frequently asked questions</h2>
+
+<dl class="faq">
+  <dt>Q1. Is TNFD mandatory?</dt>
+  <dd>As of mid-2026, TNFD is not legally mandatory in most jurisdictions, but it has become a
+  practical requirement for TSE Prime / FTSE / NSE-listed companies and for funds targeted by
+  major ESG investors. SSBJ (Japan), ISSB (global), SEBI (India BRSR), and the EU Omnibus
+  framework are all converging on TNFD-aligned disclosure within a few years.</dd>
+
+  <dt>Q2. Our company doesn't use much water — does forest TNFD still apply to us?</dt>
+  <dd>Yes. Housing makers, printers, IT companies (paper, data-centre wood furniture), and
+  most consumer-goods firms still procure forest-derived materials. The Japan guidance treats
+  this as a general framework, not a water-only one.</dd>
+
+  <dt>Q3. We don't own any forests. What do we disclose?</dt>
+  <dd>Most disclosure is about <em>dependency</em>, not ownership. Disclose your dependency on
+  upstream water forests and supply-chain procurement landscapes. Owning is not a prerequisite.</dd>
+
+  <dt>Q4. Can morimieru cover the entire TNFD disclosure?</dt>
+  <dd>For the quantitative data layer, mostly yes. Governance, strategy, and risk-management
+  narrative still need to come from your team. morimieru handles Locate and the data half of
+  Evaluate.</dd>
+
+  <dt>Q5. What is the resolution of watershed matching?</dt>
+  <dd>HydroBASINS Lvl 10 — about 100 km² mean basin area, globally. Finer resolution
+  (national hydro datasets such as Japan KSJ W07 or India-WRIS sub-basins) is integrated
+  where available.</dd>
+</dl>
+
+<h2>11. References &amp; sources</h2>
+
+<ul>
+  <li>Forestry Agency of Japan, <em>Guidelines for forest-related corporate nature disclosure</em> (April 2025)</li>
+  <li>TNFD, <em>Recommendations of the Taskforce on Nature-related Financial Disclosures</em> (September 2023)</li>
+  <li>Ministry of Environment of Japan, Natural Environment Survey</li>
+  <li>Norinchukin Bank Executive Advisor, "Water and nature disclosure under TNFD v1.0"</li>
+  <li>Forestry Agency of Japan, <em>Simplified Evaluation Method for Forest Water Yield Ver.1.0</em> (March 2026)</li>
+  <li>SEBI, <em>Business Responsibility and Sustainability Reporting (BRSR)</em> framework</li>
+  <li>IFSCA, sustainable-finance and ESG-disclosure consultations</li>
+</ul>
+
+<p style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--ink-300); font-size: 13px; color: var(--ink-500);">
+Last updated 2026-05-26. Based on public materials from the Forestry Agency of Japan and TNFD, organized by morimieru.
+</p>
+
+</div><!-- /report-body -->
+
+</body>
+</html>

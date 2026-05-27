@@ -13,7 +13,21 @@
       "kpi_label": "年間 水資源涵養量",
       "kpi_value": "約 1.19 億トン",
       "kpi_note": "AOI 12,398 ha・公式値 13,486 ha と一致率 92%",
-      "tags": ["水源涵養", "Sentinel-2", "林野庁 Tier 2", "北陸", "富山"]
+      "tags": [
+        "水源涵養",
+        "Sentinel-2",
+        "林野庁 Tier 2",
+        "北陸",
+        "富山"
+      ],
+      "title_en": "Himi forest water yield report",
+      "subtitle_en": "Sentinel-2 × Forestry Agency simplified method: ~1.19 hundred-million tonnes/yr",
+      "region_en": "Himi City, Toyama",
+      "category_en": "Water yield",
+      "kpi_label_en": "Annual water yield",
+      "kpi_value_en": "~ 119 M tonnes",
+      "kpi_note_en": "AOI 12,398 ha · 92% agreement with municipal record (13,486 ha)",
+      "href_en": "report/himi-water.html"
     },
     {
       "id": "shizuoka-forests",
@@ -28,7 +42,22 @@
       "kpi_label": "森林維持効果",
       "kpi_value": "+14 億トン／年",
       "kpi_note": "1,102 林班・161,182 ha / CO2 155万 t/年",
-      "tags": ["自治体", "林班", "水源涵養", "CO2", "中部", "静岡"]
+      "tags": [
+        "自治体",
+        "林班",
+        "水源涵養",
+        "CO2",
+        "中部",
+        "静岡"
+      ],
+      "title_en": "Shizuoka forest public function (per-municipality)",
+      "subtitle_en": "1,102 stands × 13 municipalities: water yield, CO2, bare baseline",
+      "region_en": "Shizuoka Pref.",
+      "category_en": "Municipal score",
+      "kpi_label_en": "Forest effect",
+      "kpi_value_en": "+1.41 B m³/yr",
+      "kpi_note_en": "1,102 stands · 161,182 ha · CO2 1.55 M t/yr",
+      "href_en": "report/shizuoka-forests.html"
     },
     {
       "id": "himi-monitoring",
@@ -43,7 +72,23 @@
       "kpi_label": "5 年 NDVI 変化",
       "kpi_value": "+15.2%",
       "kpi_note": "累計 ΔCO2 +41,566 t / 71 観測点",
-      "tags": ["時系列差分", "Sentinel-2", "Sentinel-1 SAR", "MRV代替", "施業効果", "北陸", "富山"]
+      "tags": [
+        "時系列差分",
+        "Sentinel-2",
+        "Sentinel-1 SAR",
+        "MRV代替",
+        "施業効果",
+        "北陸",
+        "富山"
+      ],
+      "title_en": "Himi forest management-effect monitoring",
+      "subtitle_en": "Sentinel-2 5-year time series + Sentinel-1 SAR: low-cost MRV alternative",
+      "region_en": "Himi City, Toyama",
+      "category_en": "Management-effect monitoring",
+      "kpi_label_en": "5-year NDVI change",
+      "kpi_value_en": "+15.2%",
+      "kpi_note_en": "Cumulative ΔCO2 +41,566 t · 71 obs. points",
+      "href_en": "report/himi-monitoring.html"
     }
   ],
   "categories": [
@@ -54,6 +99,18 @@
     "流域マッチング"
   ],
   "regions": [
-    "北海道", "東北", "関東", "中部", "関西", "中国", "四国", "九州"
+    "北海道",
+    "東北",
+    "関東",
+    "中部",
+    "関西",
+    "中国",
+    "四国",
+    "九州"
+  ],
+  "categories_en": [
+    "Water yield",
+    "Municipal score",
+    "Management-effect monitoring"
   ]
 }

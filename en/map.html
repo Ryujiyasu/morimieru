@@ -1,23 +1,27 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>地図で見る｜もりみえる</title>
-<meta name="description" content="衛星と公開データで描いた、森のヒートマップ。CO2吸収量・水資源涵養量・林班・流域・J-クレジット登録森林を地図上で重ねて見ることができます。">
+<title>Data Map | morimieru</title>
+<meta name="description" content="A satellite-derived forest heatmap. CO2 absorption, water yield, forest stands, watersheds, and J-Credit-registered forests, layered on one interactive map.">
 <link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/map.html">
 <link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/map.html">
 <link rel="alternate" hreflang="x-default" href="https://mori-mieru.jp/map.html">
-<link rel="canonical" href="https://mori-mieru.jp/map.html">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
-<link rel="apple-touch-icon" sizes="192x192" href="assets/favicon-192.png">
-<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="canonical" href="https://mori-mieru.jp/en/map.html">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/map.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/map.html">
+<link rel="alternate" hreflang="x-default" href="https://mori-mieru.jp/map.html">
+<link rel="canonical" href="https://mori-mieru.jp/en/map.html">
+<link rel="icon" type="image/png" sizes="192x192" href="../assets/favicon-192.png">
+<link rel="apple-touch-icon" sizes="192x192" href="../assets/favicon-192.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 <style>
 .map-page {
   display: grid;
@@ -255,7 +259,7 @@
   }
 }
 
-.lang-toggle { display: inline-flex; gap: 4px; margin-left: 12px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; }
+.lang-toggle { display: inline-flex; gap: 4px; margin-left: 12px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; }
 .lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
 .lang-toggle a.active { background: #2d5a3d; color: #fff; }
 </style>
@@ -271,18 +275,19 @@
 <body>
 
 <div class="map-page">
+  <div style="background:linear-gradient(180deg,#fff7ee 0%,#faf6ef 100%);padding:10px 24px;text-align:center;font-size:13px;color:#4a4838;border-bottom:1px solid rgba(140,90,58,0.18);">🌏 <strong style="color:#8c5a3a;">Pilot data is Japan-only.</strong> Click-through details remain in Japanese; the UI is English. India deployment is in scoping.</div>
   <header class="map-header">
     <h1>
-      <a href="/" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:8px;"><img src="assets/logo-mark.png" alt="" width="32" height="32" style="vertical-align:middle;">もりみえる</a>
-      <span class="small">地図で見る｜全国の森林公益機能</span>
+      <a href="/" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:8px;"><img src="../assets/logo-mark.png" alt="" width="32" height="32" style="vertical-align:middle;">morimieru</a>
+      <span class="small">Data map · Forest public goods, all of Japan</span>
     </h1>
     <nav class="nav">
-      <a href="reports.html">レポート</a>
-      <a href="article/">解説記事</a>
-      <a href="/#start" class="cta">森を探す</a>
+      <a href="../reports.html">Reports</a>
+      <a href="../article/">Articles</a>
+      <a href="/#start" class="cta">Find a forest</a>
       <span class="lang-toggle">
-        <a href="./map.html" class="active" title="日本語">JP</a>
-        <a href="/en/map.html" title="English">EN</a>
+        <a href="../map.html" title="日本語">JP</a>
+        <a href="./map.html" class="active" title="English">EN</a>
       </span>
     </nav>
   </header>
@@ -290,68 +295,68 @@
   <div class="map-shell">
     <aside class="map-sidebar">
       <div class="layer-group">
-        <h3>🌏 全国 CO₂ ヒートマップ（経年）</h3>
+        <h3>🌏 Nationwide CO₂ heatmap (multi-year)</h3>
         <label class="layer-row">
           <input type="checkbox" id="ly-pref-co2" checked>
           <span class="swatch" style="background:linear-gradient(90deg,#fff4d6,#7ba56f,#1f3d2a);"></span>
-          <span><strong>都道府県別 CO₂吸収</strong>（Sentinel-2）</span>
+          <span><strong>Prefecture-level CO₂ absorption</strong>（Sentinel-2）</span>
         </label>
         <div class="year-slider-wrap" id="year-slider-wrap" style="margin-top:8px;display:none;">
-          <p style="margin:8px 0 4px;font-size:12px;color:var(--ink-700);">表示年：<strong id="year-label">2025</strong></p>
+          <p style="margin:8px 0 4px;font-size:12px;color:var(--ink-700);">Year: <strong id="year-label">2025</strong></p>
           <input type="range" id="year-slider" min="2015" max="2025" value="2025" step="1" style="width:100%;">
           <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--ink-500);font-family:var(--font-mono);">
             <span>2015</span><span>2020</span><span>2025</span>
           </div>
-          <p style="margin:8px 0 0;font-size:10.5px;color:var(--ink-500);">クリックで都道府県別の10年推移を見る</p>
+          <p style="margin:8px 0 0;font-size:10.5px;color:var(--ink-500);">Click a prefecture to see its 10-year trend</p>
         </div>
-        <p id="zoom-hint" class="zoom-hint">ズームすると市町村〜林班スケールに切替</p>
+        <p id="zoom-hint" class="zoom-hint">Zoom in to switch to municipality / stand scale</p>
       </div>
 
       <div class="layer-group">
-        <h3>🌳 林班データ（静岡県）</h3>
+        <h3>🌳 Stand-level data (Shizuoka pilot)</h3>
         <label class="layer-row">
           <input type="checkbox" id="ly-rinpan-co2">
           <span class="swatch" style="background:linear-gradient(90deg,#ffe9c4,#5a8a3a,#2d5a3d);"></span>
-          <span>林班 <strong>CO₂吸収</strong></span>
+          <span>Stand <strong>CO₂ absorption</strong></span>
         </label>
         <label class="layer-row">
           <input type="checkbox" id="ly-rinpan-water">
           <span class="swatch" style="background:linear-gradient(90deg,#e7f0fa,#3b6da1,#1f4570);"></span>
-          <span>林班 <strong>水源涵養</strong></span>
+          <span>Stand <strong>water yield</strong></span>
         </label>
       </div>
 
       <div class="layer-group">
-        <h3>🌲 らしんばん 20m メッシュ（林野庁 LiDAR）</h3>
+        <h3>🌲 Rashinban 20m LiDAR (Forestry Agency of Japan)</h3>
         <label class="layer-row">
           <input type="checkbox" id="ly-rashinban-tochigi">
           <span class="swatch" style="background:#4a8c3a;"></span>
-          <span>栃木県</span>
+          <span>Tochigi Pref.</span>
         </label>
         <label class="layer-row">
           <input type="checkbox" id="ly-rashinban-hyogo">
           <span class="swatch" style="background:#4a8c3a;"></span>
-          <span>兵庫県</span>
+          <span>Hyogo Pref.</span>
         </label>
         <label class="layer-row">
           <input type="checkbox" id="ly-rashinban-kochi">
           <span class="swatch" style="background:#4a8c3a;"></span>
-          <span>高知県</span>
+          <span>Kochi Pref.</span>
         </label>
-        <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);">ズーム13以上で表示。CC-BY 林野庁／MIERUNE</p>
+        <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);">Visible at zoom ≥13. CC-BY Forestry Agency / MIERUNE</p>
       </div>
 
       <div class="layer-group">
-        <h3>📋 登録森林</h3>
+        <h3>📋 Registered forests</h3>
         <label class="layer-row">
           <input type="checkbox" id="ly-jcredit" checked>
           <span class="swatch" style="background:#c47a4a;"></span>
-          <span>J-クレジット森林 264 件</span>
+          <span>J-Credit forest projects (264)</span>
         </label>
       </div>
 
       <div class="layer-group">
-        <h3>🌊 流域</h3>
+        <h3>🌊 Watersheds</h3>
         <label class="layer-row">
           <input type="checkbox" id="ly-basins">
           <span class="swatch" style="background:#7fadda;"></span>
@@ -360,26 +365,26 @@
       </div>
 
       <div class="layer-group">
-        <h3>🐝 植生・生物多様性</h3>
+        <h3>🐝 Vegetation & biodiversity</h3>
         <label class="layer-row">
           <input type="checkbox" id="ly-vege67">
           <span class="swatch" style="background:linear-gradient(90deg,#e8d2a0,#7fb069,#1f4d2b);"></span>
-          <span>環境省 植生図（第6-7回）</span>
+          <span>Ministry of the Environment vegetation map (6th–7th)</span>
         </label>
-        <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);">出典：環境省生物多様性センター／（株）エコリス。ズーム10以上で詳細表示。</p>
+        <p style="margin:6px 0 0;font-size:10.5px;color:var(--ink-500);">Source: MoE Biodiversity Center / Ecoris Inc. Detail visible at zoom ≥10.</p>
       </div>
 
       <div class="layer-group">
-        <h3>📑 レポート地点</h3>
+        <h3>📑 Report locations</h3>
         <label class="layer-row">
           <input type="checkbox" id="ly-reports" checked>
           <span class="swatch" style="background:#2d5a3d;"></span>
-          <span>公開レポート 3 件</span>
+          <span>Published reports (3)</span>
         </label>
       </div>
 
       <div class="legend active" id="legend-co2">
-        <h4>CO₂ 吸収量（t-CO₂/年）</h4>
+        <h4>CO₂ absorption (t-CO₂/yr)</h4>
         <div class="legend-row"><span class="bar" style="background:#fff4d6;"></span><span>0 – 500</span></div>
         <div class="legend-row"><span class="bar" style="background:#d0d989;"></span><span>500 – 1,500</span></div>
         <div class="legend-row"><span class="bar" style="background:#7ba56f;"></span><span>1,500 – 3,000</span></div>
@@ -388,15 +393,15 @@
       </div>
 
       <div class="legend" id="legend-water">
-        <h4>水源涵養量（m³/年）</h4>
-        <div class="legend-row"><span class="bar" style="background:#e7f0fa;"></span><span>少</span></div>
-        <div class="legend-row"><span class="bar" style="background:#7fadda;"></span><span>中</span></div>
-        <div class="legend-row"><span class="bar" style="background:#3b6da1;"></span><span>多</span></div>
-        <div class="legend-row"><span class="bar" style="background:#1f4570;"></span><span>極大</span></div>
+        <h4>Water yield (m³/yr)</h4>
+        <div class="legend-row"><span class="bar" style="background:#e7f0fa;"></span><span>Low</span></div>
+        <div class="legend-row"><span class="bar" style="background:#7fadda;"></span><span>Medium</span></div>
+        <div class="legend-row"><span class="bar" style="background:#3b6da1;"></span><span>High</span></div>
+        <div class="legend-row"><span class="bar" style="background:#1f4570;"></span><span>Very high</span></div>
       </div>
 
       <p style="margin-top:24px;font-size:11.5px;color:var(--ink-500);line-height:1.7;">
-        ⓘ 静岡県（浜松・湖西エリア）以外の林班は未取り込み。順次他県も追加予定。
+        ⓘ Stand-level data is currently loaded for the Hamamatsu / Kosai area of Shizuoka only. Other prefectures will be added.
       </p>
     </aside>
 
@@ -404,8 +409,8 @@
     <aside class="detail-panel" id="detail-panel">
       <div class="head">
         <div>
-          <span class="badge" id="dp-badge">情報</span>
-          <h3 id="dp-title">地図上の要素をクリック</h3>
+          <span class="badge" id="dp-badge">Info</span>
+          <h3 id="dp-title">Click any feature on the map</h3>
         </div>
         <button class="close-btn" onclick="closeDetail()">×</button>
       </div>
@@ -457,7 +462,7 @@ function prefCo2Color(co2) {
 
 async function loadPrefCo2() {
   try {
-    const r = await fetch('data/co2/japan_prefectures_timeseries.geojson').then(r => r.json());
+    const r = await fetch('../data/co2/japan_prefectures_timeseries.geojson').then(r => r.json());
     prefData = r;
     document.getElementById('year-slider-wrap').style.display = 'block';
     // Set slider range from data
@@ -475,7 +480,7 @@ async function loadPrefCo2() {
     // Show a hint
     const hint = document.createElement('p');
     hint.style.cssText = 'font-size:11px;color:var(--ink-500);margin-top:6px;';
-    hint.textContent = '⏳ 全国 CO₂ データ計算中…数分でお見せできます。';
+    hint.textContent = '⏳ Computing nationwide CO₂ data — back in a few minutes.';
     document.getElementById('year-slider-wrap').parentNode.appendChild(hint);
   }
 }
@@ -580,8 +585,8 @@ document.addEventListener('input', e => {
 
 async function loadRinpan() {
   const [fc, names] = await Promise.all([
-    fetch('data/rinpan/shizuoka_rinpan_water.geojson').then(r => r.json()),
-    fetch('data/rinpan/shizuoka_muni_names.json').then(r => r.json()),
+    fetch('../data/rinpan/shizuoka_rinpan_water.geojson').then(r => r.json()),
+    fetch('../data/rinpan/shizuoka_muni_names.json').then(r => r.json()),
   ]);
   muniNames = names.mapping;
 
@@ -629,7 +634,7 @@ async function loadRinpan() {
         <div class="detail-section">
           <h4>計算手法</h4>
           <p style="font-size:12px;color:var(--ink-700);">林野庁簡易評価法 Ver.1.0 を林班単位で適用。気象は NASA POWER（2020-2024平均）、地質は産総研シームレス地質図、標高は国土地理院 DEM。</p>
-          <a class="detail-link" href="report/shizuoka-forests.html">静岡県全体レポートへ →</a>
+          <a class="detail-link" href="../report/shizuoka-forests.html">静岡県全体レポートへ →</a>
         </div>
         <div class="detail-section">
           <h4>識別子</h4>
@@ -676,7 +681,7 @@ async function loadRinpan() {
 }
 
 async function loadJcredit() {
-  const r = await fetch('data/jcredit_projects.json').then(r => r.json());
+  const r = await fetch('../data/jcredit_projects.json').then(r => r.json());
   jcreditLayer = L.layerGroup();
   for (const p of r.projects) {
     const m = L.circleMarker([p.lat, p.lon], {
@@ -722,7 +727,7 @@ async function loadJcredit() {
 }
 
 async function loadBasins() {
-  const r = await fetch('data/watersheds/japan_lev10.geojson').then(r => r.json());
+  const r = await fetch('../data/watersheds/japan_lev10.geojson').then(r => r.json());
   basinsLayer = L.geoJSON(r, {
     style: { color: '#3b6da1', weight: 0.4, opacity: 0.6, fill: false },
   });
@@ -764,17 +769,17 @@ function speciesColor(name) {
 
 const RASHINBAN_PREFS = {
   tochigi: {
-    label: '栃木県',
+    label: 'Tochigi Pref.',
     url: 'https://rinya-tochigi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf',
     layerName: 'fr_mesh20m',
   },
   hyogo: {
-    label: '兵庫県',
+    label: 'Hyogo Pref.',
     url: 'https://rinya-hyogo.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf',
     layerName: 'fr_mesh20m',
   },
   kochi: {
-    label: '高知県',
+    label: 'Kochi Pref.',
     url: 'https://rinya-kochi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf',
     layerName: 'fr_mesh20m',
   },
@@ -850,7 +855,7 @@ function bindRashinbanToggle(id, key) {
 }
 
 async function loadReports() {
-  const r = await fetch('data/reports.json').then(r => r.json());
+  const r = await fetch('../data/reports.json').then(r => r.json());
   reportsLayer = L.layerGroup();
   const points = [
     { id: 'himi-water', lat: 36.857, lon: 136.987, color: '#3b6da1' },
@@ -940,7 +945,7 @@ function applyZoomScale() {
       prefCo2Layer.addTo(map);
     }
     if (hint) {
-      hint.textContent = 'ズームすると市町村〜林班スケールに切替';
+      hint.textContent = 'Zoom in to switch to municipality / stand scale';
       hint.classList.remove('active');
     }
   }

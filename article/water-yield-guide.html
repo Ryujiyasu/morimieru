@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水源涵養量とは？林野庁 簡易評価法 Ver.1.0 の計算式と実例（令和8年最新版対応）｜もりみえる</title>
+<meta name="description" content="水源涵養量の意味、林野庁が令和8年3月に公開する簡易評価法 Ver.1.0 の計算式、必要なデータ、氷見市の実例まで。企業のCSR・TNFD開示・自治体の森づくり成果説明に使える定量評価の完全ガイド。">
+<meta name="keywords" content="水源涵養量,水源涵養量 計算,林野庁 簡易評価法,水収支法,水源涵養機能,水資源涵養,森林,林業,TNFD,CSR,森づくり">
+<meta name="author" content="もりみえる｜株式会社エムスクエア・ラボ">
+<link rel="canonical" href="https://mori-mieru.jp/article/water-yield-guide.html">
+
+<meta property="og:title" content="水源涵養量とは？林野庁 簡易評価法 Ver.1.0 の計算式と実例｜もりみえる">
+<meta property="og:description" content="令和8年3月公開の林野庁簡易評価法 Ver.1.0 を、計算式・必要データ・氷見市実例で徹底解説。">
+<meta property="og:image" content="https://mori-mieru.jp/article/img/water-yield-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/article/water-yield-guide.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="もりみえる">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="水源涵養量とは？林野庁 簡易評価法 Ver.1.0 の計算式と実例｜もりみえる">
+<meta name="twitter:description" content="林野庁の最新簡易評価法を、計算式・実例で徹底解説。">
+<meta name="twitter:image" content="https://mori-mieru.jp/article/img/water-yield-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "水源涵養量とは？林野庁 簡易評価法 Ver.1.0 の計算式と実例（令和8年最新版対応）",
+  "description": "水源涵養量の意味、林野庁が令和8年3月に公開する簡易評価法 Ver.1.0 の計算式、必要なデータ、氷見市の実例まで。",
+  "image": "https://mori-mieru.jp/article/img/water-yield-hero.jpg",
+  "datePublished": "2026-05-17",
+  "dateModified": "2026-05-17",
+  "author": {"@type": "Organization", "name": "もりみえる", "url": "https://mori-mieru.jp/"},
+  "publisher": {"@type": "Organization", "name": "株式会社エムスクエア・ラボ", "url": "https://m2-labo.jp/"},
+  "mainEntityOfPage": "https://mori-mieru.jp/article/water-yield-guide.html"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../report/report.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+
+<style>
+.report-hero { --bg-image: url('img/water-yield-hero.jpg'); }
+.article-figure { margin: 28px 0; }
+.article-figure img { width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block; }
+.article-figure figcaption { font-size: 13px; color: var(--ink-500); margin-top: 8px; text-align: center; }
+.breadcrumb { font-size: 12px; color: var(--ink-500); padding: 16px 0 0; max-width: 960px; margin: 0 auto; }
+.breadcrumb a { color: var(--ink-500); }
+.faq dt { font-weight: 700; margin-top: 14px; color: var(--theme-dark); }
+.faq dd { margin: 4px 0 0 0; }
+.related { background: var(--blue-100); padding: 24px 28px; border-radius: var(--radius-md); margin: 36px 0; }
+.related h3 { margin-top: 0; }
+.related ul { margin: 0; padding-left: 20px; }
+.formula { background: var(--blue-100); padding: 16px 20px; border-radius: var(--radius-sm); font-family: var(--font-mono); margin: 12px 0; }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body class="theme-water">
+
+<nav class="breadcrumb" aria-label="パンくず">
+  <a href="/">もりみえる</a> ／ <a href="/article/">解説記事</a> ／ 水源涵養量ガイド
+</nav>
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">Forest Water Yield · Guide</p>
+    <h1 class="report-title">水源涵養量とは？<br>林野庁 簡易評価法 Ver.1.0 で算定する完全ガイド</h1>
+    <p class="report-subtitle">
+      令和8年3月公開の最新版に対応。森林が「水を貯える働き」を、
+      企業・自治体・市民団体の誰もが定量化できる新しい標準手法を、
+      計算式・必要データ・氷見市の実例で解説します。
+    </p>
+    <dl class="report-meta">
+      <dt>公開</dt><dd>2026年5月17日</dd>
+      <dt>準拠</dt><dd>林野庁 簡易評価法 Ver.1.0（令和8年3月）</dd>
+      <dt>対象読者</dt><dd>企業CSR/サステナビリティ担当・自治体・森林組合・研究者</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<h2>1. 水源涵養量とは何か</h2>
+
+<p>
+<strong>水源涵養量（すいげんかんようりょう）</strong>とは、森林が降った雨の一部を地中に蓄え、
+ゆっくりと地下水や河川の基底流量として下流に供給する量のことです。日本語では
+「水資源涵養量」「貯留量」「基底流出量」などとも呼ばれます。
+</p>
+
+<p>
+森林に降った雨は、(a) 樹冠で蒸発する、(b) 直接流出する、(c) 地中に浸透して時間をかけて流出する、
+の3経路をたどります。このうち <strong>(c) 地中に浸透した分</strong> が水源涵養量です。
+洪水を抑え、渇水時にも水を供給する「天然のダム機能」の量的指標として、近年特に注目されています。
+</p>
+
+<figure class="article-figure">
+  <img src="img/water-balance.jpg" alt="森林における水収支：降水・蒸発散・直接流出・水源涵養の概念図">
+  <figcaption>図1：森林の水収支。降水量から蒸発散と直接流出を差し引いた残りが水源涵養量となる</figcaption>
+</figure>
+
+<h2>2. なぜ今、水源涵養量の「定量化」が必要なのか</h2>
+
+<p>
+これまで、森林の水源涵養機能は<strong>「重要だが数字にしにくい」</strong>定性的な価値として扱われてきました。
+しかし2020年代に入り、状況が大きく変わっています。
+</p>
+
+<ul>
+  <li><strong>TNFD（自然関連財務情報開示）</strong>の登場で、企業は自社の事業が依存する自然資本を定量開示する必要に</li>
+  <li><strong>森林由来J-クレジット</strong>の価格上昇（2025年に1t-CO₂あたり¥10,000を突破）に伴い、水源涵養も「数字で見せる」ニーズが拡大</li>
+  <li><strong>気候変動による豪雨・渇水の頻発</strong>で、自治体が森林整備の効果を住民・議会に説明する必要</li>
+  <li><strong>飲料・食品・半導体・紙パルプ</strong>などの水を大量に使う企業が、上流の森林への投資を説明する必要</li>
+</ul>
+
+<p>
+こうした背景のもと、林野庁は<strong>令和8年（2026年）3月</strong>、誰もが標準的な手法で
+水源涵養量を算定できるよう、「林地における水資源涵養量の簡易評価手法 Ver.1.0」を
+日英両言語の解説資料とExcel計算ツールとともに公開しました。
+</p>
+
+<h2>3. 林野庁 簡易評価法 Ver.1.0 のしくみ</h2>
+
+<p>
+新しい簡易評価法は、水文学の標準的な<strong>「水収支法」</strong>を、
+誰でも手元のデータで実行できる形にパッケージ化したものです。
+</p>
+
+<h3>3.1 基本式</h3>
+
+<div class="formula">水源涵養量 ＝ 降水量 − 蒸発散量 − 直接流出量</div>
+
+<p>
+単純な式ですが、各項に <strong>(a) 気象データ、(b) 地質データ、(c) 森林データ</strong> を組み合わせて
+当該地域の値を埋め込みます。Ver.1.0 で標準化されたのが、この埋め込み手順です。
+</p>
+
+<h3>3.2 必要な入力データ</h3>
+
+<table>
+  <thead>
+    <tr><th>項目</th><th>データソース（無料・公開）</th><th>粒度</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>降水量</td><td>気象庁 AMeDAS／NASA POWER／気象庁メッシュ平年値</td><td>10分〜年</td></tr>
+    <tr><td>気温（蒸発散推定）</td><td>気象庁 AMeDAS／NASA POWER</td><td>10分〜年</td></tr>
+    <tr><td>地質</td><td>産総研 シームレス地質図／国土地理院</td><td>20m〜1kmメッシュ</td></tr>
+    <tr><td>森林分布</td><td>国土数値情報 A13／林野庁 森林簿／衛星画像（Sentinel-2 NDVI）</td><td>10m〜25mメッシュ</td></tr>
+    <tr><td>林相（樹種・林齢）</td><td>森林簿（自治体）／航空レーザ（栃木・兵庫・高知）</td><td>林班単位</td></tr>
+  </tbody>
+</table>
+
+<figure class="article-figure">
+  <img src="img/water-yield-flow.jpg" alt="林野庁簡易評価法の処理フロー：気象・地質・森林データ → 水収支計算 → 水源涵養量">
+  <figcaption>図2：簡易評価法 Ver.1.0 の処理フロー（もりみえるでの実装例）</figcaption>
+</figure>
+
+<h3>3.3 計算ステップ</h3>
+
+<ol>
+  <li><strong>降水量</strong>：対象エリアの過去5〜10年の年降水量を取得（平均化）</li>
+  <li><strong>蒸発散量</strong>：気温データから Thornthwaite 法または Penman 法で潜在蒸発散を推定し、土地被覆係数を乗じる</li>
+  <li><strong>直接流出率</strong>：地質図から「第三紀堆積岩は直接流出率が高い」「火山岩は低い」といった係数を当てる</li>
+  <li><strong>森林マスク</strong>：衛星画像から NDVI ≥ 0.5 のピクセルを森林と判定（またはA13・森林簿を利用）</li>
+  <li><strong>集計</strong>：林地ピクセルだけを対象に上記収支を空間集計</li>
+</ol>
+
+<h2>4. 実例：富山県氷見市の年間水源涵養量</h2>
+
+<p>
+もりみえるでは、本手法を富山県氷見市の周辺森林（AOI 16km × 14km、面積 22,400 ha）に適用し、
+2026年5月に <strong>年間 約1.19億トン（961 mm／年）</strong> の水源涵養量を算定しました。
+</p>
+
+<table>
+  <thead>
+    <tr><th>項目</th><th>値</th><th>備考</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>年降水量</td><td>2,331 mm／年</td><td>NASA POWER 2020-2024 平均</td></tr>
+    <tr><td>蒸発散量</td><td>837 mm／年</td><td>Thornthwaite 法</td></tr>
+    <tr><td>直接流出量</td><td>533 mm／年</td><td>第三紀地質ベース</td></tr>
+    <tr><td><strong>水源涵養量</strong></td><td><strong>961 mm／年</strong></td><td>降水量の <strong>41.2%</strong></td></tr>
+    <tr><td>森林面積</td><td>12,398 ha</td><td>Sentinel-2 NDVI から判定</td></tr>
+    <tr><td>市公式面積との一致率</td><td>92%</td><td>市公式 13,486 ha との照合</td></tr>
+  </tbody>
+</table>
+
+<p>
+年間1.19億トンは、一般家庭<strong>約160万世帯</strong>の年間生活用水に相当します。
+詳細レポートは <a href="/report/himi-water.html">氷見市水資源涵養量レポート</a> で公開しています。
+</p>
+
+<figure class="article-figure">
+  <img src="img/himi-water-map.jpg" alt="氷見市周辺の水源涵養量ヒートマップ：森林域で値が高い">
+  <figcaption>図3：氷見市 AOI の水源涵養量空間分布（青濃いほど涵養量大）</figcaption>
+</figure>
+
+<h2>5. 自分の地域で算定するための3つのアプローチ</h2>
+
+<h3>A. 林野庁公式 Excel ツールを使う（最も簡単）</h3>
+<p>
+令和8年3月に公開された Excel ツールに、対象地域の降水量・気温・地質構成・森林面積を入力するだけで、
+標準的な算定結果が得られます。<strong>計算量1ha〜1林班程度</strong>の用途に向いています。
+</p>
+
+<h3>B. もりみえるを利用する（無料・Web 上で完結）</h3>
+<p>
+住所または林班 ID を入力するだけで、衛星データと標準データを自動取得・計算し、レポートを生成します。
+<strong>計算量100ha〜数万ha</strong>の自治体・組合・企業用途に向いています。
+</p>
+
+<h3>C. 自前で実装する（研究・大規模解析向け）</h3>
+<p>
+Python（rasterio + pystac-client）で Sentinel-2 + NASA POWER + 産総研地質を統合する実装が
+もりみえる側で公開予定です。<strong>全国スケール・大量バッチ</strong>用途に向いています。
+</p>
+
+<h2>6. 算定結果を読むときの注意点</h2>
+
+<ul>
+  <li><strong>誤差は ±30% が目安</strong>：標準データのみを使う場合、降水量・地質・森林面積それぞれの誤差が積み重なる</li>
+  <li><strong>大面積になるほど精度が安定</strong>：100ha 未満は揺らぎが大きく、1,000ha 以上で標準的</li>
+  <li><strong>絶対値より「比較」「変化」が有用</strong>：施業前後の差分、近隣との相対比較で価値が出る</li>
+  <li><strong>航空レーザ（LiDAR）が使える地域は誤差±10-15%</strong>：栃木・兵庫・高知では精度向上が可能</li>
+</ul>
+
+<h2>7. TNFD・CSR・J-クレジットへの応用</h2>
+
+<p>
+水源涵養量は、これまでカーボンクレジットの対象外でしたが、
+<strong>TNFD（自然関連財務情報開示）の重要指標</strong>として、企業が自社の水使用が依存する
+上流森林の機能を開示する場面で急速に使われ始めています。
+</p>
+
+<p>
+もりみえるの <a href="/">流域マッチング</a> 機能は、自社工場・取水点の住所から
+<strong>上流側の森林</strong>を自動特定し、その森林の水源涵養量を一括算定するため、
+TNFD の LEAP アプローチ（Locate / Evaluate / Assess / Prepare）の Locate と Evaluate を一気通貫で実行できます。
+</p>
+
+<div class="related">
+  <h3>関連記事・レポート</h3>
+  <ul>
+    <li><a href="/article/tnfd-forest-disclosure.html">TNFD森林開示の実務ガイド：林野庁手引き（令和7年4月）対応</a></li>
+    <li><a href="/article/gx-ets-forest-credit-2026.html">GX-ETS 本格運用と森林由来J-クレジット 2026年版</a></li>
+    <li><a href="/article/satellite-co2-tier2.html">衛星×CO2吸収量：IPCC AFOLU Tier 2 と Sentinel-2 の実装</a></li>
+    <li><a href="/report/himi-water.html">富山県 氷見市周辺森林 水資源涵養量レポート</a></li>
+    <li><a href="/watershed.html">全国流域マッチング（HydroBASINS Lvl 10）</a></li>
+  </ul>
+</div>
+
+<h2>8. よくある質問（FAQ）</h2>
+
+<dl class="faq">
+  <dt>Q1. 水源涵養量と「保水量」「貯水量」は同じ？</dt>
+  <dd>概念は近いですが、保水量・貯水量はある時点でのストック量（mm単位の土壌水分など）、水源涵養量はフロー量（年間トン）を指すのが一般的です。Ver.1.0 はフロー量を扱います。</dd>
+
+  <dt>Q2. 簡易評価法 Ver.1.0 と従来の SWAT/MIKE-SHE などのモデルの違いは？</dt>
+  <dd>SWAT/MIKE-SHE は流域水文の精密モデルで、専門技術と長期キャリブレーションが必要です。Ver.1.0 はそれらを「標準データ × 標準係数」で誰でも扱える形に簡略化したものです。精度は劣りますが、運用コストが極端に低い点が強みです。</dd>
+
+  <dt>Q3. 森林整備（間伐・主伐）の効果は数値化できる？</dt>
+  <dd>はい。施業前後の Sentinel-2 NDVI 差分から森林面積・蓄積の変化を推定し、再度 Ver.1.0 を適用すれば「施業による涵養量増減」が定量化できます。<a href="/report/himi-monitoring.html">氷見市時系列モニタリングレポート</a> に手法例があります。</dd>
+
+  <dt>Q4. 自治体が住民説明や議会答弁に使えるか？</dt>
+  <dd>使えます。Ver.1.0 は林野庁が標準化した公的手法のため、説明資料として「林野庁簡易評価法 Ver.1.0 準拠」と明記できます。</dd>
+
+  <dt>Q5. もりみえるは無料？</dt>
+  <dd>はい、公益基盤として無料公開しています。商用・非商用問わずレポートPDFをダウンロード可能です。</dd>
+</dl>
+
+<h2>9. 参考文献・出典</h2>
+
+<ul>
+  <li>林野庁「林地における水資源涵養量（貯留機能）の簡易評価手法 Ver.1.0」（令和8年3月）</li>
+  <li>林野庁「森林の水源涵養機能に係る解説資料」（令和5年3月）</li>
+  <li>令和5年度 山地保全調査 報告書（林野庁、令和6年3月）</li>
+  <li>NASA POWER 気象データ API（無料・公開）</li>
+  <li>産総研 シームレス地質図 V2（CC-BY）</li>
+  <li>Copernicus Sentinel-2 L2A（CDSE、無料・公開）</li>
+</ul>
+
+<p style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--ink-300); font-size: 13px; color: var(--ink-500);">
+最終更新：2026年5月17日。本記事は林野庁公開資料・公的データに基づき、もりみえるが独自に整理したものです。
+</p>
+
+</div><!-- /report-body -->
+
+</body>
+</html>

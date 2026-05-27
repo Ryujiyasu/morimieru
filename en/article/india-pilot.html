@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>India forest valuation pilot: how morimieru's stack maps onto CCTS, Western Ghats, and FSI inventory | morimieru</title>
+<meta name="description" content="With India's Carbon Credit Trading Scheme (CCTS) launching in 2026 and water stress intensifying across the Cauvery, Krishna, and Godavari basins, transparent forest valuation matters more than ever. We walk through how morimieru's free, satellite-based stack adapts from Japan to India — using Sentinel-2, FSI inventory, IMD climate, and CCTS afforestation methodology.">
+<meta name="keywords" content="India carbon market, CCTS, India CCTS 2026, Western Ghats, FSI, Forest Survey of India, Cauvery basin, Sentinel-2 India, forest valuation India, watershed India, India ESG, TNFD India, afforestation methodology">
+<meta name="author" content="morimieru | M-square Lab Inc.">
+<link rel="canonical" href="https://mori-mieru.jp/en/article/india-pilot.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/india-pilot.html">
+
+<meta property="og:title" content="India forest valuation pilot — morimieru on CCTS, Western Ghats, FSI">
+<meta property="og:description" content="How morimieru's free satellite-based forest valuation stack adapts from Japan to India: CCTS, Western Ghats, FSI inventory.">
+<meta property="og:image" content="https://mori-mieru.jp/article/img/tnfd-forest-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/en/article/india-pilot.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="morimieru">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="India forest valuation pilot — morimieru">
+<meta name="twitter:description" content="Mapping our Japan-tested forest valuation stack onto Western Ghats and CCTS.">
+<meta name="twitter:image" content="https://mori-mieru.jp/article/img/tnfd-forest-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "India forest valuation pilot: how morimieru's stack maps onto CCTS, Western Ghats, and FSI inventory",
+  "description": "Adapting a Japan-tested, satellite-based forest valuation stack for India: CCTS, Western Ghats, FSI inventory, IMD climate.",
+  "image": "https://mori-mieru.jp/article/img/tnfd-forest-hero.jpg",
+  "datePublished": "2026-05-26",
+  "dateModified": "2026-05-26",
+  "inLanguage": "en",
+  "author": {"@type": "Organization", "name": "morimieru", "url": "https://mori-mieru.jp/en/"},
+  "publisher": {"@type": "Organization", "name": "M-square Lab Inc.", "url": "https://m2-labo.jp/"},
+  "mainEntityOfPage": "https://mori-mieru.jp/en/article/india-pilot.html"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../report/report.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+
+<style>
+.report-hero { --bg-image: url('../../article/img/tnfd-forest-hero.jpg'); }
+.article-figure { margin: 28px 0; }
+.article-figure img { width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block; }
+.article-figure figcaption { font-size: 13px; color: var(--ink-500); margin-top: 8px; text-align: center; }
+.breadcrumb { font-size: 12px; color: var(--ink-500); padding: 16px 0 0; max-width: 960px; margin: 0 auto; }
+.breadcrumb a { color: var(--ink-500); }
+.faq dt { font-weight: 700; margin-top: 14px; color: var(--theme-dark); }
+.faq dd { margin: 4px 0 0 0; }
+.related { background: var(--green-100); padding: 24px 28px; border-radius: var(--radius-md); margin: 36px 0; }
+.related h3 { margin-top: 0; }
+.related ul { margin: 0; padding-left: 20px; }
+
+.swap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 22px 0; }
+@media (max-width: 720px) { .swap-grid { grid-template-columns: 1fr; } }
+.swap-card { background: var(--cream); padding: 20px 22px; border-radius: var(--radius-sm); border-left: 4px solid var(--theme); }
+.swap-card.right { border-left-color: var(--earth-500); }
+.swap-card h4 { margin: 0 0 8px; color: var(--theme-dark); }
+.swap-card.right h4 { color: var(--earth-600); }
+.swap-card ul { margin: 6px 0 0; padding-left: 18px; font-size: 14px; line-height: 1.75; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 20px 0; }
+.kpi { background: var(--paper); padding: 16px 18px; border-radius: var(--radius-sm); border-top: 3px solid var(--theme); box-shadow: var(--shadow-sm); }
+.kpi .label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-500); margin: 0 0 4px; }
+.kpi .value { font-family: var(--font-en); font-size: 22px; font-weight: 700; color: var(--theme-dark); margin: 0; line-height: 1.2; }
+.kpi .note { font-size: 11px; color: var(--ink-500); margin: 4px 0 0; }
+
+.lang-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body class="theme-water">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/en/">morimieru</a> / <a href="/en/article/">Articles</a> / India pilot
+  <span class="lang-toggle" style="margin-left: 16px;">
+    <a href="../../article/" title="日本語">JP</a>
+    <a href="./india-pilot.html" class="active">EN</a>
+  </span>
+</nav>
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">India · Pilot · Case Study</p>
+    <h1 class="report-title">India forest valuation pilot:<br>how morimieru maps onto CCTS, Western Ghats &amp; FSI</h1>
+    <p class="report-subtitle">
+      India's Carbon Credit Trading Scheme (CCTS) is going live in 2026 with afforestation as a registered methodology.
+      The Cauvery, Krishna, and Godavari basins are under severe water stress.
+      We walk through how our Japan-tested, free-data forest valuation stack adapts —
+      without changing the satellite source, the formulas, or the philosophy.
+    </p>
+    <dl class="report-meta">
+      <dt>Published</dt><dd>2026-05-26</dd>
+      <dt>Status</dt><dd>Adaptation roadmap (pilot site selection underway)</dd>
+      <dt>Target reader</dt><dd>Indian sustainability teams · DFOs · researchers · climate finance investors</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<h2>1. Why India, why now</h2>
+
+<p>
+Three forces are converging in India that make transparent, open forest valuation a need rather than a nice-to-have:
+</p>
+
+<ul>
+  <li><strong>CCTS goes live in 2026.</strong> India's Carbon Credit Trading Scheme (overseen by the Bureau of Energy Efficiency) is operational. Afforestation is one of the approved offset methodologies; voluntary registration is open to forest projects.</li>
+  <li><strong>Water stress is no longer regional.</strong> Bengaluru's intermittent water-rationing, Chennai's Day Zero memory, and the chronic Cauvery–Krishna disputes are all upstream-forest stories at heart. ITC, Coca-Cola, Hindustan Unilever, Infosys, and other water-intensive companies have all begun publishing watershed strategies.</li>
+  <li><strong>Disclosure pressure is global.</strong> TNFD adoption is moving fastest among multinational ESG investors, and Indian operations are part of the consolidated balance sheet that gets disclosed. Whether a company is headquartered in Mumbai or Tokyo, its Indian footprint needs to be measurable.</li>
+</ul>
+
+<p>
+The technology that makes this measurable already exists and is free: Sentinel-2 covers India 2–3 times per week, NASA POWER provides global climate forcing, and the Forest Survey of India (FSI) maintains a national inventory comparable in role to Japan's Forest Ecosystem Survey.
+</p>
+
+<h2>2. Why Western Ghats is the right first pilot</h2>
+
+<p>
+For a first-site selection, we want a region where (a) the public-good function is large and measurable, (b) downstream beneficiaries are concentrated and economically significant, and (c) public data coverage is dense. Western Ghats checks all three.
+</p>
+
+<div class="kpi-grid">
+  <div class="kpi">
+    <p class="label">Length</p>
+    <p class="value">≈ 1,600 km</p>
+    <p class="note">Gujarat → Kerala / Tamil Nadu</p>
+  </div>
+  <div class="kpi">
+    <p class="label">UNESCO sites</p>
+    <p class="value">39</p>
+    <p class="note">Biodiversity hotspot, 2012</p>
+  </div>
+  <div class="kpi">
+    <p class="label">Major rivers fed</p>
+    <p class="value">≥ 6</p>
+    <p class="note">Krishna · Godavari · Cauvery · Periyar · Tungabhadra · Sharavathi</p>
+  </div>
+  <div class="kpi">
+    <p class="label">Downstream pop.</p>
+    <p class="value">~300 M</p>
+    <p class="note">Karnataka · Tamil Nadu · Andhra · Kerala · Maharashtra</p>
+  </div>
+</div>
+
+<p>
+The Cauvery basin alone provides drinking water to Bengaluru, Mysuru, and Chennai. Its upstream catchment in the Kodagu / Wayanad portion of the Western Ghats is intensely studied — and intensely cultivated for coffee, cardamom, and pepper. These tree-cover supply chains are also the corporate ESG hooks: every cup of Karnataka coffee implicitly depends on a measurable watershed.
+</p>
+
+<figure class="article-figure">
+  <img src="../../article/img/tnfd-watershed-matching.jpg" alt="Conceptual figure: factory in the lower right, blue watershed extending upward to forested mountains">
+  <figcaption>Figure 1 · The watershed-matching pattern transfers directly: any HQ or factory address can be mapped to its upstream basin, then to the forests within it.</figcaption>
+</figure>
+
+<h2>3. What stays the same, what swaps in</h2>
+
+<p>
+The architecture is unchanged. Only the regional reference layers swap.
+</p>
+
+<div class="swap-grid">
+  <div class="swap-card">
+    <h4>Stays identical (already global)</h4>
+    <ul>
+      <li><strong>Sentinel-2 L2A</strong> (NDVI, weekly observation) via Copernicus / AWS Open Data</li>
+      <li><strong>Sentinel-1 SAR</strong> (cloud-penetrating, monsoon-resilient)</li>
+      <li><strong>NASA POWER</strong> climate forcing (precipitation, temperature)</li>
+      <li><strong>HydroBASINS Lvl 10</strong> watershed boundaries (CC-BY)</li>
+      <li><strong>IPCC AFOLU Tier 2</strong> formula for CO₂ absorption</li>
+      <li><strong>TPM 2.0 + Merkle hash + RFC 3161</strong> cryptographic monitoring chain</li>
+    </ul>
+  </div>
+  <div class="swap-card right">
+    <h4>Swap for India</h4>
+    <ul>
+      <li><strong>FSI</strong> inventory (Forest Survey of India, India State of Forest Report) replaces Forest Ecosystem Survey</li>
+      <li><strong>IMD</strong> (India Meteorological Department) data supplements NASA POWER for higher-resolution rainfall</li>
+      <li><strong>Bhuvan</strong> / <strong>WRIS</strong> (India-WRIS) for finer river network and elevation</li>
+      <li><strong>CartoSat-1/2</strong> DEM (ISRO) replaces GSI elevation API</li>
+      <li><strong>CCTS afforestation methodology</strong> replaces Japan's J-Credit FO-001/002/003</li>
+      <li><strong>Compensatory Afforestation Fund (CAMPA)</strong> project list replaces J-Credit registry</li>
+    </ul>
+  </div>
+</div>
+
+<p>
+Notably, the forest stand-age and species-mix coefficients are different (teak vs. cedar, sal vs. cypress, evergreen tropical vs. temperate). FSI publishes regional volume tables; these slot directly into the same Tier 2 formula.
+</p>
+
+<h2>4. A worked example: a hypothetical Cauvery-basin Karnataka factory</h2>
+
+<p>
+Suppose a beverage manufacturer operates a bottling plant near Mysuru, drawing from the Kabini reservoir. Walk-through:
+</p>
+
+<ol>
+  <li><strong>Locate the watershed.</strong> Mysuru → HydroBASINS Lvl 10 basin ID → trace upstream through the Kabini sub-catchment to the Brahmagiri-Bandipur range in Kodagu / Wayanad.</li>
+  <li><strong>Mask the forest pixels.</strong> Two seasonal Sentinel-2 composites (pre-monsoon dry, post-monsoon green) classify pixels with NDVI &gt; 0.5 as forest. Western Ghats canopy NDVI typically peaks at 0.78–0.92 post-monsoon.</li>
+  <li><strong>Estimate CO₂ absorption.</strong> Apply Tier 2 with FSI's evergreen tropical coefficients: roughly <em>15–22 t-CO₂/ha/yr</em> for mature semi-evergreen stands (higher than Japan's 8–10 t-CO₂/ha/yr for sugi at age 40).</li>
+  <li><strong>Estimate water yield.</strong> Apply the water-balance approach with IMD precipitation (Kodagu averages 2,500–4,000 mm/yr in monsoon, far above any Japanese pilot site) and Bhuvan elevation. Forested upstream area typically yields <em>900–1,800 mm/yr</em> of recharge after subtracting direct runoff and evapotranspiration.</li>
+  <li><strong>Cross-reference CCTS-eligible projects.</strong> Check whether any CCTS-registered afforestation or forest-management project sits within the traced basin. If yes: surface those projects to the user as supply-chain-aligned offset candidates.</li>
+  <li><strong>Issue the report.</strong> A signed report (TPM attestation + RFC 3161) with watershed maps, NDVI history, water-yield estimate, CO₂ estimate, and credit candidates.</li>
+</ol>
+
+<p>
+The output looks structurally identical to our Himi (Toyama, Japan) pilot — only the numbers, the species, and the regulatory anchor differ.
+</p>
+
+<h2>5. What CCTS specifically wants vs. what morimieru provides</h2>
+
+<table>
+  <thead>
+    <tr><th>CCTS / Compliance need</th><th>Where morimieru fits</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Baseline NDVI / canopy cover at project registration</td>
+      <td>Sentinel-2 multi-year mean, openly verifiable, with cryptographic timestamp</td>
+    </tr>
+    <tr>
+      <td>Annual MRV (Monitoring, Reporting, Verification)</td>
+      <td>Year-over-year NDVI diff + forest area change + Tier 2 recalculation. Per-project cost can drop to ~₹50K–₹200K/yr using free satellite data</td>
+    </tr>
+    <tr>
+      <td>Leakage / additionality check</td>
+      <td>Regional NDVI trends as control; cryptographic chain proves baseline wasn't backdated</td>
+    </tr>
+    <tr>
+      <td>Spatial accuracy of project boundary</td>
+      <td>10 m Sentinel-2 grid; finer with India CartoSat or LiDAR where available</td>
+    </tr>
+    <tr>
+      <td>Co-benefit narrative (water, biodiversity)</td>
+      <td>Water-yield estimate via simplified balance method; vegetation type via NDVI + FSI overlay</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>6. The honest gaps (what we cannot do on day one)</h2>
+
+<p>
+We want to be specific about what does <em>not</em> automatically transfer from Japan:
+</p>
+
+<ul>
+  <li><strong>Species-specific volume tables.</strong> FSI's regional tables exist, but the standard coefficients in our pipeline are calibrated for Japanese sugi/hinoki/broadleaf. The replacement is a one-time mapping exercise (a few hundred entries per state), not a research project.</li>
+  <li><strong>Stand-age inventory.</strong> FSI's India State of Forest Report gives state-level summaries but not stand-level age polygons comparable to Japan's <em>shinrin-bo</em> (forest ledgers). We compensate with NDVI maturity proxies and CAMPA project metadata where available.</li>
+  <li><strong>Geology layer.</strong> India's Geological Survey of India (GSI) maintains a Bhukosh portal, but seamless coverage at the resolution of Japan's AIST Seamless Geological Map varies by state. Water-yield estimates start with regional defaults and refine where data exists.</li>
+  <li><strong>LiDAR.</strong> Japan has 80%+ LiDAR coverage of public forests. India has selective LiDAR coverage (Karnataka and parts of Uttarakhand are ahead). Where it exists, we ingest it; elsewhere, Sentinel-2 alone delivers Tier 2 accuracy.</li>
+</ul>
+
+<p>
+None of these gaps are blockers. They are calibration tasks, not architectural changes.
+</p>
+
+<h2>7. Sample pilot scope (a 90-day roadmap)</h2>
+
+<table>
+  <thead>
+    <tr><th>Phase</th><th>Days</th><th>Output</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1. Site selection</td><td>1–10</td><td>Lock pilot polygon (e.g. 30 km × 30 km in Kodagu / Wayanad)</td></tr>
+    <tr><td>2. Data assembly</td><td>11–25</td><td>FSI vector + IMD grids + Bhuvan DEM + Sentinel-2 5-year history loaded</td></tr>
+    <tr><td>3. Calibration</td><td>26–45</td><td>Tier 2 coefficients for Western Ghats evergreen / semi-evergreen / moist-deciduous</td></tr>
+    <tr><td>4. Public dashboard</td><td>46–65</td><td>India version of <code>/en/map.html</code> centered on Western Ghats</td></tr>
+    <tr><td>5. Sample report</td><td>66–80</td><td>One signed water-yield + CO₂ report for the pilot polygon</td></tr>
+    <tr><td>6. CCTS bridge</td><td>81–90</td><td>Compatibility note &amp; data export format for CCTS afforestation methodology</td></tr>
+  </tbody>
+</table>
+
+<h2>8. How to engage with us</h2>
+
+<p>
+We are not a vendor. morimieru is a public-good infrastructure operated by M-square Lab Inc., a Shizuoka-based research and product company. We are looking for:
+</p>
+
+<ul>
+  <li><strong>Pilot partners</strong> with a credible Western Ghats footprint (a forest department, a research institution, or a company with a stake in the watershed).</li>
+  <li><strong>Data-sharing collaborators</strong> who can open up FSI plots, CAMPA project boundaries, or state-level LiDAR.</li>
+  <li><strong>Indian sustainability teams</strong> who want their CCTS or TNFD disclosure backed by transparent open-data measurements, not black-box consulting.</li>
+</ul>
+
+<p>
+Everything we publish stays free. Everything we calculate is reproducible. Every report is cryptographically verifiable.
+</p>
+
+<div class="related">
+  <h3>Related</h3>
+  <ul>
+    <li><a href="/en/">morimieru — English landing page (concept + pilot data)</a></li>
+    <li><a href="/en/watershed.html">3D watershed map (Japan data; same engine will host Western Ghats)</a></li>
+    <li><a href="/en/article/">All articles</a></li>
+    <li><a href="../../article/tnfd-forest-disclosure.html">TNFD forest disclosure: practical playbook (JP, methodology directly applicable)</a></li>
+    <li><a href="../../article/satellite-co2-tier2.html">Satellite × forest CO₂ via IPCC AFOLU Tier 2 (JP, methodology)</a></li>
+  </ul>
+</div>
+
+<h2>9. Frequently asked questions</h2>
+
+<dl class="faq">
+  <dt>Q1. Is morimieru registered with CCTS as a methodology developer?</dt>
+  <dd>Not yet. The current platform is a measurement layer, not a methodology. Our values feed into CCTS-registered afforestation projects as MRV evidence — they do not replace CCTS registration itself.</dd>
+
+  <dt>Q2. How accurate are the numbers for India compared to Japan?</dt>
+  <dd>Tier 2 accuracy (±10–30%) is achievable in India as soon as FSI species coefficients are mapped in. Higher-precision Tier 3 requires LiDAR or on-site mensuration, which we ingest where states have published it.</dd>
+
+  <dt>Q3. Can a forest department use morimieru to monitor compensatory afforestation under CAMPA?</dt>
+  <dd>Yes, as a parallel monitoring layer. The cryptographic chain means a state's monitoring report cannot be back-edited, which is valuable for inter-state and CAG audits.</dd>
+
+  <dt>Q4. Does morimieru handle Sentinel-2 cloud cover during India's monsoon?</dt>
+  <dd>The pipeline already combines pre-monsoon and post-monsoon composites and falls back to Sentinel-1 SAR (cloud-penetrating) for continuity. Monsoon gaps are a known issue but not a blocker for annual MRV.</dd>
+
+  <dt>Q5. What does it cost?</dt>
+  <dd>Use of the public site is free. A custom India deployment (a Western Ghats pilot dashboard plus calibration) is the conversation we want to have with a partner organization.</dd>
+</dl>
+
+<h2>10. References &amp; sources</h2>
+
+<ul>
+  <li>Bureau of Energy Efficiency (India) — Carbon Credit Trading Scheme (CCTS) framework, 2024–2026</li>
+  <li>Ministry of Power, Government of India — 8 approved voluntary credit methodologies, March 2025</li>
+  <li>Forest Survey of India — India State of Forest Report (latest biennial edition)</li>
+  <li>India Meteorological Department — gridded precipitation and temperature data</li>
+  <li>ISRO Bhuvan — CartoSat DEM, land-use / land-cover</li>
+  <li>India-WRIS — Water Resources Information System portal</li>
+  <li>Copernicus Sentinel-2 / Sentinel-1 — open satellite data via AWS Open Data</li>
+  <li>NASA POWER — global meteorological forcing</li>
+  <li>WWF HydroSHEDS / HydroBASINS — global watershed boundaries (CC-BY)</li>
+  <li>IPCC 2006 Guidelines for National Greenhouse Gas Inventories, AFOLU Volume 4 (2019 Refinement)</li>
+</ul>
+
+<p style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--ink-300); font-size: 13px; color: var(--ink-500);">
+Last updated 2026-05-26. India CCTS implementation details continue to evolve; we will revise as the Bureau of Energy Efficiency publishes finalized methodology rules.
+</p>
+
+</div><!-- /report-body -->
+
+</body>
+</html>

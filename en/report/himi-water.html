@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Himi City forest water yield report (Toyama, Japan) | morimieru</title>
+<meta name="description" content="A quantitative annual water yield estimate for the forests around Himi City, Toyama (Japan), produced from Sentinel-2 imagery and the Forestry Agency of Japan simplified evaluation method Ver.1.0. Approximately 119 million tonnes per year.">
+<meta name="keywords" content="Himi water yield, Toyama forest, water yield report, Forestry Agency simplified method, Sentinel-2, watershed Japan, forest hydrology">
+<link rel="canonical" href="https://mori-mieru.jp/en/report/himi-water.html">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/report/himi-water.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/report/himi-water.html">
+<meta property="og:title" content="Himi forest water yield report — morimieru">
+<meta property="og:description" content="~119 million tonnes/yr of water yield from Himi forests (Sentinel-2 + simplified evaluation method).">
+<meta property="og:image" content="https://mori-mieru.jp/assets/report-water-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/en/report/himi-water.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report.css">
+<style>
+.report-hero { --bg-image: url('../../assets/report-water-hero.jpg'); }
+.lang-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; margin-left: 12px; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body class="theme-water">
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">Forest Water Yield Report
+      <span class="lang-toggle">
+        <a href="../../report/himi-water.html" title="日本語">JP</a>
+        <a href="./himi-water.html" class="active">EN</a>
+      </span>
+    </p>
+    <h1 class="report-title">Himi City forest water yield<br>(Toyama, Japan)</h1>
+    <p class="report-subtitle">
+      An annual water yield estimate for a 16 km × 14 km AOI around Himi City, derived from
+      Sentinel-2 satellite imagery (Copernicus) and the Forestry Agency of Japan
+      simplified evaluation method Ver.1.0 (March 2026).
+    </p>
+    <dl class="report-meta">
+      <dt>Report issued</dt><dd>2026-05-14</dd>
+      <dt>Study area</dt><dd>Himi City, Toyama Prefecture · Asahi range vicinity</dd>
+      <dt>Forest area</dt><dd>12,398 ha (satellite) / 13,486 ha (municipal record)</dd>
+      <dt>Area agreement</dt><dd>92%</dd>
+      <dt>Method</dt><dd>Forestry Agency of Japan Simplified Evaluation Method Ver.1.0</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<div class="hero-stat">
+  <p class="label">Annual Water Yield</p>
+  <p class="number">~ 1.19<span class="unit">hundred million t/yr</span></p>
+  <p class="compare">
+    119,115,675 m³/yr (±30% CI: 83 M – 155 M tonnes)<br>
+    Equivalent to the annual domestic water demand of ~1.6 million households.
+  </p>
+</div>
+
+<h2>1. Summary</h2>
+
+<p>
+The AOI around Himi City (16 km × 14 km, 22,400 ha total) contains
+<strong>12,398 ha of forest (55.3%)</strong> as identified from Sentinel-2 imagery.
+The portion of annual precipitation that this forest captures and supplies downstream
+as groundwater / baseflow — i.e. water yield — is estimated at
+<strong>approximately 119 million tonnes/year (961 mm/yr)</strong>.
+</p>
+
+<div class="kpi-grid">
+  <div class="kpi">
+    <p class="kpi-label">Annual precipitation</p>
+    <p class="kpi-value">2,331<span class="unit">mm/yr</span></p>
+    <p class="kpi-note">NASA POWER 2020-2024 mean</p>
+  </div>
+  <div class="kpi alt-effect">
+    <p class="kpi-label">Water yield</p>
+    <p class="kpi-value positive">961<span class="unit">mm/yr (41.2%)</span></p>
+    <p class="kpi-note">Forest area only</p>
+  </div>
+  <div class="kpi alt-bare">
+    <p class="kpi-label">Direct runoff</p>
+    <p class="kpi-value">533<span class="unit">mm/yr (22.9%)</span></p>
+    <p class="kpi-note">Tertiary geology baseline</p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">Evapotranspiration</p>
+    <p class="kpi-value">837<span class="unit">mm/yr (35.9%)</span></p>
+    <p class="kpi-note">Transpiration + canopy interception</p>
+  </div>
+</div>
+
+<h2>2. AOI and Sentinel-2 NDVI observation</h2>
+
+<div class="figure-grid">
+  <div class="figure-wrap">
+    <p class="figure-label">Study area</p>
+    <div id="map-svg-container"></div>
+    <p class="figure-caption">Himi City, Toyama · Sea of Japan high-rainfall coast</p>
+  </div>
+  <div class="figure-wrap">
+    <p class="figure-label">Sentinel-2 NDVI (2026-03-17)</p>
+    <img src="../../data/sentinel/himi_ndvi.png" alt="Himi NDVI" class="ndvi-image" loading="lazy">
+    <p class="figure-caption">
+      Dark green = high NDVI (active vegetation) · light green = mid · brown = bare / low<br>
+      Cloud cover 3.7%, Sentinel-2A observation
+    </p>
+  </div>
+</div>
+
+<h2>3. Water-balance breakdown</h2>
+
+<div class="figure-wrap">
+  <div style="display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:center;">
+    <div id="water-donut-container"></div>
+    <div>
+      <p style="margin: 0 0 12px; font-size: 14px; font-weight: 500;">Where the 2,331 mm of annual precipitation goes</p>
+      <div class="budget-bar">
+        <div class="bar-runoff" style="width: 22.9%;">23%</div>
+        <div class="bar-evapo"  style="width: 35.9%;">36%</div>
+        <div class="bar-yield"  style="width: 41.2%;">41%</div>
+      </div>
+      <div class="budget-legend">
+        <span><span class="legend-swatch bar-runoff"></span>Direct runoff 533 mm</span>
+        <span><span class="legend-swatch bar-evapo"></span>Evapotranspiration 837 mm</span>
+        <span><span class="legend-swatch bar-yield"></span>Water yield 961 mm</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>3.1 5-year NDVI time series (real observations)</h3>
+<p>
+  5 years of Sentinel-2 observations (71 sample points) aggregated via the CDSE Statistical API.
+  The seasonal cycle (spring–summer peak, winter decline) and inter-annual variability are
+  clearly resolved. We applied an NDVI threshold of 0.5 to summer-peak rasters to identify forest area.
+</p>
+<div class="figure-wrap" id="ndvi-chart-container"></div>
+
+<div class="callout success">
+  <strong>Cross-check against the municipal record:</strong>
+  Our Sentinel-2 NDVI > 0.5 mask identifies <strong>12,398 ha of forest</strong>;
+  the City of Himi's published forest area is <strong>13,486 ha</strong> — a difference of about
+  <strong>8% (on the conservative side)</strong>, which is good agreement for satellite-based estimation.
+  The underestimate likely comes from the 0.5 threshold conservatively excluding very young conifer
+  stands, freshly harvested areas, and recently planted blocks.
+</div>
+
+<div class="callout">
+  <strong>Comparison with a hypothetical bare-ground baseline:</strong>
+  If the same 12,398 ha were bare ground, water yield would drop to roughly 10% of precipitation
+  (~233 mm/yr) — only about 29 million tonnes/year. By maintaining its current canopy, this
+  forest supplies an <strong>extra ~90 million tonnes/year</strong> of stable downstream water.
+</div>
+
+<h2>4. Calculation method (IPCC-aligned, Forestry-Agency compliant)</h2>
+
+<p>
+Aligned with the
+<a href="https://www.rinya.maff.go.jp/j/suigen/suigen/260311.html" target="_blank" rel="noopener">
+"Simplified Evaluation Method for Forest Water Yield Ver.1.0"</a>
+published by the Forestry Agency of Japan in March 2026.
+Every input is fetched automatically from public open data sources.
+</p>
+
+<h3>4.1 The headline equations</h3>
+<div class="method-formula">Water yield [mm/yr] = Annual precipitation − Direct runoff − Evapotranspiration
+
+  P_eve  = 0.6473 × P − 138.67          (event-aggregated precipitation)
+  Q      = a × P_eve + b                 (direct runoff by geology class)
+  Q_t    = (849 × DBH − 7350) × (0.0244 × T + 0.4361)
+                                          (per-tree transpiration, Tsuruta et al. 2019)
+  r      = k1 × {1 − exp(−k2 × N)}      (conifer interception rate, Komatsu et al. 2015)
+  E      = Q_t × N + r × P              (ET = transpiration + interception)
+
+  <strong>Water yield = P − Q − E</strong></div>
+
+<h3>4.2 Inputs and sources</h3>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Input</th><th>Value</th><th>Source</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Monthly T &amp; P</td><td class="num">T=16.0°C, P=2,160 mm/yr</td><td><small>NASA POWER monthly (2020-2024 mean)</small></td></tr>
+    <tr><td>Station elevation</td><td class="num">2.9 m</td><td><small>GSI Japan 5 m DEM API</small></td></tr>
+    <tr><td>Forest-point elevation</td><td class="num">171.5 m</td><td><small>GSI Japan 5 m DEM API</small></td></tr>
+    <tr><td>Geology class</td><td class="num">Tertiary (Neogene Miocene)</td><td><small>AIST Seamless Geological Map v2 API</small></td></tr>
+    <tr><td>Forest type</td><td class="num">Evergreen conifer (sugi / hinoki dominant)</td><td><small>Sentinel-2 NDVI seasonal pattern</small></td></tr>
+    <tr><td>Forest area</td><td class="num">12,398 ha</td><td><small>Sentinel-2 L2A NDVI > 0.5 (Hansen 2013)</small></td></tr>
+    <tr><td>Stem density</td><td class="num">783 stems/ha</td><td><small>Forestry Agency default (mid-aged sugi/hinoki)</small></td></tr>
+    <tr><td>Mean DBH</td><td class="num">32 cm</td><td><small>Forestry Agency yield-prediction table (age 50–70)</small></td></tr>
+    <tr><td>Mean tree height</td><td class="num">18 m</td><td><small>Same as above</small></td></tr>
+  </tbody>
+</table>
+
+<h3>4.3 Results (mm/yr scale)</h3>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Term</th><th>Value</th><th>Note</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>P (elevation-corrected precipitation)</td><td class="num">2,331 mm/yr</td><td><small>After elevation correction</small></td></tr>
+    <tr><td>P_eve (event aggregate)</td><td class="num">1,370 mm/yr</td><td><small>Regression-derived</small></td></tr>
+    <tr><td>Q (direct runoff)</td><td class="num">533 mm/yr</td><td><small>Tertiary geology, ≤1306 mm band</small></td></tr>
+    <tr><td>Transpiration</td><td class="num">453 mm/yr</td><td><small>Per-tree × stem density × 12 months</small></td></tr>
+    <tr><td>Canopy interception</td><td class="num">384 mm/yr</td><td><small>Conifer interception rate</small></td></tr>
+    <tr><td>Total ET</td><td class="num">837 mm/yr</td><td><small>Transpiration + interception</small></td></tr>
+    <tr style="background:var(--blue-100);"><td><strong>Water yield</strong></td><td class="num effect"><strong>961 mm/yr</strong></td><td><small><strong>41.2% of precipitation</strong></small></td></tr>
+  </tbody>
+</table>
+
+<h2>5. Extending to the full AOI</h2>
+
+<p>
+Multiplying the per-hectare value by the satellite-measured forest area (12,398 ha) gives
+the annual water yield for the whole AOI.
+</p>
+
+<div class="method-formula">  961 mm/yr × 12,398 ha
+= 0.961 m × 12,398 × 10,000 m²
+= <strong>119,115,675 m³/yr</strong>
+= ~ 1.19 hundred million tonnes/yr
+= ±30% CI: 83,448,000 – 154,974,000 m³</div>
+
+<h2>6. Scale comparison</h2>
+
+<ul class="compare-list">
+  <li><span>Tokyo Dome (1.23 M m³)</span><strong>~97 Tokyo Domes / yr</strong></li>
+  <li><span>Household domestic use (73 m³/household)</span><strong>~1.63 M households / yr</strong></li>
+  <li><span>500 ml bottled-water units</span><strong>~238 billion bottles / yr</strong></li>
+  <li><span>Mineral-water bottling plant capacity</span><strong>Several tens to ~100 large plants worth</strong></li>
+</ul>
+
+<h2>7. Data sources</h2>
+
+<div class="sources">
+  <h3>Open data sources (all free, commercial use OK)</h3>
+  <ul>
+    <li><strong>Sentinel-2 L2A</strong> (satellite imagery / NDVI) — <a href="https://dataspace.copernicus.eu/" target="_blank">Copernicus Data Space Ecosystem (CDSE)</a></li>
+    <li><strong>NASA POWER</strong> (monthly T &amp; P) — <a href="https://power.larc.nasa.gov/" target="_blank">power.larc.nasa.gov</a></li>
+    <li><strong>GSI Japan elevation API</strong> (DEM) — <a href="https://maps.gsi.go.jp/development/elevation_s.html" target="_blank">maps.gsi.go.jp</a></li>
+    <li><strong>AIST Seamless Geological Map v2</strong> — <a href="https://gbank.gsj.jp/seamless/" target="_blank">gbank.gsj.jp/seamless/</a></li>
+    <li><strong>Forestry Agency Simplified Evaluation Method</strong> Ver.1.0 (March 2026) — <a href="https://www.rinya.maff.go.jp/j/suigen/suigen/260311.html" target="_blank">rinya.maff.go.jp</a></li>
+  </ul>
+</div>
+
+<h2>8. Reducing the error envelope</h2>
+
+<div class="callout warn">
+  <strong>This estimate carries a typical ±30% uncertainty. Drivers and compression strategies:</strong>
+  <ul>
+    <li>Stem density, DBH, and height use Forestry Agency standard values → <strong>integrate Forestry Agency LiDAR (Tochigi / Hyogo / Kochi already public) for 20 m mesh stand measurements</strong>, shifting to Tier 3 with ±10–15%</li>
+    <li>Classification error from a single NDVI threshold → <strong>multi-temporal NDVI consensus</strong> to remove seasonal noise</li>
+    <li>Coarse geology mesh (multiple classes within AOI) → <strong>per-stand subdivision</strong> to match local geology</li>
+    <li>NASA POWER grid resolution (~50 km) → <strong>integrate AMeDAS (17 km, 10-minute resolution)</strong></li>
+  </ul>
+  All of the above are on our roadmap as structural error compression — not just disclaimers.
+</div>
+
+<p class="disclaimer">
+※ This report is a third-party estimate aligned with the Forestry Agency of Japan's official
+formula. It is not an official certification by the Forestry Agency or MAFF.
+Issuance of J-Credit water-yield credits requires separate official monitoring and
+third-party verification. All numerical values are estimates and do not constitute
+commercial guarantees.
+</p>
+
+<div class="report-footer">
+  <p>© 2026 morimieru | <a href="https://mori-mieru.jp/en/">mori-mieru.jp/en</a></p>
+  <div class="footer-actions">
+    <a href="../" class="btn-back">← Home (EN)</a>
+    <button class="btn-print" onclick="window.print()">🖨️ Save as PDF</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+fetch('../../data/sentinel/himi_figures.json')
+  .then(r => r.json())
+  .then(figs => {
+    document.getElementById('ndvi-chart-container').innerHTML = figs.ndvi_chart_svg;
+    document.getElementById('water-donut-container').innerHTML = figs.water_donut_svg;
+    document.getElementById('map-svg-container').innerHTML = figs.japan_map_svg;
+  })
+  .catch(e => console.warn('figures load failed', e));
+</script>
+</body>
+</html>

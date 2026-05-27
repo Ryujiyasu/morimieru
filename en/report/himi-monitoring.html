@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Himi forest management-effect monitoring (5-year NDVI) | morimieru</title>
+<meta name="description" content="A 5-year NDVI time-series analysis (2021-2025) for the Himi City forest AOI, quantifying vegetation vigour change and the corresponding CO2 absorption and water yield deltas. A low-cost alternative to credit-programme MRV.">
+<meta name="keywords" content="forest monitoring, NDVI time series, Sentinel-2, Sentinel-1, MRV, J-Credit MRV, satellite monitoring, Himi forest, management effect">
+<link rel="canonical" href="https://mori-mieru.jp/en/report/himi-monitoring.html">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/report/himi-monitoring.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/report/himi-monitoring.html">
+<meta property="og:title" content="Himi forest management-effect monitoring (5-year NDVI)">
+<meta property="og:description" content="A 5-year NDVI time series for Himi forests. Vegetation vigour change quantified into CO2 and water deltas.">
+<meta property="og:image" content="https://mori-mieru.jp/assets/report-monitor-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/en/report/himi-monitoring.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report.css">
+<style>
+.report-hero { --bg-image: url('../../assets/report-monitor-hero.jpg'); }
+.lang-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; margin-left: 12px; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body class="theme-monitor">
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">Forest Treatment Effect Monitoring Report
+      <span class="lang-toggle">
+        <a href="../../report/himi-monitoring.html" title="日本語">JP</a>
+        <a href="./himi-monitoring.html" class="active">EN</a>
+      </span>
+    </p>
+    <h1 class="report-title">Himi forest<br>management-effect monitoring</h1>
+    <p class="report-subtitle">
+      A 5-year NDVI time series from Sentinel-2 (2021-2025) quantifies vegetation vigour
+      change in the Himi forest AOI and the corresponding CO₂ absorption and water yield deltas.
+      We show this method as a <strong>low-cost alternative</strong> to credit-programme MRV
+      (Monitoring, Reporting, Verification).
+    </p>
+    <dl class="report-meta">
+      <dt>Report issued</dt><dd>2026-05-14</dd>
+      <dt>Study AOI</dt><dd>Himi City, Toyama Prefecture · Asahi range vicinity</dd>
+      <dt>Forest area</dt><dd>12,398 ha</dd>
+      <dt>Observation window</dt><dd>2021-2025 (5 years)</dd>
+      <dt>Sample points</dt><dd>71</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<div class="hero-stat">
+  <p class="label">5-Year Forest Vigour Change</p>
+  <p class="number" id="hero-ndvi-pct">+15.2<span class="unit">% NDVI</span></p>
+  <p class="compare" id="hero-compare">
+    2021-2022 mean 0.401 → 2024-2025 mean 0.462<br>
+    Vigour is up — a management-effect signal.
+  </p>
+</div>
+
+<h2>1. Observation results</h2>
+
+<div class="kpi-grid">
+  <div class="kpi alt-effect">
+    <p class="kpi-label">5-year cumulative ΔCO₂</p>
+    <p class="kpi-value positive" id="kpi-co2">+41,566<span class="unit">t-CO₂</span></p>
+    <p class="kpi-note">NDVI → AGB empirical</p>
+  </div>
+  <div class="kpi alt-water">
+    <p class="kpi-label">Water yield change</p>
+    <p class="kpi-value positive" id="kpi-water">+0.3<span class="unit">%</span></p>
+    <p class="kpi-note">~ +362,707 m³/yr</p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">Observations</p>
+    <p class="kpi-value" id="kpi-obs">71<span class="unit">points</span></p>
+    <p class="kpi-note">Summer peak × 5 years</p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">AOI</p>
+    <p class="kpi-value">12,398<span class="unit">ha</span></p>
+    <p class="kpi-note">Asahi range, Himi City</p>
+  </div>
+</div>
+
+<h2>2. Year-by-year NDVI trend</h2>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Summer NDVI mean</th>
+      <th>Obs. count</th>
+      <th>ΔNDVI vs prev. yr</th>
+      <th>% change</th>
+    </tr>
+  </thead>
+  <tbody id="year-rows"></tbody>
+</table>
+
+<div class="callout">
+  <strong>On year-to-year variability:</strong>
+  Single-year comparisons fluctuate ±20-40% because of climate-year differences (heatwaves,
+  delayed monsoon end, etc.). <strong>A 2-3-year moving average extracts the true
+  management / forest-state signal.</strong> Here we use the 2021-2022 mean vs 2024-2025 mean
+  as the long-term trend.
+</div>
+
+<h2>3. Calculation basis</h2>
+
+<div class="method-formula">// NDVI → CO2 (empirical, Pettorelli et al. family)
+ΔAGB (t/ha)  = ΔNDVI × 30
+ΔC (t-C/ha)  = ΔAGB × 0.5
+ΔCO₂ (t/ha) = ΔC × 3.67
+ΔCO₂ (AOI)  = ΔCO₂/ha × forest_area_ha
+
+// NDVI → water yield (conservative)
+Δwater (%)  = ΔNDVI × 5  (NDVI +0.1 ≈ +0.5% yield)
+Δwater (m³) = baseline_yield × Δ%
+
+// Long-term trend
+NDVI_early = mean(2021, 2022)
+NDVI_late  = mean(2024, 2025)
+<strong>ΔNDVI_long = NDVI_late − NDVI_early</strong></div>
+
+<h2>4. Compared with credit-programme MRV</h2>
+
+<div class="callout success">
+  <strong>A low-cost alternative to MRV:</strong>
+  Maintaining a J-Credit forest-absorption project requires annual monitoring, reporting, and
+  third-party verification, costing hundreds of thousands to millions of yen. Our method
+  <strong>derives the same signal automatically from public data</strong>, so the marginal
+  cost is near zero. Project creators, corporate buyers, and local governments all share
+  the same numbers — and the data lineage stays consistent.
+</div>
+
+<h2>5. Sentinel-1 SAR: all-weather, all-season monitoring</h2>
+
+<p>
+  Sentinel-2 NDVI is optical, so it cannot observe through <strong>cloud, fog, or at night</strong>.
+  In monsoon and typhoon seasons — common in Japan, India, and much of Southeast Asia — this
+  is a serious gap. Combining <strong>Sentinel-1</strong> (C-band SAR / synthetic-aperture radar)
+  closes it.
+</p>
+
+<div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
+  <div class="kpi">
+    <p class="kpi-label">Cloud-penetrating</p>
+    <p class="kpi-value">6-12<span class="unit">days</span></p>
+    <p class="kpi-note">All weather, all seasons</p>
+  </div>
+  <div class="kpi alt-effect">
+    <p class="kpi-label">VH backscatter</p>
+    <p class="kpi-value">Biomass<span class="unit">proxy</span></p>
+    <p class="kpi-note">Correlates with canopy structure / standing volume</p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">Harvest detection</p>
+    <p class="kpi-value">Real-time<span class="unit">possible</span></p>
+    <p class="kpi-note">Clear-cuts drop ~-6 to -10 dB</p>
+  </div>
+</div>
+
+<div class="figure-wrap" id="sar-figure-wrap">
+  <p class="figure-label">Sentinel-1 SAR — VH Backscatter (Himi AOI)</p>
+  <div id="sar-image-host" style="position:relative;background:#1a1f1a;border-radius:8px;min-height:280px;display:flex;align-items:center;justify-content:center;color:#a7c498;font-family:ui-monospace,monospace;font-size:13px;">
+    <span>📡 SAR image pending (will populate after next fetch_sentinel1_himi.py run)</span>
+  </div>
+  <div class="sar-legend" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;font-size:11.5px;">
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;background:#e6c8a0;border-radius:2px;"></span>Bare / water (&lt; -18 dB)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;background:#a7c498;border-radius:2px;"></span>Sparse vegetation (-18 to -14)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;background:#5a8a3a;border-radius:2px;"></span>Medium forest (-14 to -11)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;background:#2d5a3d;border-radius:2px;"></span>Dense forest (&gt; -11 dB)</span>
+  </div>
+  <p class="figure-caption" id="sar-caption">
+    Cross-polarized VH responds strongly to canopy scattering, so it works as a forest-biomass proxy.
+    Gamma0 terrain-corrected, ortho-rectified against Copernicus DEM 30 m.
+  </p>
+</div>
+
+<div class="callout success">
+  <strong>NDVI × SAR hybrid evaluation:</strong>
+  Combining NDVI (optical / vigour) with VH backscatter (radar / biomass) lets us independently
+  estimate <strong>(1) leaf health</strong> and <strong>(2) structural standing volume</strong>.
+  When weather knocks out one, the other fills in — there is no monitoring gap.
+</div>
+
+<h2>6. Structural error compression</h2>
+
+<div class="callout warn">
+  <strong>Method-improvement roadmap:</strong>
+  <ul>
+    <li>NDVI → AGB is an empirical formula → integrate <strong>Forestry Agency LiDAR</strong> for per-stand measured biomass</li>
+    <li>Climate-year variability → <strong>moving average + AMeDAS correction</strong> to extract the pure vegetation signal</li>
+    <li>Large-scale harvest / natural disturbance → <strong>Sentinel-1 SAR</strong> integration for cloud- and season-independent detection (§5)</li>
+    <li>Understorey / young-stand change → combine <strong>multi-band indices (NDMI, SAVI, etc.)</strong></li>
+    <li>Tier 2 → <strong>Tier 3</strong> compresses uncertainty from ±30% to ±10-15%</li>
+  </ul>
+</div>
+
+<h2>7. Next steps</h2>
+
+<ul>
+  <li>Per-stand time-series differencing (Shizuoka 1,102 stands as the next batch)</li>
+  <li>Integrate the Forestry Agency LiDAR (publicly opened for Tochigi, Hyogo, Kochi) to move to Tier 3</li>
+  <li>A dashboard so local governments and forest cooperatives can monitor their own forests</li>
+  <li>AMeDAS integration to remove climate-year confounds</li>
+  <li>Automated SAR time-series differencing (harvest alerts)</li>
+</ul>
+
+<h2>8. Data sources</h2>
+
+<div class="sources">
+  <ul>
+    <li><strong>Sentinel-2 L2A</strong> (NDVI time series) — CDSE Sentinel Hub Statistical API</li>
+    <li><strong>Sentinel-1 GRD</strong> (C-band SAR, VH polarization) — CDSE Sentinel Hub Process API</li>
+    <li><strong>Forestry Agency Simplified Evaluation Method</strong> Ver.1.0 (water yield baseline)</li>
+    <li><strong>IPCC AFOLU 2006</strong> (CO₂ conversion factors)</li>
+    <li><strong>Pettorelli et al. family</strong> (empirical NDVI → AGB)</li>
+  </ul>
+</div>
+
+<p class="disclaimer">
+※ This report is a third-party estimate built on public satellite data. It is not an official
+J-Credit / VCS certification. Actual credit issuance or renewal requires monitoring reports
+prepared per the Forestry Agency / programme secretariat methodologies.
+</p>
+
+<div class="report-footer">
+  <p>© 2026 morimieru | <a href="https://mori-mieru.jp/en/">mori-mieru.jp/en</a></p>
+  <div class="footer-actions">
+    <a href="../" class="btn-back">← Home (EN)</a>
+    <button class="btn-print" onclick="window.print()">🖨️ Save as PDF</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+fetch('../../data/sentinel/himi_timeseries_diff.json')
+  .then(r => r.json())
+  .then(d => {
+    const lt = d.long_term;
+    document.getElementById('hero-ndvi-pct').innerHTML = `${lt.delta_pct >= 0 ? '+' : ''}${lt.delta_pct}<span class="unit">% NDVI</span>`;
+    document.getElementById('hero-compare').innerHTML =
+      `${d.observation_period.from}-${d.observation_period.from + 1} mean ${lt.ndvi_early_mean} → ${d.observation_period.to - 1}-${d.observation_period.to} mean ${lt.ndvi_late_mean}<br>` +
+      (lt.delta_pct >= 0
+        ? 'Vigour is up — a management-effect signal.'
+        : 'Vigour is down — possible harvest or degradation.');
+
+    document.getElementById('kpi-co2').innerHTML = `${lt.delta_co2_cumulative_t >= 0 ? '+' : ''}${lt.delta_co2_cumulative_t.toLocaleString()}<span class="unit">t-CO₂</span>`;
+    document.getElementById('kpi-water').innerHTML = `${lt.delta_water_yield_pct >= 0 ? '+' : ''}${lt.delta_water_yield_pct}<span class="unit">%</span>`;
+    document.getElementById('kpi-obs').innerHTML = `${d.observation_period.obs_count}<span class="unit">points</span>`;
+
+    const rows = d.year_over_year.map(y => `
+      <tr>
+        <td><strong>${y.to_year}</strong></td>
+        <td class="num">${y.ndvi_to}</td>
+        <td class="num">${d.yearly_summer_ndvi[y.to_year]?.count_obs || '-'}</td>
+        <td class="num ${y.delta_ndvi >= 0 ? 'pos' : 'neg'}">${y.delta_ndvi >= 0 ? '+' : ''}${y.delta_ndvi}</td>
+        <td class="num ${y.delta_pct >= 0 ? 'pos' : 'neg'}">${y.delta_pct >= 0 ? '+' : ''}${y.delta_pct}%</td>
+      </tr>
+    `).join('');
+    const firstYear = d.year_over_year[0];
+    document.getElementById('year-rows').innerHTML = `
+      <tr>
+        <td><strong>${firstYear.from_year}</strong></td>
+        <td class="num">${firstYear.ndvi_from}</td>
+        <td class="num">${d.yearly_summer_ndvi[firstYear.from_year]?.count_obs || '-'}</td>
+        <td class="num">(baseline)</td>
+        <td class="num">-</td>
+      </tr>` + rows;
+  })
+  .catch(e => console.warn('data load failed', e));
+
+fetch('../../data/sentinel/himi_sar_meta.json')
+  .then(r => r.ok ? r.json() : Promise.reject())
+  .then(meta => {
+    const host = document.getElementById('sar-image-host');
+    host.innerHTML = '';
+    host.style.background = '#0d1310';
+    host.style.padding = '0';
+    const img = document.createElement('img');
+    img.src = '../../data/sentinel/himi_sar.png';
+    img.alt = 'Sentinel-1 VH backscatter';
+    img.className = 'ndvi-image';
+    img.style.width = '100%';
+    img.style.height = 'auto';
+    img.style.display = 'block';
+    host.appendChild(img);
+
+    if (meta.scene) {
+      const cap = document.getElementById('sar-caption');
+      const dt = meta.scene.datetime ? new Date(meta.scene.datetime).toISOString().slice(0,10) : '';
+      const plat = meta.scene.platform || '';
+      const orb = meta.scene.orbit_state || '';
+      cap.innerHTML =
+        `Acquired <strong>${dt}</strong>${plat ? ` / ${plat.toUpperCase()}` : ''}${orb ? ` / ${orb}` : ''} (most recent scene in last 60 days)<br>` +
+        cap.textContent;
+    }
+  })
+  .catch(() => { /* SAR not yet fetched */ });
+</script>
+</body>
+</html>

@@ -1,45 +1,200 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://mori-mieru.jp/</loc>
-    <lastmod>2026-05-14</lastmod>
+    <lastmod>2026-05-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/map.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/map.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/map.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/watershed.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/watershed.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/watershed.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/reports.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/reports.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/reports.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/article/</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/article/" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/article/india-pilot.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/india-pilot.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/article/karnataka-coffee-supply-chain.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/karnataka-coffee-supply-chain.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/article/india-campa-monitoring.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/india-campa-monitoring.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/article/india-semiconductor-water.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/india-semiconductor-water.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/article/tnfd-forest-disclosure.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/article/tnfd-forest-disclosure.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/tnfd-forest-disclosure.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/article/satellite-co2-tier2.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/article/satellite-co2-tier2.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/satellite-co2-tier2.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/article/water-yield-guide.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/article/water-yield-guide.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/water-yield-guide.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/report/himi-water.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/report/himi-water.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/report/himi-water.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/report/himi-monitoring.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/report/himi-monitoring.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/report/himi-monitoring.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/en/report/shizuoka-forests.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/report/shizuoka-forests.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/report/shizuoka-forests.html" xmlns:xhtml="http://www.w3.org/1999/xhtml"/>
   </url>
   <url>
     <loc>https://mori-mieru.jp/reports.html</loc>
-    <lastmod>2026-05-14</lastmod>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://mori-mieru.jp/map.html</loc>
-    <lastmod>2026-05-14</lastmod>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://mori-mieru.jp/watershed.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://mori-mieru.jp/report/himi-water.html</loc>
-    <lastmod>2026-05-14</lastmod>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://mori-mieru.jp/report/shizuoka-forests.html</loc>
-    <lastmod>2026-05-14</lastmod>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://mori-mieru.jp/report/himi-monitoring.html</loc>
-    <lastmod>2026-05-14</lastmod>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/article/</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/article/water-yield-guide.html</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/article/tnfd-forest-disclosure.html</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/article/jcredit-forest-map-2026.html</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/article/satellite-co2-tier2.html</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mori-mieru.jp/article/gx-ets-forest-credit-2026.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>

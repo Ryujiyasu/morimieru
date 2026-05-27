@@ -8,6 +8,9 @@
 <meta name="keywords" content="森林,衛星画像,Sentinel-2,Sentinel-1,水源涵養,CO2吸収,J-クレジット,森林モニタリング,林業,自治体,森林整備,NDVI,林班,流域,カーボンクレジット">
 <meta name="author" content="株式会社エムスクエア・ラボ">
 <link rel="canonical" href="https://mori-mieru.jp/">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/">
+<link rel="alternate" hreflang="x-default" href="https://mori-mieru.jp/">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="assets/favicon-192.png">
@@ -69,9 +72,20 @@
     <a href="watershed.html">🌊 流域マップ</a>
     <a href="map.html">📊 データマップ</a>
     <a href="reports.html">レポート</a>
+    <a href="article/">解説記事</a>
     <a href="#about">これは何？</a>
     <a href="#start" class="cta">森を探す</a>
+    <span class="lang-toggle">
+      <a href="/" class="active" title="日本語">JP</a>
+      <a href="/en/" title="English">EN</a>
+    </span>
   </nav>
+
+  <style>
+    .lang-toggle { display: inline-flex; gap: 4px; margin-left: 12px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; }
+    .lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+    .lang-toggle a.active { background: #2d5a3d; color: #fff; }
+  </style>
 </header>
 
 <!-- ============== Hero ============== -->
@@ -411,6 +425,38 @@
         <p>すべて無料データ + オープンソース。小規模な森林組合・自治体でも運用可能。「精度競争」ではなく「検証可能性 × 普及可能性」で価値を生みます。</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ============== Articles CTA ============== -->
+<section id="articles" style="background: linear-gradient(180deg, #f6faf5 0%, #ffffff 100%); padding: 64px 24px;">
+  <div class="container" style="max-width: 1080px; margin: 0 auto;">
+    <p style="font-family: 'Josefin Sans', sans-serif; font-size: 12px; letter-spacing: 0.3em; color: #2d5a3d; text-transform: uppercase; margin: 0 0 12px;">Articles</p>
+    <h2 style="font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 28px; color: #1f3d2a; margin: 0 0 24px;">解説記事</h2>
+    <p style="color: #4a4838; line-height: 1.85; margin: 0 0 28px;">林野庁・IPCC・TNFD の公開資料に準拠した実務ガイドです。企業 CSR・サステナビリティ担当者、自治体、林業実務者向けに整理しています。</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
+      <a href="article/gx-ets-forest-credit-2026.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #c47a4a; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #c47a4a; text-transform: uppercase; margin: 0 0 8px;">GX-ETS · 2026 · NEW</p>
+        <p style="font-weight: 700; color: #8c5a3a; line-height: 1.5; margin: 0;">GX-ETS と森林由来J-クレジット 2026年版（上限¥4,300の影響）</p>
+      </a>
+      <a href="article/water-yield-guide.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #3b6da1; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #3b6da1; text-transform: uppercase; margin: 0 0 8px;">Water · Guide</p>
+        <p style="font-weight: 700; color: #1f4570; line-height: 1.5; margin: 0;">水源涵養量とは？林野庁簡易評価法 Ver.1.0 ガイド</p>
+      </a>
+      <a href="article/tnfd-forest-disclosure.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #2d5a3d; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #2d5a3d; text-transform: uppercase; margin: 0 0 8px;">TNFD · Forest</p>
+        <p style="font-weight: 700; color: #1f3d2a; line-height: 1.5; margin: 0;">TNFD森林開示の実務ガイド（林野庁手引き対応）</p>
+      </a>
+      <a href="article/jcredit-forest-map-2026.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #c47a4a; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #c47a4a; text-transform: uppercase; margin: 0 0 8px;">J-Credit · Map 2026</p>
+        <p style="font-weight: 700; color: #8c5a3a; line-height: 1.5; margin: 0;">森林由来J-クレジット 全264件マップ 2026年版</p>
+      </a>
+      <a href="article/satellite-co2-tier2.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #2d5a3d; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #2d5a3d; text-transform: uppercase; margin: 0 0 8px;">Satellite · CO₂</p>
+        <p style="font-weight: 700; color: #1f3d2a; line-height: 1.5; margin: 0;">衛星×森林CO2吸収量：IPCC Tier 2 実装解説</p>
+      </a>
+    </div>
+    <a href="article/" style="display: inline-block; font-family: 'Josefin Sans', sans-serif; font-size: 13px; letter-spacing: 0.15em; color: #2d5a3d; text-transform: uppercase; text-decoration: none; padding: 10px 24px; border: 1px solid #2d5a3d; border-radius: 999px;">記事一覧を見る →</a>
   </div>
 </section>
 

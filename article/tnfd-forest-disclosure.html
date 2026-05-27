@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TNFD森林開示で何を出すか：林野庁手引き（令和7年4月）に沿った実務ガイド｜もりみえる</title>
+<meta name="description" content="TNFD（自然関連財務情報開示）で森林をどう開示するか。林野庁が令和7年4月に公表した手引きに沿って、LEAPアプローチ別の必要データ、流域マッチング、水源涵養量・CO2吸収量の測り方を解説。">
+<meta name="keywords" content="TNFD,自然関連財務情報開示,森林 開示,林野庁 手引き,LEAP,水源涵養,自然資本,生物多様性,森林の多面的機能,CSR,サステナビリティ">
+<meta name="author" content="もりみえる｜株式会社エムスクエア・ラボ">
+<link rel="canonical" href="https://mori-mieru.jp/article/tnfd-forest-disclosure.html">
+
+<meta property="og:title" content="TNFD森林開示で何を出すか｜林野庁手引き（令和7年4月）に沿った実務ガイド">
+<meta property="og:description" content="LEAPアプローチ別の必要データ、流域マッチング、水源涵養量・CO2吸収量の測り方を解説。">
+<meta property="og:image" content="https://mori-mieru.jp/article/img/tnfd-forest-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/article/tnfd-forest-disclosure.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="もりみえる">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TNFD森林開示で何を出すか｜林野庁手引き対応の実務ガイド">
+<meta name="twitter:description" content="LEAPアプローチ別の必要データと測り方を解説。">
+<meta name="twitter:image" content="https://mori-mieru.jp/article/img/tnfd-forest-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "TNFD森林開示で何を出すか：林野庁手引き（令和7年4月）に沿った実務ガイド",
+  "description": "TNFD（自然関連財務情報開示）で森林をどう開示するか。林野庁手引きに沿って実務的に解説。",
+  "image": "https://mori-mieru.jp/article/img/tnfd-forest-hero.jpg",
+  "datePublished": "2026-05-17",
+  "dateModified": "2026-05-17",
+  "author": {"@type": "Organization", "name": "もりみえる", "url": "https://mori-mieru.jp/"},
+  "publisher": {"@type": "Organization", "name": "株式会社エムスクエア・ラボ", "url": "https://m2-labo.jp/"},
+  "mainEntityOfPage": "https://mori-mieru.jp/article/tnfd-forest-disclosure.html"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../report/report.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+
+<style>
+.report-hero { --bg-image: url('img/tnfd-forest-hero.jpg'); }
+.article-figure { margin: 28px 0; }
+.article-figure img { width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block; }
+.article-figure figcaption { font-size: 13px; color: var(--ink-500); margin-top: 8px; text-align: center; }
+.breadcrumb { font-size: 12px; color: var(--ink-500); padding: 16px 0 0; max-width: 960px; margin: 0 auto; }
+.breadcrumb a { color: var(--ink-500); }
+.faq dt { font-weight: 700; margin-top: 14px; color: var(--theme-dark); }
+.faq dd { margin: 4px 0 0 0; }
+.related { background: var(--green-100); padding: 24px 28px; border-radius: var(--radius-md); margin: 36px 0; }
+.related h3 { margin-top: 0; }
+.related ul { margin: 0; padding-left: 20px; }
+.leap-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 20px 0; }
+.leap-card { background: var(--cream); padding: 16px; border-radius: var(--radius-sm); border-left: 4px solid var(--theme); }
+.leap-card .letter { font-family: var(--font-en); font-size: 24px; font-weight: 700; color: var(--theme); }
+.leap-card .name { font-weight: 700; margin: 2px 0 4px; }
+.leap-card .desc { font-size: 13px; color: var(--ink-700); line-height: 1.6; }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body>
+
+<nav class="breadcrumb" aria-label="パンくず">
+  <a href="/">もりみえる</a> ／ <a href="/article/">解説記事</a> ／ TNFD森林開示の実務ガイド
+</nav>
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">TNFD · Forest · Practical Guide</p>
+    <h1 class="report-title">TNFD森林開示で何を出すか<br>林野庁手引き（令和7年4月）に沿った実務ガイド</h1>
+    <p class="report-subtitle">
+      水を使う製造業・飲料・食品・半導体・住宅・金融すべての企業に関わる
+      「森林依存・森林インパクト」をどう測り、どう開示するか。
+      LEAPアプローチに沿って実装手順を整理します。
+    </p>
+    <dl class="report-meta">
+      <dt>公開</dt><dd>2026年5月17日</dd>
+      <dt>準拠</dt><dd>林野庁「森林に関するTNFD情報開示の手引き」（令和7年4月）</dd>
+      <dt>対象読者</dt><dd>CSR/サステナビリティ/IR部門・経営企画・調達部門</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<h2>1. なぜ「森林 × TNFD」が今、重要なのか</h2>
+
+<p>
+TNFD（Taskforce on Nature-related Financial Disclosures：自然関連財務情報開示タスクフォース）は、
+2023年9月に提言 v1.0 が公表され、TCFD の自然版として急速に主流化しました。
+2024年以降、東証プライム上場企業を中心に開示が本格化しています。
+</p>
+
+<p>
+TNFDは「自然」を5つの領域に分解して扱いますが、日本企業にとって<strong>最も実務的に重い領域が「森林」</strong>です。
+理由は3つあります。
+</p>
+
+<ul>
+  <li><strong>水の依存</strong>：飲料・食品・半導体・紙パルプは「水」を多量に使うが、その水は上流森林の水源涵養機能に依存している</li>
+  <li><strong>気候の依存</strong>：森林はCO₂吸収・固定の主要装置であり、自社のScope 3排出オフセットにも関わる</li>
+  <li><strong>サプライチェーン</strong>：木材・紙・パーム油など、森林由来資材の調達が「自然インパクト」に直結</li>
+</ul>
+
+<p>
+この実務的な空白を埋めるために、<strong>林野庁は令和7年（2025年）4月に
+「森林の有する多面的機能に関する企業の自然関連財務情報開示に向けた手引き」</strong>を公表しました。
+本記事は、この手引きに沿って企業が実際に何をすべきかを整理します。
+</p>
+
+<h2>2. 林野庁手引きの全体像</h2>
+
+<p>
+手引きは、TNFD の提言が定める<strong>14の開示項目</strong>に対して、
+「森林依存・森林インパクト」をどう測定・開示すべきかを示しています。
+特に注力されているのが、以下の機能の定量化です。
+</p>
+
+<table>
+  <thead>
+    <tr><th>機能カテゴリ</th><th>具体的な指標</th><th>主なデータソース</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>水源涵養</td><td>年間涵養量（mm/年・トン/年）</td><td>林野庁 簡易評価法 Ver.1.0、衛星画像</td></tr>
+    <tr><td>気候緩和（CO₂吸収）</td><td>年間吸収量（t-CO₂/年）</td><td>IPCC AFOLU Tier 2、森林簿、Sentinel-2</td></tr>
+    <tr><td>土砂災害防止</td><td>侵食抑制量、崩壊リスク</td><td>地形データ、降雨データ</td></tr>
+    <tr><td>生物多様性</td><td>植生タイプ、希少種生息状況</td><td>環境省 自然環境保全基礎調査、モニタリングサイト1000</td></tr>
+    <tr><td>木材供給</td><td>蓄積量・成長量</td><td>森林簿、航空レーザ（LiDAR）</td></tr>
+  </tbody>
+</table>
+
+<h2>3. LEAPアプローチ：森林開示の4ステップ</h2>
+
+<p>
+TNFDは <strong>LEAPアプローチ</strong>という4ステップの実装手順を推奨しています。
+森林開示でも、この枠組みに沿って進めます。
+</p>
+
+<div class="leap-box">
+  <div class="leap-card">
+    <div class="letter">L</div>
+    <div class="name">Locate</div>
+    <div class="desc">自社が依存・影響する森林を「特定」する</div>
+  </div>
+  <div class="leap-card">
+    <div class="letter">E</div>
+    <div class="name">Evaluate</div>
+    <div class="desc">依存・影響の大きさを「定量評価」する</div>
+  </div>
+  <div class="leap-card">
+    <div class="letter">A</div>
+    <div class="name">Assess</div>
+    <div class="desc">それがもたらすリスク・機会を「査定」する</div>
+  </div>
+  <div class="leap-card">
+    <div class="letter">P</div>
+    <div class="name">Prepare</div>
+    <div class="desc">開示と内部対応を「準備」する</div>
+  </div>
+</div>
+
+<figure class="article-figure">
+  <img src="img/tnfd-leap-flow.jpg" alt="LEAPアプローチのフロー：Locate→Evaluate→Assess→Prepareの4ステップ">
+  <figcaption>図1：LEAPアプローチの4ステップと、森林開示での具体的アウトプット</figcaption>
+</figure>
+
+<h2>4. Locate：自社が依存する森林を特定する</h2>
+
+<p>
+LEAPの最初のステップ Locate では、自社の事業活動と自然との「接点」を地理的に特定します。
+森林の場合、特定すべきは主に以下の3種類です。
+</p>
+
+<ol>
+  <li><strong>取水点の上流森林</strong>：工場・本社・データセンターが利用する水の上流域</li>
+  <li><strong>原材料調達地の森林</strong>：木材・紙・パーム油・大豆など森林由来資材の生産地</li>
+  <li><strong>自社所有・契約森林</strong>：CSR森林・社員教育の森・社有林など</li>
+</ol>
+
+<p>
+このうち1番が最もボリュームが大きく、かつ自社では把握困難です。
+工場の所在地住所から「どの河川流域に属するか」「その上流のどの森林に依存しているか」を
+地理的に追跡するには、<strong>流域マッチング</strong>と呼ばれる手法が必要です。
+</p>
+
+<p>
+もりみえるは <a href="/watershed.html">HydroBASINS Lvl 10</a> をベースに、
+住所 → 取水域 → 上流林班の自動マッチングを無料で提供しています。
+これ単独で Locate ステップが完了します。
+</p>
+
+<figure class="article-figure">
+  <img src="img/tnfd-watershed-matching.jpg" alt="工場の住所から取水域を特定し、さらに上流の森林を抽出する流域マッチング図">
+  <figcaption>図2：流域マッチングによる Locate。工場住所 → 取水域 → 上流森林を一気通貫で特定</figcaption>
+</figure>
+
+<h2>5. Evaluate：依存・影響を定量化する</h2>
+
+<p>
+Locate で特定した森林について、依存・影響を数値化します。
+森林の機能ごとに、推奨される測定指標は以下のとおりです。
+</p>
+
+<h3>5.1 水源涵養機能</h3>
+
+<p>
+取水点の上流森林について、年間の水源涵養量を <strong>林野庁簡易評価法 Ver.1.0</strong> で算定します。
+詳細は <a href="/article/water-yield-guide.html">水源涵養量ガイド</a> を参照。
+TNFD 開示では「自社が年間に使う水量のうち、X% が当該森林に由来」のような表現が有効です。
+</p>
+
+<h3>5.2 CO₂吸収機能</h3>
+
+<p>
+IPCC AFOLU ガイドラインの <strong>Tier 2</strong> 手法で算定します。
+Sentinel-2 から森林面積・植生指数を取得し、林齢・樹種ごとの係数を当てて推定します。
+詳細は <a href="/article/satellite-co2-tier2.html">衛星×CO2吸収量 解説記事</a> を参照。
+</p>
+
+<h3>5.3 生物多様性</h3>
+
+<p>
+環境省の<strong>自然環境保全基礎調査（植生図 1/50,000）</strong>と<strong>モニタリングサイト1000</strong>から、
+対象森林の植生タイプ・希少種生息情報をオーバーレイします。
+TNFD では「自然へのインパクト」として、土地利用変化や種の絶滅リスクへの貢献度が問われます。
+</p>
+
+<h2>6. Assess：リスクと機会を査定する</h2>
+
+<p>
+Evaluate で出した量を、自社の財務インパクト・戦略インパクトに翻訳します。
+</p>
+
+<table>
+  <thead>
+    <tr><th>カテゴリ</th><th>森林に関連するリスク・機会の例</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>物理的リスク</td><td>上流森林の劣化による取水困難・水質悪化・洪水被害</td></tr>
+    <tr><td>移行リスク</td><td>森林保全規制の強化、TNFD非対応による投資家評価の低下</td></tr>
+    <tr><td>機会</td><td>自社の森林投資をブランドとして発信、ESG債発行の根拠</td></tr>
+    <tr><td>システミック</td><td>気候変動による広域水循環変化、生態系崩壊が産業全体に与える影響</td></tr>
+  </tbody>
+</table>
+
+<h2>7. Prepare：開示と内部対応</h2>
+
+<p>
+TNFD は最終的に有価証券報告書・統合報告書・サステナビリティレポートで開示します。
+森林の場合、以下の3点を必ず盛り込むことが手引きで推奨されています。
+</p>
+
+<ul>
+  <li><strong>地理情報</strong>：依存・影響する森林の位置（住所粒度ではなく流域・林班粒度）</li>
+  <li><strong>定量指標</strong>：水源涵養量・CO₂吸収量・面積・植生タイプなど</li>
+  <li><strong>変化のトラッキング</strong>：年次の経時変化（衛星時系列差分が有用）</li>
+</ul>
+
+<p>
+特に「変化のトラッキング」は、TNFD が将来的に MRV（Monitoring/Reporting/Verification）の
+質を厳しく問う方向にあるため、いまから時系列データの蓄積基盤を作っておくことが推奨されます。
+</p>
+
+<h2>8. 実装ロードマップ：3年プラン</h2>
+
+<table>
+  <thead>
+    <tr><th>年</th><th>マイルストーン</th><th>もりみえるで支援できる範囲</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1年目</td><td>Locate 完了：自社の依存森林リスト作成</td><td>流域マッチングで自動生成可</td></tr>
+    <tr><td>2年目</td><td>Evaluate：水・CO₂の定量指標の初版開示</td><td>簡易評価法・Tier 2 で算定可</td></tr>
+    <tr><td>3年目</td><td>Assess + Prepare：リスク機会分析、財務翻訳、有報開示</td><td>時系列差分データで変化トラッキング</td></tr>
+  </tbody>
+</table>
+
+<div class="related">
+  <h3>関連記事・レポート</h3>
+  <ul>
+    <li><a href="/article/gx-ets-forest-credit-2026.html">GX-ETS 本格運用と森林由来J-クレジット 2026年版</a></li>
+    <li><a href="/article/water-yield-guide.html">水源涵養量とは？林野庁簡易評価法 Ver.1.0 ガイド</a></li>
+    <li><a href="/article/satellite-co2-tier2.html">衛星×CO2吸収量：IPCC AFOLU Tier 2 解説</a></li>
+    <li><a href="/article/jcredit-forest-map-2026.html">森林由来J-クレジット 全264件マップ 2026年版</a></li>
+    <li><a href="/watershed.html">全国流域マッチング</a></li>
+  </ul>
+</div>
+
+<h2>9. よくある質問（FAQ）</h2>
+
+<dl class="faq">
+  <dt>Q1. TNFDは義務化されているか？</dt>
+  <dd>2026年5月時点で法的義務化はされていませんが、東証プライム上場企業を中心に「準義務」状態に進んでいます。SSBJ（サステナビリティ基準委員会）の議論次第で、近い将来に法定開示化される可能性が高い領域です。</dd>
+
+  <dt>Q2. 水を多量に使わない業種でも森林開示は必要か？</dt>
+  <dd>必要です。木材・紙・建材を使う住宅メーカー、印刷業、調達側のIT企業（オフィス・データセンターの紙・木材調達）も対象となり得ます。林野庁手引きは業種を限定せず幅広く適用可能な構成です。</dd>
+
+  <dt>Q3. 自社所有森林がない場合は何を開示すれば良い？</dt>
+  <dd>「依存」側の開示が中心になります。取水域上流の森林依存度、原材料調達地の森林状態などです。所有・契約関係がなくても、依存関係は十分な開示対象です。</dd>
+
+  <dt>Q4. もりみえる単独で TNFD 全項目を埋められる？</dt>
+  <dd>定量データ部分は概ねカバーできます。ただし、ガバナンス・戦略・リスク管理体制などの定性開示は企業側で別途準備が必要です。もりみえるは Locate + Evaluate のデータ基盤を担います。</dd>
+
+  <dt>Q5. 流域マッチングはどの精度で動く？</dt>
+  <dd>HydroBASINS Lvl 10（平均集水面積 約100km²）を採用しており、市区町村〜数十km四方の精度で上流森林を特定できます。より細かい粒度は国土数値情報 W07 流域メッシュとの統合で対応中です。</dd>
+</dl>
+
+<h2>10. 参考文献・出典</h2>
+
+<ul>
+  <li>林野庁「森林の有する多面的機能に関する企業の自然関連財務情報開示に向けた手引き」（令和7年4月）</li>
+  <li>TNFD「Recommendations of the Taskforce on Nature-related Financial Disclosures」（2023年9月）</li>
+  <li>環境省「自然環境保全基礎調査」</li>
+  <li>農林中央金庫エグゼクティブ・アドバイザー資料「水分野も含む自然関連の情報開示」</li>
+  <li>林野庁「林地における水資源涵養量の簡易評価手法 Ver.1.0」（令和8年3月）</li>
+</ul>
+
+<p style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--ink-300); font-size: 13px; color: var(--ink-500);">
+最終更新：2026年5月17日。本記事は林野庁・TNFD 公開資料に基づき、もりみえるが独自に整理したものです。
+</p>
+
+</div><!-- /report-body -->
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Articles | morimieru</title>
+<meta name="description" content="Practical articles on water yield, TNFD forest disclosure, J-Credit, and satellite CO2 estimation. Aligned with Forestry Agency of Japan / IPCC / TNFD public materials; written for sustainability teams.">
+<meta name="keywords" content="forest, water yield, TNFD, J-Credit, IPCC AFOLU, Sentinel-2, NDVI, forest DX">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/article/">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/">
+<link rel="alternate" hreflang="x-default" href="https://mori-mieru.jp/article/">
+<link rel="canonical" href="https://mori-mieru.jp/en/article/">
+
+<meta property="og:title" content="Articles | morimieru">
+<meta property="og:description" content="Practical articles on water yield, TNFD, J-Credit, satellite CO2.">
+<meta property="og:url" content="https://mori-mieru.jp/en/article/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="もりみえる">
+<meta property="og:image" content="https://mori-mieru.jp/assets/og-image.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../report/report.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+
+<style>
+.breadcrumb { font-size: 12px; color: var(--ink-500); padding: 16px 0 0; max-width: 960px; margin: 0 auto; }
+.breadcrumb a { color: var(--ink-500); }
+.article-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin: 36px 0; }
+.article-card { background: var(--paper); padding: 28px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s; border-top: 4px solid var(--theme); }
+.article-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.article-card .tag { font-family: var(--font-en); font-size: 11px; letter-spacing: 0.2em; color: var(--theme); text-transform: uppercase; margin-bottom: 10px; }
+.article-card h3 { margin: 0 0 12px; font-size: 18px; color: var(--theme-dark); line-height: 1.5; }
+.article-card h3 a { color: inherit; }
+.article-card p { margin: 0 0 14px; font-size: 14px; line-height: 1.75; color: var(--ink-700); }
+.article-card .meta { font-size: 12px; color: var(--ink-500); }
+</style>
+</head>
+<body class="theme-water">
+
+<nav class="breadcrumb" aria-label="パンくず">
+  <a href="/en/">morimieru</a> / Articles
+  <span class="lang-toggle" style="margin-left: 16px;">
+    <a href="../../article/" title="日本語">JP</a>
+    <a href="./" class="active" title="English">EN</a>
+  </span>
+</nav>
+
+<style>
+.lang-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+</style>
+
+<header class="report-hero">
+  <div class="container">
+    <p class="report-eyebrow">Articles · Practical Guides</p>
+    <h1 class="report-title">Articles</h1>
+    <p class="report-subtitle">
+      Practical guides aligned with public materials from the Forestry Agency of Japan, IPCC, and TNFD.
+      Written for corporate sustainability teams, public-sector officials, and forestry practitioners.
+    </p>
+  </div>
+</header>
+
+<div class="report-body">
+
+<div class="article-list">
+
+  <article class="article-card" style="border-top-color: var(--blue-700);">
+    <div class="tag" style="color: var(--blue-700);">India · Semiconductor · NEW</div>
+    <h3><a href="india-semiconductor-water.html">India's semiconductor build-out × water exposure: a watershed playbook for fabs</a></h3>
+    <p>Dholera, Sanand, and ISM 2.0 are putting billions of fab investment into water-sensitive basins. Under TNFD, BRSR Principle 6, and CDP Water Security, every fab and lender now needs watershed-level evidence — and the satellite stack is free.</p>
+    <p class="meta">2026-05-26 · ~17,000 chars · EN</p>
+  </article>
+
+  <article class="article-card" style="border-top-color: var(--green-700);">
+    <div class="tag" style="color: var(--green-700);">India · CAMPA</div>
+    <h3><a href="india-campa-monitoring.html">CAMPA monitoring: a satellite layer for compensatory-afforestation transparency</a></h3>
+    <p>India's ₹66,000 Cr CAMPA corpus + plantation non-maintenance findings from CAG / CEC = a textbook case for a free, tamper-proof, plot-level monitoring layer. We outline how Sentinel-2 + Merkle hash + RFC 3161 timestamps complement state forest department processes without replacing them.</p>
+    <p class="meta">2026-05-26 · ~16,000 chars · EN</p>
+  </article>
+
+  <article class="article-card" style="border-top-color: var(--earth-500);">
+    <div class="tag" style="color: var(--earth-500);">India · Coffee · EUDR</div>
+    <h3><a href="karnataka-coffee-supply-chain.html">Karnataka coffee: satellite watershed monitoring meets EUDR, CCTS, and TNFD in 2026</a></h3>
+    <p>Karnataka supplies 70%+ of India's coffee. With EUDR live, CCTS open, and TNFD reshaping ESG, every exporter and roaster needs watershed-level evidence — and the free satellite stack to deliver it is already there.</p>
+    <p class="meta">2026-05-26 · ~15,500 chars · EN</p>
+  </article>
+
+  <article class="article-card" style="border-top-color: var(--blue-700);">
+    <div class="tag" style="color: var(--blue-700);">India · Pilot</div>
+    <h3><a href="india-pilot.html">India forest valuation pilot: how morimieru maps onto CCTS, Western Ghats &amp; FSI</a></h3>
+    <p>India's CCTS goes live in 2026 with afforestation registered. The Cauvery / Krishna basins are under water stress. We map our Japan-tested stack onto Western Ghats with FSI, IMD, and CartoSat — same Sentinel-2, same formulas.</p>
+    <p class="meta">2026-05-26 · ~15,000 chars · EN</p>
+  </article>
+
+  <article class="article-card" style="border-top-color: var(--earth-500);">
+    <div class="tag" style="color: var(--earth-500);">GX-ETS · Forest Credit</div>
+    <h3><a href="../../article/gx-ets-forest-credit-2026.html">Japan GX-ETS: how the ¥4,300 cap reshapes forest J-Credit markets (2026)</a></h3>
+    <p>GX-ETS goes live April 2026. The ¥4,300 cap meets a forest-credit market at ¥10,000+ — we map covered companies, strategy choices, price trajectory, and purchase channels.</p>
+    <p class="meta">2026-05-19 · ~5,500 chars · JP</p>
+  </article>
+
+  <article class="article-card">
+    <div class="tag">TNFD · Forest</div>
+    <h3><a href="tnfd-forest-disclosure.html">TNFD forest disclosure: practical playbook for the LEAP approach</a></h3>
+    <p>How to measure and disclose forest dependency and impact — for water-intensive manufacturing, housing, finance. Step-by-step against the LEAP approach with global data sources and India BRSR / IFSCA notes.</p>
+    <p class="meta">2026-05-26 · ~9,000 words · EN</p>
+  </article>
+
+  <article class="article-card">
+    <div class="tag">Forest Water · Guide</div>
+    <h3><a href="water-yield-guide.html">Forest water yield: a complete guide to the simplified evaluation method</a></h3>
+    <p>The forest-as-reservoir function, quantified by a new standard method (Forestry Agency of Japan Ver.1.0). Formulas, required inputs, a Himi City worked example, and the India substitutions (IMD, Bhuvan, FSI).</p>
+    <p class="meta">2026-05-26 · ~9,000 words · EN</p>
+  </article>
+
+  <article class="article-card">
+    <div class="tag">Satellite · IPCC Tier 2</div>
+    <h3><a href="satellite-co2-tier2.html">Satellite × forest CO₂: IPCC AFOLU Tier 2 with Sentinel-2</a></h3>
+    <p>Between national-default precision and proprietary LiDAR sits Tier 2 × satellite NDVI. Formulas, processing flow, full stack, the Shizuoka 1,102-stand worked example, and Western Ghats Tier 2 numbers.</p>
+    <p class="meta">2026-05-26 · ~9,000 words · EN</p>
+  </article>
+
+  <article class="article-card">
+    <div class="tag">J-Credit · Map 2026</div>
+    <h3><a href="../../article/jcredit-forest-map-2026.html">All 264 forest J-Credit projects, mapped — price, purchase, and selection (2026)</a></h3>
+    <p>A market that crossed ¥10,000/t-CO₂ and is heading toward ¥20,000. 264 nationwide projects on one transparent map, four purchase channels, and how to choose. (Japan-specific)</p>
+    <p class="meta">2026-05-17 · ~5,000 chars · JP only</p>
+  </article>
+
+</div>
+
+<p style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--ink-300); font-size: 13px; color: var(--ink-500);">
+All articles are free. morimieru is operated as a public-good infrastructure; commercial and non-commercial use are both permitted. Articles in JP only (GX-ETS, J-Credit map) are Japan-specific by topic and not on the English translation roadmap.
+</p>
+
+</div><!-- /report-body -->
+
+</body>
+</html>

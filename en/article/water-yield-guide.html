@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forest water yield: a complete guide to the simplified evaluation method | morimieru</title>
+<meta name="description" content="Forest water yield explained. The Forestry Agency of Japan released a simplified evaluation method Ver.1.0 in March 2026 — a globally transferable, open-data-only approach that anyone can run with NASA POWER, satellite forest masks, and a public geology layer. Complete guide with formulas, inputs, and a Himi City worked example.">
+<meta name="keywords" content="forest water yield, water balance method, simplified evaluation method, water yield calculation, watershed hydrology, evapotranspiration, NASA POWER, IMD India, TNFD water, CSR water">
+<meta name="author" content="morimieru | M-square Lab Inc.">
+<link rel="canonical" href="https://mori-mieru.jp/en/article/water-yield-guide.html">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/article/water-yield-guide.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/water-yield-guide.html">
+
+<meta property="og:title" content="Forest water yield: complete guide to the simplified method">
+<meta property="og:description" content="A globally transferable, open-data-only water yield method. Formulas, inputs, Himi City example.">
+<meta property="og:image" content="https://mori-mieru.jp/article/img/water-yield-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/en/article/water-yield-guide.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="morimieru">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Forest water yield: complete simplified-method guide">
+<meta name="twitter:description" content="Open-data water yield. Formulas, inputs, worked example.">
+<meta name="twitter:image" content="https://mori-mieru.jp/article/img/water-yield-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Forest water yield: a complete guide to the simplified evaluation method",
+  "description": "A walkthrough of the simplified water-balance method for forest water yield, with formulas and a Himi worked example.",
+  "image": "https://mori-mieru.jp/article/img/water-yield-hero.jpg",
+  "datePublished": "2026-05-26",
+  "dateModified": "2026-05-26",
+  "inLanguage": "en",
+  "author": {"@type": "Organization", "name": "morimieru", "url": "https://mori-mieru.jp/en/"},
+  "publisher": {"@type": "Organization", "name": "M-square Lab Inc.", "url": "https://m2-labo.jp/"},
+  "mainEntityOfPage": "https://mori-mieru.jp/en/article/water-yield-guide.html"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../report/report.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+
+<style>
+.report-hero { --bg-image: url('../../article/img/water-yield-hero.jpg'); }
+.article-figure { margin: 28px 0; }
+.article-figure img { width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block; }
+.article-figure figcaption { font-size: 13px; color: var(--ink-500); margin-top: 8px; text-align: center; }
+.breadcrumb { font-size: 12px; color: var(--ink-500); padding: 16px 0 0; max-width: 960px; margin: 0 auto; }
+.breadcrumb a { color: var(--ink-500); }
+.faq dt { font-weight: 700; margin-top: 14px; color: var(--theme-dark); }
+.faq dd { margin: 4px 0 0 0; }
+.related { background: var(--blue-100); padding: 24px 28px; border-radius: var(--radius-md); margin: 36px 0; }
+.related h3 { margin-top: 0; }
+.related ul { margin: 0; padding-left: 20px; }
+.formula { background: var(--blue-100); padding: 16px 20px; border-radius: var(--radius-sm); font-family: var(--font-mono); margin: 12px 0; }
+.lang-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body class="theme-water">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/en/">morimieru</a> / <a href="/en/article/">Articles</a> / Forest water yield
+  <span class="lang-toggle" style="margin-left: 16px;">
+    <a href="../../article/water-yield-guide.html" title="日本語">JP</a>
+    <a href="./water-yield-guide.html" class="active">EN</a>
+  </span>
+</nav>
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">Forest Water Yield · Guide</p>
+    <h1 class="report-title">Forest water yield<br>A complete guide to the simplified evaluation method</h1>
+    <p class="report-subtitle">
+      The Forestry Agency of Japan released a new standard simplified method in March 2026 that
+      lets companies, governments, and citizen groups quantify forest water yield with public
+      data alone. We walk through the formulas, the required inputs, and a Himi City worked
+      example — and outline the same approach for India.
+    </p>
+    <dl class="report-meta">
+      <dt>Published</dt><dd>2026-05-26</dd>
+      <dt>Aligned with</dt><dd>Forestry Agency of Japan Simplified Evaluation Method Ver.1.0 (March 2026)</dd>
+      <dt>Target reader</dt><dd>Sustainability teams · local governments · forest cooperatives · researchers</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<h2>1. What forest water yield means</h2>
+
+<p>
+<strong>Forest water yield</strong> is the portion of rainfall that a forest captures in soil,
+releases slowly as baseflow into rivers, and ultimately delivers downstream as a reliable
+water supply. It is the quantitative form of the "forest as natural reservoir" idea.
+</p>
+
+<p>
+Rain that falls on a forest takes one of three routes: (a) it evaporates from the canopy, (b)
+it runs off the surface directly, or (c) it infiltrates into the soil and emerges over weeks
+to months as groundwater or baseflow. The third path is water yield. It mitigates floods and
+sustains rivers through dry seasons — the part of a forest that <em>literally</em> waters
+downstream cities.
+</p>
+
+<figure class="article-figure">
+  <img src="../../article/img/water-balance.jpg" alt="Forest water balance: precipitation, evapotranspiration, direct runoff, water yield">
+  <figcaption>Figure 1 · Forest water balance. Precipitation minus evapotranspiration and direct runoff is water yield.</figcaption>
+</figure>
+
+<h2>2. Why measuring water yield matters now</h2>
+
+<p>
+Water yield was historically treated as a qualitative property of forests — important but
+hard to count. That changed in the 2020s for several reasons:
+</p>
+
+<ul>
+  <li><strong>TNFD (Taskforce on Nature-related Financial Disclosures)</strong> made
+  watershed-level dependency disclosure a near-mandatory requirement for listed companies.</li>
+  <li><strong>Forest carbon credit prices</strong> crossed psychological thresholds in 2025
+  (¥10,000/t-CO₂ in Japan), pulling water yield in as a co-benefit narrative.</li>
+  <li><strong>Climate-driven flood and drought</strong> shocks make local governments accountable
+  for explaining their forest investments to constituents.</li>
+  <li><strong>Water-intensive companies</strong> — beverage, food, semiconductor, paper — need
+  to disclose their upstream-forest exposure under TNFD and BRSR (in India).</li>
+</ul>
+
+<p>
+Against that backdrop, the Forestry Agency of Japan released the
+<em>Simplified Evaluation Method for Forest Water Yield, Ver.1.0</em> in
+<strong>March 2026</strong>, with bilingual documentation and a downloadable spreadsheet.
+The method was designed so anyone could compute water yield with publicly available data.
+</p>
+
+<h2>3. How the simplified evaluation method works</h2>
+
+<p>
+The method is a standardized packaging of the textbook <strong>water-balance</strong>
+approach. The headline formula is simple:
+</p>
+
+<h3>3.1 The headline formula</h3>
+
+<div class="formula">Water yield = Precipitation − Evapotranspiration − Direct runoff</div>
+
+<p>
+The simplification is not in this equation — that part is decades old. It is in the
+<strong>standardized way to fill each term</strong> using free public data.
+</p>
+
+<h3>3.2 Required inputs</h3>
+
+<table>
+  <thead>
+    <tr><th>Input</th><th>Open data source</th><th>Resolution</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Precipitation</td><td>JMA AMeDAS / NASA POWER / JMA mesh climatology</td><td>10-min to annual</td></tr>
+    <tr><td>Temperature (for ET)</td><td>JMA AMeDAS / NASA POWER</td><td>10-min to annual</td></tr>
+    <tr><td>Geology</td><td>AIST Seamless Geological Map / GSI Japan</td><td>20 m – 1 km mesh</td></tr>
+    <tr><td>Forest mask</td><td>KSJ A13 / Forestry Agency ledger / Sentinel-2 NDVI</td><td>10–25 m mesh</td></tr>
+    <tr><td>Stand info (species, age)</td><td>Forest ledger / airborne LiDAR</td><td>Per stand</td></tr>
+  </tbody>
+</table>
+
+<p>
+All sources are free and open. For India deployments, the equivalents are: <strong>IMD</strong>
+(precipitation, temperature), <strong>NASA POWER</strong> (climate backup), <strong>Geological
+Survey of India / Bhukosh</strong> (geology), <strong>FSI / Sentinel-2</strong> (forest), and
+<strong>FSI ISFR</strong> (stand info).
+</p>
+
+<figure class="article-figure">
+  <img src="../../article/img/water-yield-flow.jpg" alt="Processing flow: climate, geology, forest data → water-balance → water yield">
+  <figcaption>Figure 2 · The simplified method as implemented by morimieru.</figcaption>
+</figure>
+
+<h3>3.3 Calculation steps</h3>
+
+<ol>
+  <li><strong>Precipitation.</strong> Pull 5–10 years of annual precipitation for the area and average</li>
+  <li><strong>Evapotranspiration.</strong> Estimate potential ET from temperature (Thornthwaite or
+  Penman) and multiply by a land-cover coefficient</li>
+  <li><strong>Direct runoff rate.</strong> Apply geology-driven coefficients (Tertiary sedimentary
+  rocks yield higher direct runoff; volcanic rocks lower)</li>
+  <li><strong>Forest mask.</strong> Classify pixels with NDVI ≥ 0.5 as forest (or use the
+  national ledger / KSJ A13)</li>
+  <li><strong>Spatial aggregation.</strong> Sum the per-pixel balance across the forest mask</li>
+</ol>
+
+<h2>4. Worked example: Himi City, Toyama, Japan</h2>
+
+<p>
+morimieru applied the method to an AOI of 16 km × 14 km around Himi City (Toyama Prefecture),
+covering 22,400 ha of mixed land cover. The result was <strong>~119 million tonnes/year</strong>
+of water yield, or <strong>961 mm/year</strong> over the forest area.
+</p>
+
+<table>
+  <thead>
+    <tr><th>Term</th><th>Value</th><th>Source</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Annual precipitation</td><td>2,331 mm/yr</td><td>NASA POWER 2020-2024 average</td></tr>
+    <tr><td>Evapotranspiration</td><td>837 mm/yr</td><td>Thornthwaite method</td></tr>
+    <tr><td>Direct runoff</td><td>533 mm/yr</td><td>Tertiary geology baseline</td></tr>
+    <tr><td><strong>Water yield</strong></td><td><strong>961 mm/yr</strong></td><td><strong>41.2% of precipitation</strong></td></tr>
+    <tr><td>Forest area</td><td>12,398 ha</td><td>Sentinel-2 NDVI mask</td></tr>
+    <tr><td>Cross-check vs municipal record</td><td>92%</td><td>vs Himi's reported 13,486 ha</td></tr>
+  </tbody>
+</table>
+
+<p>
+119 million tonnes is roughly the annual domestic water demand of <strong>1.6 million
+households</strong>. The full report is at
+<a href="../../report/himi-water.html">Himi water yield report (JP)</a>.
+</p>
+
+<figure class="article-figure">
+  <img src="../../article/img/himi-water-map.jpg" alt="Spatial map of water yield over Himi: blue intensity = yield density">
+  <figcaption>Figure 3 · Spatial distribution of water yield across the Himi AOI (darker blue = higher yield).</figcaption>
+</figure>
+
+<h2>5. Three ways to run the method on your own area</h2>
+
+<h3>A. The Forestry Agency Excel tool (simplest)</h3>
+<p>
+The official spreadsheet released in March 2026 lets you enter precipitation, temperature,
+geology composition, and forest area for a target area and outputs the standard estimate.
+Best for <strong>1 ha to one stand</strong>.
+</p>
+
+<h3>B. morimieru's web interface (free, end-to-end)</h3>
+<p>
+Enter an address or stand ID. We auto-fetch the satellite and standard datasets and produce
+a report. Best for <strong>100 ha to many tens of thousands of ha</strong>, suitable for
+local governments, cooperatives, and corporate ESG teams.
+</p>
+
+<h3>C. Self-implementation (research / large-scale)</h3>
+<p>
+Python with rasterio + pystac-client + the public datasets gives full reproducibility. We
+plan to open-source the morimieru pipeline. Best for <strong>nation-scale batch processing</strong>.
+</p>
+
+<h2>6. How to read the numbers</h2>
+
+<ul>
+  <li><strong>Uncertainty ~ ±30%.</strong> Standard data only — precipitation, geology, and
+  forest area each carry their own error, which compound</li>
+  <li><strong>Larger areas are more stable.</strong> Under 100 ha the noise is high; above
+  1,000 ha the estimate is usable</li>
+  <li><strong>Compare or differ, don't worship absolutes.</strong> Pre / post-management,
+  upstream / downstream, this watershed / that watershed — these comparisons are where the
+  signal is</li>
+  <li><strong>±10–15% with LiDAR.</strong> Where national LiDAR exists (Tochigi, Hyogo,
+  Kochi in Japan; parts of Karnataka and Uttarakhand in India), substitute it in</li>
+</ul>
+
+<h2>7. Application: TNFD, CSR, and carbon credits</h2>
+
+<p>
+Forest water yield used to fall outside formal carbon credit scope. With TNFD now requiring
+disclosure of corporate dependency on water provisioning, water yield has become a
+<strong>headline indicator</strong> for companies reporting their upstream-forest exposure.
+</p>
+
+<p>
+The morimieru <a href="/en/watershed.html">watershed-matching feature</a> takes an
+HQ or factory address, identifies the upstream forests, and computes their water yield in
+one workflow — directly executing the Locate and Evaluate steps of the TNFD LEAP approach.
+See the <a href="/en/article/tnfd-forest-disclosure.html">TNFD forest disclosure playbook</a>
+for the disclosure-side framing.
+</p>
+
+<h2>8. India-specific notes</h2>
+
+<p>
+The method transfers directly. The substitutions:
+</p>
+
+<ul>
+  <li><strong>IMD</strong> replaces JMA AMeDAS for precipitation and temperature; NASA POWER
+  remains the global backup</li>
+  <li><strong>Bhukosh</strong> (GSI India) replaces AIST for geology</li>
+  <li><strong>Bhuvan / CartoSat</strong> (ISRO) replaces GSI Japan for DEM</li>
+  <li><strong>FSI ISFR</strong> replaces the Forestry Agency ledger for stand info</li>
+  <li><strong>India-WRIS</strong> replaces KSJ W07 for watershed metadata</li>
+</ul>
+
+<p>
+The Western Ghats portion of Karnataka and Kerala typically yields <strong>900–1,800 mm/yr</strong>
+of water — comparable to Japan's highest-yield basins, with much greater seasonal
+concentration due to the southwest monsoon. See the
+<a href="/en/article/india-pilot.html">India pilot article</a> for the full mapping.
+</p>
+
+<div class="related">
+  <h3>Related</h3>
+  <ul>
+    <li><a href="/en/article/india-pilot.html">India forest valuation pilot: CCTS, Western Ghats &amp; FSI</a></li>
+    <li><a href="/en/article/tnfd-forest-disclosure.html">TNFD forest disclosure: practical LEAP playbook</a></li>
+    <li><a href="/en/article/satellite-co2-tier2.html">Satellite × forest CO₂: IPCC AFOLU Tier 2 walkthrough</a></li>
+    <li><a href="../../report/himi-water.html">Himi water yield report (JP)</a></li>
+    <li><a href="/en/watershed.html">Watershed map</a></li>
+  </ul>
+</div>
+
+<h2>9. Frequently asked questions</h2>
+
+<dl class="faq">
+  <dt>Q1. Is water yield the same as storage / reservoir capacity?</dt>
+  <dd>Related but distinct. Storage capacity is a stock (mm of soil water at a moment); water
+  yield is a flow (tonnes per year). The simplified method addresses the flow.</dd>
+
+  <dt>Q2. How does the simplified method compare with SWAT / MIKE-SHE etc.?</dt>
+  <dd>SWAT and MIKE-SHE are precision hydrological models requiring expert calibration and
+  weeks-to-months of setup. The simplified method packages a coarser version that anyone can
+  run with public data — lower precision, dramatically lower operational cost.</dd>
+
+  <dt>Q3. Can it quantify management effect (thinning, harvest)?</dt>
+  <dd>Yes. Sentinel-2 NDVI differencing before and after management gives the change in
+  effective forest area and stand vigour. Re-running the simplified method yields a quantified
+  effect. See <a href="../../report/himi-monitoring.html">Himi monitoring report (JP)</a>.</dd>
+
+  <dt>Q4. Is it usable for local-government accountability?</dt>
+  <dd>Yes. Since the method is a publicly standardised approach from a national agency,
+  outputs can be cited as "computed per the official Ver.1.0 method", which carries weight
+  in council presentations and constituent briefings.</dd>
+
+  <dt>Q5. Is morimieru free?</dt>
+  <dd>Yes — fully free as public-good infrastructure. PDF reports can be downloaded for any
+  commercial or non-commercial purpose.</dd>
+</dl>
+
+<h2>10. References &amp; sources</h2>
+
+<ul>
+  <li>Forestry Agency of Japan, <em>Simplified Evaluation Method for Forest Water Yield Ver.1.0</em> (March 2026)</li>
+  <li>Forestry Agency of Japan, <em>Reference Materials on Forest Water Yield Functions</em> (March 2023)</li>
+  <li>FY2023 Mountain Conservation Survey Report (Forestry Agency, March 2024)</li>
+  <li>NASA POWER climate data API (free, public)</li>
+  <li>AIST Seamless Geological Map V2 (CC-BY)</li>
+  <li>Copernicus Sentinel-2 L2A (CDSE, free, public)</li>
+  <li>India Meteorological Department gridded products (for India deployments)</li>
+</ul>
+
+<p style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--ink-300); font-size: 13px; color: var(--ink-500);">
+Last updated 2026-05-26. Based on public materials from the Forestry Agency of Japan, organized by morimieru.
+</p>
+
+</div><!-- /report-body -->
+
+</body>
+</html>

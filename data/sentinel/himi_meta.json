@@ -1,6 +1,6 @@
 {
   "source": "CDSE Sentinel Hub Process API",
-  "fetched_at": "2026-05-13T23:47:52.388184Z",
+  "fetched_at": "2026-05-26T17:00:13.472189Z",
   "bbox_wgs84": [
     136.897,
     36.787,
@@ -18,10 +18,10 @@
     ]
   ],
   "scene": {
-    "scene_id": "S2A_MSIL2A_20260317T014121_N0512_R117_T53SPA_20260317T051411.SAFE",
-    "datetime": "2026-03-17T01:47:33.666Z",
+    "scene_id": "S2A_MSIL2A_20260426T014111_N0512_R117_T53SPA_20260426T052714.SAFE",
+    "datetime": "2026-04-26T01:47:29.151Z",
     "platform": "sentinel-2a",
-    "cloud_cover": 3.7,
+    "cloud_cover": 6.25,
     "mgrs_tile": null
   },
   "timeseries_points": 71,

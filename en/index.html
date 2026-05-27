@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>morimieru | Find your connection to forests — free satellite-based forest valuation</title>
+<meta name="description" content="Open satellite data + public data, made into transparent measurements of forest value: water yield, CO2 absorption, watershed matching, management-effect monitoring. Demonstrated in Japan, applicable globally (India focus).">
+<meta name="keywords" content="forest monitoring, satellite, Sentinel-2, Sentinel-1, water yield, CO2 absorption, carbon credit, NDVI, watershed, TNFD, ESG, India forests, Japan forests">
+<meta name="author" content="M-square Lab Inc.">
+<link rel="canonical" href="https://mori-mieru.jp/en/">
+<link rel="alternate" hreflang="ja" href="https://mori-mieru.jp/">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/">
+<link rel="alternate" hreflang="x-default" href="https://mori-mieru.jp/">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../assets/favicon-192.png">
+<link rel="apple-touch-icon" sizes="192x192" href="../assets/favicon-192.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
+
+<meta property="og:title" content="morimieru | Free satellite-based forest valuation, applicable globally">
+<meta property="og:description" content="Transparent measurement of forest value (water yield, CO2, watershed). Demonstrated in Japan, opening to India and the world.">
+<meta property="og:image" content="https://mori-mieru.jp/assets/og-image.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/en/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta property="og:site_name" content="morimieru">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="morimieru | Free satellite-based forest valuation">
+<meta name="twitter:description" content="Demonstrated in Japan, applicable globally.">
+<meta name="twitter:image" content="https://mori-mieru.jp/assets/og-image.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "morimieru",
+  "alternateName": "もりみえる",
+  "url": "https://mori-mieru.jp/en/",
+  "inLanguage": "en",
+  "description": "Transparent forest valuation built on free public satellite data.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "M-square Lab Inc.",
+    "url": "https://m2-labo.jp/"
+  }
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="../style.css">
+
+<style>
+.lang-toggle { display: inline-flex; gap: 4px; margin-left: 12px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+.intro-banner { background: linear-gradient(180deg, #fff7ee 0%, #faf6ef 100%); padding: 14px 24px; text-align: center; border-bottom: 1px solid rgba(140,90,58,0.18); font-size: 14px; color: #4a4838; }
+.intro-banner strong { color: #8c5a3a; }
+</style>
+</head>
+<body>
+
+<div class="intro-banner">
+  🌏 <strong>Pilot in Japan, opening for India and global deployment.</strong> The methodology relies on Sentinel-2 (global, free) and IPCC AFOLU Tier 2, so it transfers anywhere with public DEM and climate data.
+</div>
+
+<header class="site-header">
+  <a href="./" class="logo" aria-label="Home">
+    <img class="logo-mark" src="../assets/logo-mark.png" alt="morimieru logo" width="36" height="36">
+    <span class="logo-text">morimieru</span>
+    <span class="logo-en">forest valuation</span>
+  </a>
+  <nav class="nav">
+    <a href="../watershed.html">🌊 Watershed Map</a>
+    <a href="../map.html">📊 Data Map</a>
+    <a href="../reports.html">Reports</a>
+    <a href="../article/">Articles</a>
+    <a href="#about">What is this?</a>
+    <a href="#start" class="cta">Find a forest</a>
+    <span class="lang-toggle">
+      <a href="../" title="日本語">JP</a>
+      <a href="./" class="active">EN</a>
+    </span>
+  </nav>
+</header>
+
+<!-- ============== Hero ============== -->
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Find your connection to forests</p>
+    <h1 class="hero-title">
+      Discover the forest<br>
+      <span class="accent">that flows to your factory.</span>
+    </h1>
+    <p class="hero-lead">
+      Free public satellite data, transparent calculations, instant valuation of any forest's<br>
+      water yield, carbon absorption, and downstream connection — at watershed and stand precision.
+    </p>
+    <div class="hero-cta-row">
+      <a href="#start" class="btn btn-primary">Find your forest →</a>
+      <a href="../watershed.html" class="btn btn-ghost">🌊 Watershed Map (3D)</a>
+      <a href="../map.html" class="btn btn-ghost">📊 Data Map</a>
+      <a href="#" class="btn btn-ghost" id="quick-look">Browse sample candidates</a>
+    </div>
+    <p class="hero-sub">
+      Built entirely on free open data —<br>
+      Sentinel-1/2, Landsat, NASA POWER, IPCC AFOLU Tier 2, HydroBASINS.
+    </p>
+  </div>
+  <div class="hero-bg"></div>
+</section>
+
+<!-- ============== About ============== -->
+<section id="about" class="section about">
+  <div class="container">
+    <p class="section-eyebrow">About</p>
+    <h2 class="section-title">Your forests, visible weekly. Anywhere on Earth.</h2>
+    <figure class="concept-figure">
+      <img src="../assets/concept-diagram.jpg" alt="Satellites observe forests; forest CO2 absorption flows to companies" loading="lazy">
+      <figcaption>Satellite → Forest → Company. We build the measurement and trust layer that connects them.</figcaption>
+    </figure>
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="about-icon">🛰️</div>
+        <h3>Satellites pass every few days</h3>
+        <p>Sentinel-2 and Sentinel-1 (European Copernicus) observe every site on Earth 2–3 times per week. The pilot computes real NDVI from free L2A tiles via AWS Open Data — no proprietary feeds.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">📋</div>
+        <h3>Real forests, not synthetic samples</h3>
+        <p>The current Japan pilot maps all 264 forest-management projects registered with the Japan J-Credit programme. For India, the same approach plugs into India Carbon Market projects and FSI inventory.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">🔏</div>
+        <h3>Cryptographically tamper-proof reports</h3>
+        <p>Every acquisition, processing, and estimation step is sealed with TPM 2.0 attestation, Merkle hashes, and RFC 3161 timestamps. Reports are independently verifiable by any third party.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Start ============== -->
+<section id="start" class="section step-form">
+  <div class="container narrow">
+    <p class="section-eyebrow">Step 1</p>
+    <h2 class="section-title">Tell us about you.</h2>
+    <p class="section-lead">We propose forests that match your context — your watershed, sector, budget, and intent. Open to companies, governments, and individuals.</p>
+
+    <form id="company-form" class="form">
+      <label class="field">
+        <span class="field-label">Organization name <span class="field-hint">(optional)</span></span>
+        <input type="text" name="company" placeholder="e.g. Acme Corp (you can leave this blank)">
+      </label>
+      <label class="field">
+        <span class="field-label">Headquarters / main site address
+          <span class="field-hint">We prioritize forests in your watershed upstream of this address</span>
+        </span>
+        <div class="address-row">
+          <input type="text" name="address" id="address-input" placeholder="e.g. Bangalore, Karnataka / Yaizu, Shizuoka, Japan" autocomplete="street-address">
+          <button type="button" class="btn-locate" id="btn-locate" title="Use my current location">📍 Locate me</button>
+        </div>
+      </label>
+      <label class="field">
+        <span class="field-label">Sector</span>
+        <select name="industry">
+          <option value="食品">Food & Beverage</option>
+          <option value="建築">Real Estate & Construction</option>
+          <option value="製造">Manufacturing</option>
+          <option value="IT">IT / Services</option>
+          <option value="金融">Finance</option>
+          <option value="小売">Retail & Distribution</option>
+          <option value="その他">Other</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">Annual budget <span class="value-display" id="budget-display">¥3M / ≈ US$20K</span></span>
+        <input type="range" name="budget" min="50" max="2000" step="50" value="300" id="budget-input">
+        <div class="range-hints"><span>¥0.5M (~US$3K)</span><span>¥20M (~US$130K)</span></div>
+      </label>
+      <label class="field">
+        <span class="field-label">Preferred region</span>
+        <select name="region">
+          <option value="all">Propose anywhere</option>
+          <option value="hokkaido">Hokkaido (Japan)</option>
+          <option value="tohoku">Tohoku (Japan)</option>
+          <option value="kanto">Kanto (Japan)</option>
+          <option value="chubu" selected>Chubu / Hokuriku (Japan)</option>
+          <option value="kansai">Kansai (Japan)</option>
+          <option value="chugoku">Chugoku (Japan)</option>
+          <option value="shikoku">Shikoku (Japan)</option>
+          <option value="kyushu">Kyushu / Okinawa (Japan)</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">Why forests matter to you (optional)</span>
+        <textarea name="vision" rows="3" placeholder="e.g. CSR for the local watershed / decarbonization pillar / 100-year anniversary commitment"></textarea>
+      </label>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-large">See matching forests →</button>
+        <button type="button" class="btn btn-ghost" id="sample-button">Try with a sample address</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============== Step 2 ============== -->
+<section id="candidates" class="section step-candidates" hidden>
+  <div class="container">
+    <p class="section-eyebrow">Step 2</p>
+    <h2 class="section-title">We found <span id="candidate-count">4</span> forests that fit <span id="company-name-display">you</span>.</h2>
+    <p class="section-lead">Click any forest to view its actual satellite image, NDVI history, and absorption estimate.</p>
+
+    <div id="watershed-summary" class="watershed-summary" hidden>
+      <div class="ws-icon">🌊</div>
+      <div class="ws-text">
+        <p class="ws-label">Your watershed</p>
+        <p class="ws-name" id="ws-name">—</p>
+        <ul class="ws-stats">
+          <li>Basin area: <strong id="ws-area">—</strong> km²</li>
+          <li>Registered forest credits in basin: <strong id="ws-jc-count">—</strong></li>
+          <li>Upstream sub-basins: <strong id="ws-upstream-count">—</strong></li>
+        </ul>
+        <p class="ws-help">The light-blue boundary is your direct catchment; deeper blue is upstream. See the map below.</p>
+      </div>
+    </div>
+
+    <div class="candidates-layout">
+      <div id="candidates-map" class="candidates-map"></div>
+      <div id="candidates-list" class="candidates-list"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Step 3 ============== -->
+<section id="deepdive" class="section step-deepdive" hidden>
+  <div class="container">
+    <p class="section-eyebrow">Step 3 — Deep dive</p>
+    <h2 class="section-title" id="dd-title">Asahi mountain forest, Himi City, Toyama, Japan</h2>
+    <p class="section-lead" id="dd-lead">A pilot site for the Forestry Agency of Japan's FY2025 evaluation programme. We combine high-precision airborne LiDAR baselines with weekly Sentinel-2 imagery.</p>
+
+    <div class="dd-grid">
+      <div class="dd-satellite">
+        <div class="dd-satellite-frame">
+          <div id="dd-map" class="dd-map"></div>
+          <div class="dd-satellite-overlay">
+            <div class="dd-stamp">
+              <div class="stamp-row"><span class="stamp-label">Source</span><span>Sentinel-2 L2A</span></div>
+              <div class="stamp-row"><span class="stamp-label">Tile</span><span>T53SMV</span></div>
+              <div class="stamp-row"><span class="stamp-label">Date</span><span id="dd-date">2026-05-10</span></div>
+              <div class="stamp-row"><span class="stamp-label">Cloud</span><span>3%</span></div>
+              <div class="stamp-row"><span class="stamp-label">Hash</span><span class="mono">a4f3...92c1</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="timeline">
+          <p class="timeline-label">5-year NDVI history (weekly observations)</p>
+          <svg viewBox="0 0 600 80" class="timeline-svg" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="ndviGrad" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#5a8a3a" stop-opacity="0.5"/>
+                <stop offset="1" stop-color="#5a8a3a" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path id="ndvi-path" fill="url(#ndviGrad)" stroke="#2d5a3d" stroke-width="1.5" d=""/>
+          </svg>
+          <div class="timeline-axis"><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
+        </div>
+      </div>
+
+      <div class="dd-side">
+        <div class="metric-card highlight">
+          <p class="metric-label">Estimated annual CO₂ absorption</p>
+          <p class="metric-value"><span id="dd-co2">1,420</span> <span class="metric-unit">t-CO₂/yr</span></p>
+          <p class="metric-error">95% CI: 1,180 – 1,690 t-CO₂</p>
+        </div>
+        <div class="metric-card highlight-blue" id="dd-water-card" hidden>
+          <p class="metric-label">Estimated annual water yield</p>
+          <p class="metric-value"><span id="dd-water-m3">—</span> <span class="metric-unit">m³/yr</span></p>
+          <p class="metric-error" id="dd-water-detail">Per Forestry Agency of Japan simplified method Ver.1.0</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">Credit valuation</p>
+          <p class="metric-value"><span id="dd-credit">17.05</span> <span class="metric-unit">M JPY/yr</span></p>
+          <p class="metric-error">@ ¥12,000 / t-CO₂ (recent J-Credit forest-origin market price)</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">Forest profile</p>
+          <ul class="metric-list">
+            <li><span>Area</span><span id="dd-area">182 ha</span></li>
+            <li><span>Species</span><span id="dd-species">Sugi / Hinoki 73% · Broadleaf 27%</span></li>
+            <li><span>Avg. height</span><span id="dd-height">18.4 m</span></li>
+            <li><span>Stand age</span><span id="dd-age">55 yrs (dominant cohort)</span></li>
+            <li><span>Tenure</span><span id="dd-owner">Forest cooperative / private</span></li>
+          </ul>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">Reference inventories</p>
+          <ul class="metric-list small">
+            <li><span>Forest Ecosystem Survey</span><span>3 plots included</span></li>
+            <li><span>Airborne LiDAR</span><span>FY2024 high-density</span></li>
+            <li><span>Yield prediction</span><span>Toyama Sugi table</span></li>
+          </ul>
+        </div>
+        <details class="method-details" id="method-details" open hidden>
+          <summary>📐 How we derived these numbers (4 steps)</summary>
+          <div id="method-body" class="method-body"></div>
+        </details>
+        <button class="btn btn-primary btn-large btn-full" onclick="goToCommit()">Commit to this forest →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Step 4 ============== -->
+<section id="commit" class="section step-commit" hidden>
+  <div class="container narrow">
+    <p class="section-eyebrow">Step 4</p>
+    <h2 class="section-title">Commitment Certificate</h2>
+    <p class="section-lead">Your commitment has been sealed with a cryptographic timestamp.<br>Anyone can later verify, with third-party tooling, that this content was decided at this moment.</p>
+
+    <div class="certificate">
+      <div class="cert-header">
+        <img src="../assets/cert-emblem.png" alt="" class="cert-mark-img">
+        <div class="cert-title-wrap">
+          <p class="cert-en">FOREST COMMITMENT CERTIFICATE</p>
+          <p class="cert-jp">森林コミットメント証明書</p>
+        </div>
+        <div class="cert-no">No. <span id="cert-no">MM-2026-0513-001</span></div>
+      </div>
+
+      <div class="cert-body">
+        <p class="cert-statement">
+          <strong id="cert-company">Sample Corp.</strong> hereby commits to the<br>
+          conservation and stewardship of the forest below.
+        </p>
+
+        <table class="cert-table">
+          <tr><th>Target forest</th><td id="cert-forest">Asahi range, Himi City, Toyama, Japan</td></tr>
+          <tr><th>Area</th><td id="cert-area">182 ha</td></tr>
+          <tr><th>Est. annual CO₂ absorption</th><td id="cert-co2">1,420 t-CO₂ <span class="cert-sub">(95% CI: 1,180 – 1,690)</span></td></tr>
+          <tr><th>Commitment period</th><td id="cert-period">2026-05-13 to 2031-05-12 (5 years)</td></tr>
+          <tr><th>Annual budget</th><td id="cert-budget">¥3,000,000</td></tr>
+        </table>
+
+        <div class="cert-hash-block">
+          <p class="cert-hash-title">Tamper-proof record</p>
+          <div class="cert-hash-row"><span>Issued at</span><span class="mono" id="cert-timestamp">2026-05-13T14:38:21+09:00</span></div>
+          <div class="cert-hash-row"><span>Sentinel-2 scene ID</span><span class="mono">S2A_MSIL2A_20260510T013451</span></div>
+          <div class="cert-hash-row"><span>Acquisition server TPM attestation</span><span class="mono">7f3b9c...2a91</span></div>
+          <div class="cert-hash-row"><span>Processing code hash</span><span class="mono">e8a124...c0d5</span></div>
+          <div class="cert-hash-row"><span>This certificate hash (SHA-256)</span><span class="mono" id="cert-self-hash">computing...</span></div>
+          <div class="cert-hash-row"><span>RFC 3161 timestamp</span><span class="mono">tsa.example.jp #00128341</span></div>
+        </div>
+
+        <p class="cert-disclaimer">
+          ※ This certificate is a declaration of intent. It is not itself a carbon credit. Formal credit issuance follows the relevant national methodology (J-Credit in Japan, India Carbon Market in India, etc.).
+        </p>
+      </div>
+
+      <div class="cert-footer">
+        <p class="cert-issuer">Issued by: morimieru (M-square Lab Inc.)</p>
+        <button class="btn btn-ghost btn-small" onclick="window.print()">🖨️ Save as PDF</button>
+      </div>
+    </div>
+
+    <div class="next-steps">
+      <a href="#" onclick="resetFlow();return false;" class="btn btn-ghost">Back to start</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Reports ============== -->
+<section id="reports" class="section reports">
+  <div class="container">
+    <p class="section-eyebrow">Reports</p>
+    <h2 class="section-title">Published reports</h2>
+    <p class="section-lead">Auto-generated reports from satellites and public data, organized by region and topic.</p>
+
+    <div class="reports-summary">
+      <div class="reports-count">
+        <span class="big" id="reports-count-num">3</span>
+        <span class="label">published</span>
+      </div>
+      <ul class="reports-themes">
+        <li>📘 Water yield (Toyama)</li>
+        <li>📗 Municipal forest score (Shizuoka, 1,102 stands)</li>
+        <li>📙 Management-effect monitoring (5-year NDVI diff)</li>
+      </ul>
+      <a href="../reports.html" class="btn btn-primary">See all →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Technology ============== -->
+<section id="technology" class="section technology">
+  <div class="container">
+    <p class="section-eyebrow">Technology</p>
+    <h2 class="section-title">How it works</h2>
+    <div class="tech-grid">
+      <div class="tech-step">
+        <div class="tech-num">1</div>
+        <h3>Free public satellite data</h3>
+        <p>Sentinel-2 (optical, 10 m resolution, 2× weekly), Sentinel-1 (SAR, all-weather, 1–2× weekly), and Landsat 8/9. Most points on Earth get at least one usable observation per week.</p>
+      </div>
+      <div class="tech-step">
+        <div class="tech-num">2</div>
+        <h3>National inventories as ground truth</h3>
+        <p>In Japan, 25 years of Forest Ecosystem Survey (15,000 plots on a 4 km grid) and 80%-coverage airborne LiDAR train the estimator. Equivalent reference data (FSI in India, FIA in the US) plugs in the same slot.</p>
+      </div>
+      <div class="tech-step">
+        <div class="tech-num">3</div>
+        <h3>Cryptographic, tamper-proof records</h3>
+        <p>TPM 2.0 attestation (time of acquisition) + Merkle hash chain (processing pipeline) + RFC 3161 timestamps make every monitoring report independently verifiable.</p>
+      </div>
+      <div class="tech-step">
+        <div class="tech-num">4</div>
+        <h3>Built for accessibility, not gatekeeping</h3>
+        <p>All inputs are free data; all code is open-source. Small forest cooperatives and local governments can run it. We compete on <strong>verifiability × accessibility</strong>, not on proprietary precision.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Articles ============== -->
+<section id="articles" style="background: linear-gradient(180deg, #f6faf5 0%, #ffffff 100%); padding: 64px 24px;">
+  <div class="container" style="max-width: 1080px; margin: 0 auto;">
+    <p style="font-family: 'Josefin Sans', sans-serif; font-size: 12px; letter-spacing: 0.3em; color: #2d5a3d; text-transform: uppercase; margin: 0 0 12px;">Articles</p>
+    <h2 style="font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 28px; color: #1f3d2a; margin: 0 0 24px;">Explainer articles</h2>
+    <p style="color: #4a4838; line-height: 1.85; margin: 0 0 28px;">Practical guides aligned with public materials (Forestry Agency of Japan, IPCC, TNFD). Aimed at sustainability teams, public-sector officials, and forestry practitioners. <em>Currently in Japanese — English translations coming soon.</em></p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
+      <a href="article/india-semiconductor-water.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #3b6da1; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #3b6da1; text-transform: uppercase; margin: 0 0 8px;">India · Semiconductor · NEW</p>
+        <p style="font-weight: 700; color: #1f4570; line-height: 1.5; margin: 0;">India fabs × water exposure: TNFD / BRSR / CDP playbook — EN</p>
+      </a>
+      <a href="article/karnataka-coffee-supply-chain.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #c47a4a; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #c47a4a; text-transform: uppercase; margin: 0 0 8px;">India · Coffee · EUDR</p>
+        <p style="font-weight: 700; color: #8c5a3a; line-height: 1.5; margin: 0;">Karnataka coffee: satellite watershed evidence for EUDR / CCTS / TNFD — EN</p>
+      </a>
+      <a href="article/india-pilot.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #3b6da1; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #3b6da1; text-transform: uppercase; margin: 0 0 8px;">India · Pilot</p>
+        <p style="font-weight: 700; color: #1f4570; line-height: 1.5; margin: 0;">India forest valuation pilot: CCTS, Western Ghats &amp; FSI — EN</p>
+      </a>
+      <a href="../article/gx-ets-forest-credit-2026.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #c47a4a; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #c47a4a; text-transform: uppercase; margin: 0 0 8px;">GX-ETS · 2026</p>
+        <p style="font-weight: 700; color: #8c5a3a; line-height: 1.5; margin: 0;">Japan's GX-ETS and forest J-Credits, 2026 edition (the ¥4,300 cap effect) — JP</p>
+      </a>
+      <a href="../article/water-yield-guide.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #3b6da1; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #3b6da1; text-transform: uppercase; margin: 0 0 8px;">Water · Guide</p>
+        <p style="font-weight: 700; color: #1f4570; line-height: 1.5; margin: 0;">Forest water yield: a complete guide to the simplified method — JP</p>
+      </a>
+      <a href="../article/tnfd-forest-disclosure.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #2d5a3d; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #2d5a3d; text-transform: uppercase; margin: 0 0 8px;">TNFD · Forest</p>
+        <p style="font-weight: 700; color: #1f3d2a; line-height: 1.5; margin: 0;">TNFD forest disclosure: a practical guide (LEAP) — JP</p>
+      </a>
+      <a href="../article/jcredit-forest-map-2026.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #c47a4a; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #c47a4a; text-transform: uppercase; margin: 0 0 8px;">J-Credit · Map 2026</p>
+        <p style="font-weight: 700; color: #8c5a3a; line-height: 1.5; margin: 0;">All 264 Japan forest J-Credit projects, mapped — JP</p>
+      </a>
+      <a href="../article/satellite-co2-tier2.html" style="display: block; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,61,42,0.08); border-top: 3px solid #2d5a3d; text-decoration: none; color: inherit;">
+        <p style="font-family: 'Josefin Sans', sans-serif; font-size: 10px; letter-spacing: 0.2em; color: #2d5a3d; text-transform: uppercase; margin: 0 0 8px;">Satellite · CO₂</p>
+        <p style="font-weight: 700; color: #1f3d2a; line-height: 1.5; margin: 0;">Satellite × forest CO₂: IPCC AFOLU Tier 2 walkthrough — JP</p>
+      </a>
+    </div>
+    <a href="../article/" style="display: inline-block; font-family: 'Josefin Sans', sans-serif; font-size: 13px; letter-spacing: 0.15em; color: #2d5a3d; text-transform: uppercase; text-decoration: none; padding: 10px 24px; border: 1px solid #2d5a3d; border-radius: 999px;">See all articles →</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-logo"><img src="../assets/logo-mark.png" alt="" width="28" height="28" style="vertical-align:middle;transform:translateY(-2px);margin-right:6px;"> morimieru</p>
+        <p class="footer-tag">Connecting forests and futures, with satellites and cryptographic proof.</p>
+      </div>
+      <div>
+        <p class="footer-heading">Data sources</p>
+        <ul>
+          <li>Sentinel-1 / Sentinel-2 (European Copernicus)</li>
+          <li>Landsat 8/9 (NASA / USGS)</li>
+          <li>NASA POWER (climate forcing)</li>
+          <li>HydroBASINS (WWF HydroSHEDS, watershed boundaries)</li>
+          <li>Forest Ecosystem Survey & LiDAR (Forestry Agency of Japan)</li>
+          <li>J-Credit programme (Japan METI / MAFF / MoE)</li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-heading">What is this?</p>
+        <p class="small">A public-good infrastructure for forest valuation, originally aligned with the Forestry Agency of Japan's FY2025 commissioned study on combined forest resource survey methods. We layer free public satellite data, transparent calculation, and cryptographic verifiability on top of existing national inventories. The Japan pilot is live; India deployment is in scoping.</p>
+      </div>
+    </div>
+    <p class="copyright">© 2026 morimieru. Built for forests, by people who love forests.</p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../data/candidates.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

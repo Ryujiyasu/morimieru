@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAMPA monitoring: a satellite layer for compensatory afforestation transparency | morimieru</title>
+<meta name="description" content="India's Compensatory Afforestation Fund (CAMPA) corpus exceeds ₹66,000 crore, but CAG audits and CEC reviews have flagged plantation non-maintenance and fund-utilisation gaps. We outline how a free, satellite-based public-good monitoring layer adds tamper-proof, plot-level evidence — complementing, not replacing, state forest department processes.">
+<meta name="keywords" content="CAMPA, compensatory afforestation, CAMPA monitoring, CAG audit forest, India forest transparency, NPV forest, FCA, state forest department, Sentinel-2 afforestation, MRV India">
+<meta name="author" content="morimieru | M-square Lab Inc.">
+<link rel="canonical" href="https://mori-mieru.jp/en/article/india-campa-monitoring.html">
+<link rel="alternate" hreflang="en" href="https://mori-mieru.jp/en/article/india-campa-monitoring.html">
+
+<meta property="og:title" content="CAMPA monitoring: a satellite layer for compensatory afforestation transparency">
+<meta property="og:description" content="A public-good satellite monitoring layer for India's ₹66,000 Cr CAMPA programme — plot-level evidence, tamper-proof reports, free open data.">
+<meta property="og:image" content="https://mori-mieru.jp/article/img/satellite-co2-hero.jpg">
+<meta property="og:url" content="https://mori-mieru.jp/en/article/india-campa-monitoring.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="morimieru">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CAMPA monitoring: a satellite transparency layer">
+<meta name="twitter:description" content="Plot-level satellite evidence for India's compensatory afforestation programme.">
+<meta name="twitter:image" content="https://mori-mieru.jp/article/img/satellite-co2-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "CAMPA monitoring: a satellite layer for compensatory afforestation transparency",
+  "description": "A public-good satellite monitoring layer for India's CAMPA programme, designed to complement state forest department processes.",
+  "image": "https://mori-mieru.jp/article/img/satellite-co2-hero.jpg",
+  "datePublished": "2026-05-26",
+  "dateModified": "2026-05-26",
+  "inLanguage": "en",
+  "author": {"@type": "Organization", "name": "morimieru", "url": "https://mori-mieru.jp/en/"},
+  "publisher": {"@type": "Organization", "name": "M-square Lab Inc.", "url": "https://m2-labo.jp/"},
+  "mainEntityOfPage": "https://mori-mieru.jp/en/article/india-campa-monitoring.html"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;900&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../report/report.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+
+<style>
+.report-hero { --bg-image: url('../../article/img/satellite-co2-hero.jpg'); }
+.article-figure { margin: 28px 0; }
+.article-figure img { width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block; }
+.article-figure figcaption { font-size: 13px; color: var(--ink-500); margin-top: 8px; text-align: center; }
+.breadcrumb { font-size: 12px; color: var(--ink-500); padding: 16px 0 0; max-width: 960px; margin: 0 auto; }
+.breadcrumb a { color: var(--ink-500); }
+.faq dt { font-weight: 700; margin-top: 14px; color: var(--theme-dark); }
+.faq dd { margin: 4px 0 0 0; }
+.related { background: var(--green-100); padding: 24px 28px; border-radius: var(--radius-md); margin: 36px 0; }
+.related h3 { margin-top: 0; }
+.related ul { margin: 0; padding-left: 20px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 20px 0; }
+.kpi { background: var(--paper); padding: 16px 18px; border-radius: var(--radius-sm); border-top: 3px solid var(--theme); box-shadow: var(--shadow-sm); }
+.kpi .label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-500); margin: 0 0 4px; }
+.kpi .value { font-family: var(--font-en); font-size: 22px; font-weight: 700; color: var(--theme-dark); margin: 0; line-height: 1.2; }
+.kpi .note { font-size: 11px; color: var(--ink-500); margin: 4px 0 0; }
+.stance-card { background: linear-gradient(135deg, var(--green-100), var(--cream)); padding: 22px 26px; border-radius: var(--radius-md); margin: 22px 0; border-left: 4px solid var(--green-700); }
+.stance-card h4 { margin: 0 0 8px; color: var(--green-900); }
+.stance-card p { margin: 6px 0; font-size: 14px; line-height: 1.8; color: var(--ink-700); }
+.lang-toggle { display: inline-flex; gap: 4px; padding: 4px; background: rgba(45,90,61,0.08); border-radius: 999px; vertical-align: middle; }
+.lang-toggle a { padding: 4px 10px; font-size: 12px; letter-spacing: 0.1em; border-radius: 999px; text-decoration: none; color: #4a4838; font-family: 'Josefin Sans', sans-serif; }
+.lang-toggle a.active { background: #2d5a3d; color: #fff; }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NPPM980N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9NPPM980N');
+</script>
+</head>
+<body class="theme-co2">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/en/">morimieru</a> / <a href="/en/article/">Articles</a> / CAMPA monitoring
+  <span class="lang-toggle" style="margin-left: 16px;">
+    <a href="./india-campa-monitoring.html" class="active">EN</a>
+  </span>
+</nav>
+
+<header class="report-hero" data-bg>
+  <div class="container">
+    <p class="report-eyebrow">India · CAMPA · State Forest Departments</p>
+    <h1 class="report-title">CAMPA monitoring<br>a satellite layer for compensatory-afforestation transparency</h1>
+    <p class="report-subtitle">
+      India's Compensatory Afforestation Fund corpus has grown into one of the world's
+      largest pools of forest-restoration money. Successive CAG audits and Central
+      Empowered Committee reviews have surfaced gaps in plantation maintenance and
+      fund utilisation. We outline how a free, satellite-based monitoring layer adds
+      plot-level evidence — complementing, not replacing, state forest department processes.
+    </p>
+    <dl class="report-meta">
+      <dt>Published</dt><dd>2026-05-26</dd>
+      <dt>Posture</dt><dd>Public-good complement to official monitoring; not an audit or critique</dd>
+      <dt>Target reader</dt><dd>State DFOs / PCCFs · CAMPA secretariats · CAG / audit · researchers · climate finance</dd>
+    </dl>
+  </div>
+</header>
+
+<div class="report-body">
+
+<h2>1. The CAMPA stake, in numbers</h2>
+
+<div class="kpi-grid">
+  <div class="kpi">
+    <p class="label">Corpus (cumulative)</p>
+    <p class="value">> ₹66,000 Cr</p>
+    <p class="note">National + state CAMPA pool</p>
+  </div>
+  <div class="kpi">
+    <p class="label">Physical target met</p>
+    <p class="value">~85%</p>
+    <p class="note">Per Central Empowered Committee finding</p>
+  </div>
+  <div class="kpi">
+    <p class="label">Funds utilised</p>
+    <p class="value">~67.5%</p>
+    <p class="note">Same source — utilisation lags target</p>
+  </div>
+  <div class="kpi">
+    <p class="label">Audit cadence</p>
+    <p class="value">Annual</p>
+    <p class="note">CAG audits both National and State CAMPA</p>
+  </div>
+</div>
+
+<p>
+CAMPA was created to ensure that when forest land is diverted for non-forest use under
+the Forest (Conservation) Act, the diverting user-agency pays Net Present Value (NPV)
+and Compensatory Afforestation (CA) into a dedicated fund. After the 2018 Supreme Court
+ruling and the 2018 CAF Act + 2018 rules, the corpus was placed under the CAMPA framework
+with National and State authorities. The intent is straightforward: when a hectare is
+diverted, an equivalent (or better) hectare gets restored — measurably, accountably,
+and on time.
+</p>
+
+<p>
+The execution has been uneven. Annual CAG audits and the Supreme Court's Central
+Empowered Committee have repeatedly flagged plantation non-maintenance, delays in plan
+approval and fund release, and instances of fund use outside the programme's intended
+scope. State-level audits in Uttarakhand and Odisha, in particular, have been picked up
+in national press. None of this is a secret — and none of it is something morimieru
+is uniquely positioned to fix in isolation. But the data layer that closes most of
+these gaps is, today, freely available from space.
+</p>
+
+<h2>2. The structural monitoring problem</h2>
+
+<p>
+The CAMPA reporting chain currently runs through state forest department officers,
+divisional inspections, and periodic compendium reports to National CAMPA. Several
+features of this chain limit what the CAG and CEC can verify externally:
+</p>
+
+<ul>
+  <li><strong>Plot boundaries are often not in a queryable spatial format.</strong>
+  Compensatory plots are recorded by survey numbers and verbal descriptions. Without
+  vector polygons, third parties cannot test claims against ground truth.</li>
+  <li><strong>Baseline imagery for "before" condition is rarely archived alongside the
+  approval.</strong> When a clearance is granted under the FCA, the precise pre-diversion
+  forest cover at that polygon is not snapshotted in a way that can be later proven.</li>
+  <li><strong>Plantation success is verified by site visits, not continuously.</strong>
+  A site-visit-based system measures the day of the visit; canopy collapse in month 11
+  after a month-1 visit goes undetected.</li>
+  <li><strong>Cross-state comparability is weak.</strong> Each state's CAMPA reports
+  on its own template, often without coordinate-system consistency.</li>
+</ul>
+
+<p>
+None of these constraints come from negligence — they are artefacts of an
+inspection-based system designed before pixel-level satellite data was free, weekly,
+and global. The data environment changed; the monitoring layer hasn't fully caught up.
+</p>
+
+<h2>3. What a satellite monitoring layer adds</h2>
+
+<p>
+A satellite monitoring layer — built on Sentinel-2, Sentinel-1, and HydroBASINS, with
+cryptographic timestamps on every observation — adds five capabilities that the
+inspection chain cannot deliver on its own:
+</p>
+
+<table>
+  <thead>
+    <tr><th>Capability</th><th>Concrete output</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pre-clearance baseline lock-in</td>
+      <td>NDVI snapshot of the exact diverted polygon at the date of clearance, cryptographically time-stamped so it cannot be back-dated</td>
+    </tr>
+    <tr>
+      <td>Continuous compensatory-plot tracking</td>
+      <td>Weekly NDVI for every CA plot since planting; alerts on canopy collapse, fire, or stalled growth</td>
+    </tr>
+    <tr>
+      <td>Like-for-like comparison</td>
+      <td>Side-by-side time series of the diverted plot vs the compensatory plot, on the same scale</td>
+    </tr>
+    <tr>
+      <td>Watershed-context overlay</td>
+      <td>Each plot's catchment and downstream basin shown alongside its growth — making the "did we restore in a useful place" question answerable</td>
+    </tr>
+    <tr>
+      <td>Tamper-proof audit chain</td>
+      <td>TPM 2.0 attestation + Merkle hash + RFC 3161 timestamp on every report. CAG / CEC can independently verify dates and content years later.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>4. Our stance: complement, not critique</h2>
+
+<div class="stance-card">
+  <h4>Three things this layer is, and three it is not</h4>
+  <p><strong>Is:</strong> a free, parallel public-good monitoring stream. A neutral
+  data layer for state forest departments to use voluntarily. An audit-friendly
+  evidence chain for the CAG, CEC, and Parliamentary Standing Committee on Science &amp;
+  Technology, Environment, Forests &amp; Climate Change.</p>
+  <p><strong>Is not:</strong> an indictment of any state forest department. A replacement
+  for ground inspections. A certification or regulatory body.</p>
+</div>
+
+<p>
+A state DFO's job already involves more inspections than headcount allows. Satellite
+monitoring multiplies their visibility without adding fieldwork. A CAG auditor's mandate
+already requires verification — satellite evidence makes a previously expensive check
+trivial. The technology benefits the people inside the system as much as the people
+auditing it.
+</p>
+
+<h2>5. A worked example: monitoring a hypothetical CA polygon</h2>
+
+<p>
+Suppose a 50 ha forest patch in district A is approved for diversion in 2023, with a
+75 ha compensatory plot allocated in district B. The diverting user-agency deposits
+NPV + CA into State CAMPA. The state forest department plans the CA plot, plants it
+in monsoon 2024, and reports survival rates back to National CAMPA. Where does
+satellite evidence enter?
+</p>
+
+<ol>
+  <li><strong>2023, at clearance:</strong> Sentinel-2 NDVI snapshot of the 50 ha diverted
+  polygon at the exact date of FCA approval, frozen in the cryptographic chain.
+  Provides the contested "what was there before" baseline for every future audit.</li>
+  <li><strong>2024, at planting:</strong> Snapshot of the 75 ha CA polygon at the
+  planting season, marking the year-zero condition of the new plantation.</li>
+  <li><strong>2024–2030, monthly:</strong> NDVI tracking of the CA polygon. Year-on-year
+  growth visible; canopy collapse, fire, or stagnation flagged automatically.</li>
+  <li><strong>2024–onward, watershed view:</strong> Both polygons placed on the
+  HydroBASINS Lvl 10 layer. Auditors can see whether the CA plot sits in a watershed that
+  hydrologically substitutes for the diverted patch, or in a distant basin that does not.</li>
+  <li><strong>Anytime, externally:</strong> CAG, CEC, civil society researchers, or
+  climate finance entities can pull the report bundle and verify that the values match
+  the time-stamped raw data — no permissioned access required.</li>
+</ol>
+
+<p>
+This is exactly the pattern morimieru runs for forests in Japan. The same engine,
+applied at the State CAMPA level, opens a national-scale evidence layer.
+</p>
+
+<h2>6. Stack: what stays, what swaps</h2>
+
+<table>
+  <thead>
+    <tr><th>Layer</th><th>Source (already global)</th><th>India substitution</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Optical satellite</td><td>Sentinel-2 L2A (Copernicus, 10 m)</td><td>—</td></tr>
+    <tr><td>Cloud-penetrating</td><td>Sentinel-1 SAR (Copernicus)</td><td>—</td></tr>
+    <tr><td>Climate</td><td>NASA POWER</td><td>IMD gridded products for finer monsoon detail</td></tr>
+    <tr><td>DEM</td><td>SRTM / Copernicus DEM</td><td>ISRO CartoSat where state-released</td></tr>
+    <tr><td>Watershed boundaries</td><td>HydroBASINS Lvl 10 (CC-BY)</td><td>India-WRIS finer sub-basins</td></tr>
+    <tr><td>Forest inventory</td><td>—</td><td>Forest Survey of India regional volume tables</td></tr>
+    <tr><td>Land-use baseline</td><td>—</td><td>ISRO Bhuvan LULC + FSI ISFR</td></tr>
+    <tr><td>Plot register</td><td>—</td><td>State CAMPA plot list (where shared) + e-Green Watch where available</td></tr>
+    <tr><td>Cryptographic chain</td><td>TPM 2.0 + Merkle + RFC 3161</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<p>
+The architecture is identical to our Japan pilot. The data layer differences are mostly
+small and well-documented. See our
+<a href="/en/article/india-pilot.html">India pilot article</a> and
+<a href="/en/article/satellite-co2-tier2.html">Tier 2 walkthrough</a>.
+</p>
+
+<h2>7. A 90-day state-level pilot scope</h2>
+
+<table>
+  <thead>
+    <tr><th>Phase</th><th>Days</th><th>Output</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1. Plot ingest</td><td>1–10</td><td>State CAMPA CA plot list converted to polygon geometry (where survey-number-only, buffer the centroid until ground-truth polygons available)</td></tr>
+    <tr><td>2. Baseline snapshots</td><td>11–25</td><td>Sentinel-2 NDVI baseline for each polygon at planting date (or most recent year if older)</td></tr>
+    <tr><td>3. Time-series build</td><td>26–45</td><td>Year-by-year NDVI tracks for every CA plot in the pilot batch</td></tr>
+    <tr><td>4. Watershed overlay</td><td>46–60</td><td>HydroBASINS catchment per plot; downstream-village layer where required</td></tr>
+    <tr><td>5. Cryptographic chain</td><td>61–75</td><td>Per-plot signed report bundles; aggregate Merkle root anchored for the state</td></tr>
+    <tr><td>6. Public dashboard</td><td>76–90</td><td>State-CAMPA dashboard (read-only, sortable by district / year / size) — analogue of our existing JP-side reports</td></tr>
+  </tbody>
+</table>
+
+<p>
+We have not yet run a CAMPA pilot. We have run every constituent step for our Japan
+forest pilots and have documented the India-layer substitutions. The pilot above is
+what we would propose to a state forest department, a research institution, or a
+CAG-affiliated reviewer who can bring (a) a plot list, (b) the political space to run
+a parallel transparency layer, and (c) the willingness to publish the result.
+</p>
+
+<h2>8. Honest constraints</h2>
+
+<ul>
+  <li><strong>Plot geometry is the blocker.</strong> The pipeline only works once
+  polygons exist. Where CA plot records are still survey-number-based or descriptive,
+  there is a one-time digitisation step.</li>
+  <li><strong>NDVI is not species-aware.</strong> A mono-plantation can score the same
+  NDVI as a biodiverse forest. The satellite layer can flag <em>presence</em> of canopy;
+  composition still needs ground botanical inventory.</li>
+  <li><strong>Smallholder co-implemented plots.</strong> Where CA plots are mosaic-style
+  on community lands, single-polygon analysis is too coarse. Pixel-level aggregation
+  helps but does not fully solve this.</li>
+  <li><strong>Imagery archive only goes back so far.</strong> Sentinel-2 baseline is
+  reliable from late 2015; Landsat extends earlier with coarser resolution. Plots
+  approved before 2015 need a different baseline strategy.</li>
+</ul>
+
+<h2>9. Who this is for</h2>
+
+<ul>
+  <li><strong>State forest departments</strong> wanting an audit-defensible monitoring
+  layer for their own use — no licence cost, no vendor lock-in.</li>
+  <li><strong>National CAMPA</strong> and the MoEFCC, for cross-state comparability.</li>
+  <li><strong>CAG, the Central Empowered Committee, and the Parliamentary Standing
+  Committee on S&amp;T, Environment, Forests &amp; Climate Change</strong> for independent
+  verification.</li>
+  <li><strong>Research institutes</strong> (FRI Dehradun, IIFM Bhopal, IISc CES, IIT
+  Bombay CESE) studying compensatory afforestation effectiveness.</li>
+  <li><strong>Civil society and climate journalism</strong> tracking implementation.</li>
+  <li><strong>Climate finance entities</strong> assessing whether Indian afforestation
+  programmes are delivering measurable, additional climate outcomes.</li>
+</ul>
+
+<div class="related">
+  <h3>Related</h3>
+  <ul>
+    <li><a href="/en/article/india-pilot.html">India forest valuation pilot: CCTS, Western Ghats &amp; FSI</a></li>
+    <li><a href="/en/article/karnataka-coffee-supply-chain.html">Karnataka coffee × EUDR / CCTS / TNFD playbook</a></li>
+    <li><a href="/en/article/tnfd-forest-disclosure.html">TNFD forest disclosure: practical LEAP playbook</a></li>
+    <li><a href="/en/article/satellite-co2-tier2.html">Satellite × forest CO₂: IPCC AFOLU Tier 2 walkthrough</a></li>
+    <li><a href="/en/article/water-yield-guide.html">Forest water yield: simplified evaluation method</a></li>
+  </ul>
+</div>
+
+<h2>10. Frequently asked questions</h2>
+
+<dl class="faq">
+  <dt>Q1. Is morimieru proposing to replace State CAMPA's own monitoring?</dt>
+  <dd>No. The proposal is a parallel public-good layer that state forest departments
+  can adopt voluntarily, and that external reviewers (CAG, CEC, civil society) can use
+  independently. The official monitoring chain continues to be the authoritative one.</dd>
+
+  <dt>Q2. Are state forest departments asking for this?</dt>
+  <dd>Mixed. Some senior officers have publicly welcomed satellite-based transparency
+  (it reduces the inspection burden on under-staffed divisions). Others reasonably worry
+  about misinterpretation of pixel-level data by people unfamiliar with field reality.
+  The cryptographic chain matters precisely because it lets both sides reason from the
+  same data.</dd>
+
+  <dt>Q3. Is the data accuracy good enough to call out a state?</dt>
+  <dd>Used responsibly, yes for the gross failure modes (no plantation present, complete
+  canopy collapse, fire), no for fine-grained claims (exact species mix, exact stem
+  count). The intent is to surface where the system is working and where it isn't —
+  not to litigate marginal cases via remote sensing.</dd>
+
+  <dt>Q4. What does it cost a state to participate?</dt>
+  <dd>The morimieru web layer is free. Adapting it to a specific state's plot list
+  is a one-time digitisation effort that the state holds the data for. Compute and
+  storage at scale are in the low single-digit lakh rupees per state per year —
+  trivial against the CAMPA corpus.</dd>
+
+  <dt>Q5. Where does this connect to CCTS afforestation credits?</dt>
+  <dd>Directly. The same satellite layer that monitors a CAMPA CA plot can serve as
+  baseline and MRV for a CCTS afforestation project, if the state or user-agency
+  registers it. CAMPA monitoring and CCTS MRV converge on the same data infrastructure.</dd>
+</dl>
+
+<h2>11. References &amp; sources</h2>
+
+<ul>
+  <li>Compensatory Afforestation Fund Act, 2016 and CAF Rules, 2018 — Ministry of Environment, Forest and Climate Change (MoEFCC)</li>
+  <li>T.N. Godavarman Thirumulpad v. Union of India — Supreme Court of India, ongoing forest case</li>
+  <li>National CAMPA — Annual reports and CAG audit findings</li>
+  <li>Central Empowered Committee (CEC) — Periodic reviews on CAMPA implementation</li>
+  <li>Parliamentary Standing Committee on Science &amp; Technology, Environment, Forests and Climate Change — review reports on CAMPA</li>
+  <li>Forest Survey of India — India State of Forest Report</li>
+  <li>e-Green Watch (NIC / MoEFCC) — central plantation-tracking system</li>
+  <li>Copernicus Sentinel-2 / Sentinel-1 — open satellite data</li>
+  <li>WWF HydroSHEDS / HydroBASINS — global watershed boundaries (CC-BY)</li>
+</ul>
+
+<p style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--ink-300); font-size: 13px; color: var(--ink-500);">
+Last updated 2026-05-26. morimieru is operated as a public-good infrastructure. This
+article is descriptive, not a regulatory commentary. State-specific implementation
+notes will be added as pilot conversations progress.
+</p>
+
+</div><!-- /report-body -->
+
+</body>
+</html>
